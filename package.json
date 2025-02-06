@@ -17,9 +17,10 @@
     "dotenv": "^16.4.7"
   },
   "bin": {
-    "cody-rn-ui": "./index.ts"
+    "cody-rn-ui": "./dist/index.js"
   },
   "scripts": {
-    "extract": "bun index.ts --outDir dist"
+    "extract": "bun index.ts --outDir dist",
+    "build": "bun build index.ts --outfile dist/index.js --target=node"
   }
 }
