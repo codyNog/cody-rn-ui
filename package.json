@@ -1,0 +1,25 @@
+{
+  "name": "cody-rn-ui",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/bun": "latest",
+    "plop": "^4.0.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.1.0",
+    "react": "^19.0.0",
+    "adm-zip": "^0.5.16",
+    "dotenv": "^16.4.7"
+  },
+  "bin": {
+    "cody-rn-ui": "./index.ts"
+  },
+  "scripts": {
+    "extract": "bun index.ts --outDir dist"
+  }
+}
