@@ -6,6 +6,7 @@
     "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@types/adm-zip": "^0.5.7",
     "@types/bun": "latest",
     "plop": "^4.0.1"
@@ -15,15 +16,20 @@
   },
   "dependencies": {
     "@octokit/rest": "^21.1.0",
-    "react": "^19.0.0",
+    "@types/react": "^19.0.8",
     "adm-zip": "^0.5.16",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "react": "^19.0.0",
+    "tamagui": "^1.123.17"
   },
   "bin": {
     "cody-rn-ui": "./dist/index.js"
   },
   "scripts": {
     "extract": "bun index.ts --outDir dist",
-    "build": "bun build index.ts --outfile dist/index.js --target=node"
+    "build": "bun build index.ts --outfile dist/index.js --target=node",
+    "format": "biome check --write .",
+    "postplop": "bun format",
+    "plop": "plop"
   }
 }
