@@ -1,7 +1,10 @@
 {
-  "name": "cody-rn-ui",
+  "name": "@codynog/cody-rn-ui",
   "module": "index.ts",
   "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "devDependencies": {
     "@types/adm-zip": "^0.5.7",
     "@types/bun": "latest",
