@@ -27,7 +27,7 @@
   },
   "scripts": {
     "extract": "bun index.ts --outDir dist",
-    "build": "bun build index.ts --outfile dist/index.js --target=node",
+    "build": "bun build index.ts --outfile dist/index.js --target=node --banner '#!/usr/bin/env node'",
     "format": "biome check --write .",
     "postplop": "bun format",
     "plop": "plop"
