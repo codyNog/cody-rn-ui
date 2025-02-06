@@ -1,0 +1,35 @@
+name: setup
+description: 'Setup bun with .bun-version file and cache npm dependencies using cache v4'
+
+runs:
+  using: "composite"
+  steps:
+
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version-file: ".bun-version"
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@dayone-jp'
+
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(bun pm cache dir)" >> $GITHUB_OUTPUT
+
+    - name: Restore npm cache
+      uses: actions/cache/restore@v4
+      id: npm-cache
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Install dependencies
+      run: bun i
+      shell: bash
+
+    - name: Save npm cache
+      uses: actions/cache/save@v4
+      if: steps.npm-cache.outputs.cache-hit != 'true'
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
