@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { I18nProviderClient } from "shared/libs/i18n/client";
 import { getCanvas } from "shared/libs/storybook";
-import { Card as Component } from "..";
+import { Card as Component } from "../..";
 
 const meta: Meta<typeof Component> = {
   component: Component,
