@@ -55,6 +55,7 @@ const GitHubFileExtractor = (token: string) => {
 
   const mergeDependencies = async (
     localPackageJsonPath: string,
+    repoPackageJson: PackageJson,
   ): Promise<void> => {
     if (!repoPackageJson?.dependencies) {
       console.log("No dependencies found in repository package.json");
@@ -268,12 +269,36 @@ const GitHubFileExtractor = (token: string) => {
       await extractSpecificDirectory(zipBuffer, options.outputPath);
       await saveVersion(latestTag);
 
-      const nearestPackageJson = await findNearestPackageJson(process.cwd());
-      if (nearestPackageJson) {
-        console.log(`Found package.json at: ${nearestPackageJson}`);
-        await mergeDependencies(nearestPackageJson);
-      } else {
-        console.log("No package.json found in parent directories");
+      // Check for package.json in the output directory
+      const outputPackageJsonPath = path.join(
+        options.outputPath,
+        "package.json",
+      );
+      try {
+        await fs.access(outputPackageJsonPath);
+        console.log(`Found package.json at: ${outputPackageJsonPath}`);
+        if (!repoPackageJson) {
+          console.warn(
+            "Repository package.json not found in zip.  Skipping dependency merge.",
+          );
+        } else {
+          await mergeDependencies(outputPackageJsonPath, repoPackageJson);
+        }
+      } catch {
+        // If package.json doesn't exist in the output path, search parent directories.
+        const nearestPackageJson = await findNearestPackageJson(process.cwd());
+        if (nearestPackageJson) {
+          console.log(`Found package.json at: ${nearestPackageJson}`);
+          if (!repoPackageJson) {
+            console.warn(
+              "Repository package.json not found in zip.  Skipping dependency merge.",
+            );
+          } else {
+            await mergeDependencies(nearestPackageJson, repoPackageJson);
+          }
+        } else {
+          console.log("No package.json found in parent directories");
+        }
       }
 
       console.log("✨ Files copied successfully!");
