@@ -3,7 +3,7 @@ import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 import { PlatformPressable } from "@react-navigation/elements";
 import * as Haptics from "expo-haptics";
 import { Tabs } from "expo-router";
-import { type ComponentProps, forwardRef } from "react";
+import type { ComponentProps } from "react";
 import { Platform } from "react-native";
 import TabBarBackground from "../TabBarBackground";
 
@@ -28,8 +28,7 @@ type Props = {
   screens: Screen[];
 };
 
-// biome-ignore lint:
-export const BottomTabs = forwardRef<any, Props>(({ screens }: Props, _ref) => {
+export const BottomTabs = ({ screens }: Props) => {
   return (
     <Tabs
       screenOptions={{
@@ -50,4 +49,4 @@ export const BottomTabs = forwardRef<any, Props>(({ screens }: Props, _ref) => {
       ))}
     </Tabs>
   );
-});
+};

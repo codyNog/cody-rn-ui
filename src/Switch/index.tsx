@@ -1,38 +1,44 @@
-import { forwardRef } from "react";
-import type { Switch as SwitchPrimitive } from "react-native";
+import type { Ref } from "react";
 import {
   Label,
   Switch as S,
   Separator,
   type SwitchProps,
+  type TamaguiElement,
   XStack,
 } from "tamagui";
 
 type Props = SwitchProps & {
   label?: string;
+  ref?: Ref<TamaguiElement>;
 };
 
-export const Switch = forwardRef<SwitchPrimitive, Props>(
-  ({ size, defaultChecked, label, id, ...rest }, ref) => {
-    return (
-      <XStack alignItems="center" gap="$4">
-        {label && (
-          <>
-            <Label
-              paddingRight="$0"
-              justifyContent="flex-end"
-              size={size}
-              htmlFor={id}
-            >
-              {label}
-            </Label>
-            <Separator minHeight={20} vertical />
-          </>
-        )}
-        <S {...rest} id={id} size={size} ref={ref} inset="auto">
-          <S.Thumb animation="quicker" />
-        </S>
-      </XStack>
-    );
-  },
-);
+export const Switch = ({
+  size,
+  defaultChecked,
+  label,
+  id,
+  ref,
+  ...rest
+}: Props) => {
+  return (
+    <XStack alignItems="center" gap="$4">
+      {label && (
+        <>
+          <Label
+            paddingRight="$0"
+            justifyContent="flex-end"
+            size={size}
+            htmlFor={id}
+          >
+            {label}
+          </Label>
+          <Separator minHeight={20} vertical />
+        </>
+      )}
+      <S {...rest} id={id} size={size} ref={ref} inset="auto">
+        <S.Thumb animation="quicker" />
+      </S>
+    </XStack>
+  );
+};
