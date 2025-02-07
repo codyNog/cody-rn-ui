@@ -1,5 +1,5 @@
 import { Check as CheckIcon } from "@tamagui/lucide-icons";
-import { useId, type Ref } from "react";
+import { type Ref, useId } from "react";
 import {
   Checkbox as Cb,
   type CheckboxProps,
