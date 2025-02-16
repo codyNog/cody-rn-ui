@@ -1,6 +1,7 @@
 import { createInterFont } from "@tamagui/font-inter";
 import { shorthands } from "@tamagui/shorthands";
 import { themes, tokens } from "@tamagui/themes";
+import { ToastProvider } from "@tamagui/toast";
 import type { ReactNode } from "react";
 import { TamaguiProvider, createTamagui } from "tamagui";
 
@@ -18,5 +19,9 @@ const tamaguiConfig = createTamagui({
 });
 
 export const UIProvider = ({ children }: { children: ReactNode }) => {
-  return <TamaguiProvider config={tamaguiConfig}>{children}</TamaguiProvider>;
+  return (
+    <ToastProvider>
+      <TamaguiProvider config={tamaguiConfig}>{children}</TamaguiProvider>
+    </ToastProvider>
+  );
 };

@@ -6,16 +6,47 @@
     "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.25.4",
     "@biomejs/biome": "^1.9.4",
+    "@chromatic-com/storybook": "^2.0.2",
+    "@expo/metro-runtime": "~4.0.1",
+    "@storybook/addon-actions": "^8.5.3",
+    "@storybook/addon-controls": "^8.5.3",
+    "@storybook/addon-essentials": "^8.5.3",
+    "@storybook/addon-links": "^8.5.3",
+    "@storybook/addon-ondevice-actions": "^8.5.4",
+    "@storybook/addon-ondevice-backgrounds": "^8.5.4",
+    "@storybook/addon-ondevice-controls": "^8.5.4",
+    "@storybook/addon-ondevice-notes": "^8.5.4",
+    "@storybook/core": "^8.5.3",
+    "@storybook/react": "^8.5.3",
+    "@storybook/react-native": "^8.5.4",
+    "@storybook/react-native-web-vite": "^8.5.3",
+    "@storybook/test": "^8.5.3",
     "@types/adm-zip": "^0.5.7",
     "@types/bun": "latest",
-    "plop": "^4.0.1"
+    "@types/react": "~18.3.12",
+    "babel-plugin-react-docgen-typescript": "^1.5.1",
+    "babel-plugin-react-native-web": "^0.19.10",
+    "cross-env": "^7.0.3",
+    "cspell": "^8.17.3",
+    "expo": "~52.0.31",
+    "expo-constants": "~17.0.5",
+    "expo-status-bar": "~2.0.1",
+    "npm-run-all": "^4.1.5",
+    "plop": "^4.0.1",
+    "react-native-web": "^0.19.13",
+    "storybook": "^8.5.3",
+    "typescript": "~5.3.3",
+    "vite": "^6.0.11"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
     "@octokit/rest": "^21.1.0",
+    "@react-native-async-storage/async-storage": "^2.1.1",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/elements": "^2.2.5",
     "@tamagui/font-inter": "^1.124.1",
@@ -26,12 +57,13 @@
     "@types/react": "^19.0.8",
     "adm-zip": "^0.5.16",
     "dotenv": "^16.4.7",
+    "expo-blur": "^14.0.3",
     "expo-haptics": "^14.0.1",
     "expo-router": "^4.0.17",
     "expo-symbols": "^0.2.2",
     "expo-web-browser": "^14.0.2",
     "react": "^19.0.0",
-    "tamagui": "^1.123.17"
+    "tamagui": "1.124.1"
   },
   "bin": {
     "cody-rn-ui": "./dist/index.js"
@@ -41,6 +73,16 @@
     "build": "bun build index.ts --outfile dist/index.js --target=node --banner '#!/usr/bin/env node'",
     "format": "biome check --write .",
     "postplop": "bun format",
-    "plop": "plop"
+    "plop": "plop",
+    "storybook:web": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "storybook-generate": "sb-rn-get-stories --config-path .rnstorybook",
+    "storybook": "cross-env EXPO_PUBLIC_STORYBOOK_ENABLED='true' expo start",
+    "storybook:ios": "cross-env EXPO_PUBLIC_STORYBOOK_ENABLED='true' expo start --ios",
+    "storybook:android": "cross-env EXPO_PUBLIC_STORYBOOK_ENABLED='true' expo start --android",
+    "lint": "run-p lint:*",
+    "lint:script": "npx biome check .",
+    "lint:spell": "cspell . --no-progress",
+    "build-check": "tsc --noEmit"
   }
 }

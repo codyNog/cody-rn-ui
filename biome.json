@@ -5,7 +5,8 @@
       ".next/**",
       "*.css.d.ts",
       "gen/**",
-      ".vscode/**"
+      ".vscode/**",
+      "./.rnstorybook/**"
     ]
   },
   "linter": {

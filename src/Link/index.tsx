@@ -1,6 +1,7 @@
 import { Link as LinkPrimitive, type LinkProps } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";
 import { Platform } from "react-native";
+import { Anchor } from "../Anchor";
 
 type Props = Omit<LinkProps, "href"> & {
   href: string;
@@ -22,7 +23,9 @@ export const Link = ({ external, href, ...rest }: Props) => {
             await openBrowserAsync(href);
           }
         }}
-      />
+      >
+        <Anchor {...rest} />
+      </Link>
     );
   }
 

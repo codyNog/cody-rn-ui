@@ -1,38 +1,64 @@
 "use client";
 import { Check, ChevronDown, ChevronUp } from "@tamagui/lucide-icons";
-import { type Ref, useMemo, useState } from "react";
+import { type Ref, useMemo } from "react";
+import type { FontSizeTokens, SelectProps, TamaguiElement } from "tamagui";
 import {
-  type SelectProps,
+  Adapt,
   Sheet,
-  type TamaguiElement,
   Select as TamaguiSelect,
-  Text,
   YStack,
+  getFontSize,
 } from "tamagui";
-import type { FontSizeTokens } from "tamagui";
-import { Adapt, getFontSize } from "tamagui";
 import { LinearGradient } from "tamagui/linear-gradient";
+
+type Option = {
+  value: string;
+  label: string;
+};
+
+type Group = {
+  group: string;
+  options: Option[];
+};
 
 type Props = SelectProps & {
   ref?: Ref<TamaguiElement>;
-  options: {
-    value: string;
-    label: string;
-  }[];
+  options: Option[] | Group[];
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
 };
 
-export const Select = ({ options, ref, ...props }: Props) => {
-  const [val, setVal] = useState("apple");
+export const Select = ({
+  value,
+  onChange,
+  options,
+  ref,
+  placeholder,
+  ...props
+}: Props) => {
+  const normalizedOptions = useMemo(() => {
+    // フラットな配列の場合は、デフォルトグループに包む
+    if (options.length > 0 && "value" in options[0]) {
+      return [
+        {
+          group: "",
+          options: options as Option[],
+        },
+      ];
+    }
+    return options as Group[];
+  }, [options]);
 
   return (
     <TamaguiSelect
-      value={val}
-      onValueChange={setVal}
+      value={value}
+      onValueChange={onChange}
       disablePreventBodyScroll
       {...props}
     >
       <TamaguiSelect.Trigger ref={ref} width={220} iconAfter={ChevronDown}>
-        <TamaguiSelect.Value placeholder="Something" />
+        <TamaguiSelect.Value placeholder={placeholder} />
       </TamaguiSelect.Trigger>
 
       <Adapt platform="touch">
@@ -83,12 +109,13 @@ export const Select = ({ options, ref, ...props }: Props) => {
           // exitStyle={{ o: 0, y: 10 }}
           minWidth={200}
         >
-          <TamaguiSelect.Group>
-            <TamaguiSelect.Label>Fruits</TamaguiSelect.Label>
-            {/* for longer lists memoizing these is useful */}
-            {useMemo(
-              () =>
-                options.map((item, i) => {
+          {normalizedOptions.map((group, groupIndex) => {
+            return (
+              <TamaguiSelect.Group key={group.group || groupIndex}>
+                {group.group && (
+                  <TamaguiSelect.Label>{group.group}</TamaguiSelect.Label>
+                )}
+                {group.options.map((item, i) => {
                   return (
                     <TamaguiSelect.Item
                       index={i}
@@ -103,10 +130,10 @@ export const Select = ({ options, ref, ...props }: Props) => {
                       </TamaguiSelect.ItemIndicator>
                     </TamaguiSelect.Item>
                   );
-                }),
-              [options],
-            )}
-          </TamaguiSelect.Group>
+                })}
+              </TamaguiSelect.Group>
+            );
+          })}
           {/* Native gets an extra icon */}
           {props.native && (
             <YStack

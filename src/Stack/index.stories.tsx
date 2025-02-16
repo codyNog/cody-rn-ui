@@ -1,43 +1,30 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { I18nProviderClient } from "shared/libs/i18n/client";
-import { getCanvas } from "shared/libs/storybook";
-import { Stack as Component } from ".";
 
-const meta: Meta<typeof Component> = {
-  component: Component,
+import { expect } from "@storybook/test";
+import { XStack, YStack } from ".";
+import { Text } from "../Text";
+import { getCanvas } from "../libs/storybook";
+
+const meta: Meta = {
+  component: YStack,
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Component>;
+const Component = () => (
+  <YStack gap="$2">
+    <XStack gap="$4">
+      <Text>Hello</Text>
+      <Text>World</Text>
+    </XStack>
+    <XStack>
+      <Text>Goodbye</Text>
+      <Text>World</Text>
+    </XStack>
+  </YStack>
+);
 
-export const Ja: Story = {
+export const Default = {
   args: {},
-  render: (args) => (
-    <I18nProviderClient locale={"ja"}>
-      <Component {...args} />
-    </I18nProviderClient>
-  ),
-};
-
-export const En: Story = {
-  args: {},
-  render: (args) => (
-    <I18nProviderClient locale={"en"}>
-      <Component {...args} />
-    </I18nProviderClient>
-  ),
-};
-
-export const Behavior: Story = {
-  args: {},
-  render: (args) => (
-    <I18nProviderClient locale={"ja"}>
-      <Component {...args} />
-    </I18nProviderClient>
-  ),
-  play: async ({ canvasElement }) => {
-    const canvas = getCanvas(canvasElement);
-    expect(canvas).toBeTruthy();
-  },
+  render: Component,
 };

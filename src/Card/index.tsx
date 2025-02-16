@@ -1,5 +1,5 @@
 "use client";
-import type { ReactNode, Ref } from "react";
+import type { Ref } from "react";
 import {
   H2,
   Paragraph,
@@ -12,11 +12,14 @@ import { Button } from "../Button";
 type Props = {
   title?: string; // Optional title prop
   description?: string; // Optional description prop
-  children?: ReactNode; // Optional children prop
   ref?: Ref<TamaguiElement>; // Optional ref prop
+  actions?: {
+    onClick: () => void;
+    label: string;
+  }[];
 };
 
-export const Card = ({ title, description, ref }: Props) => {
+export const Card = ({ title, description, ref, actions }: Props) => {
   return (
     <TamaguiCard
       ref={ref}
@@ -30,7 +33,11 @@ export const Card = ({ title, description, ref }: Props) => {
       </TamaguiCard.Header>
       <TamaguiCard.Footer padded>
         <XStack flex={1} />
-        <Button>Purchase</Button>
+        {actions?.map(({ onClick, label }) => (
+          <Button key={label} onPress={onClick}>
+            {label}
+          </Button>
+        ))}
       </TamaguiCard.Footer>
     </TamaguiCard>
   );

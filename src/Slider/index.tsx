@@ -1,7 +1,6 @@
 "use client";
 import type { Ref } from "react";
-import type { TamaguiElement } from "tamagui";
-import type { SliderProps } from "tamagui";
+import type { SliderProps, TamaguiElement } from "tamagui";
 import { Slider as TamaguiSlider } from "tamagui";
 
 type Props = SliderProps & {

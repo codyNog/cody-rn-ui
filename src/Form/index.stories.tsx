@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { I18nProviderClient } from "shared/libs/i18n/client";
-import { getCanvas } from "shared/libs/storybook";
+import { expect } from "@storybook/test";
+import { useState } from "react";
+import { XStack, YStack } from "tamagui";
 import { Form as Component } from ".";
+import { Button } from "../Button";
+import { Input } from "../Input";
+import { Label } from "../Label";
+import { Select } from "../Select";
+import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
   component: Component,
@@ -11,31 +17,48 @@ export default meta;
 
 type Story = StoryObj<typeof Component>;
 
-export const Ja: Story = {
+export const Default: Story = {
   args: {},
-  render: (args) => (
-    <I18nProviderClient locale={"ja"}>
-      <Component {...args} />
-    </I18nProviderClient>
-  ),
-};
-
-export const En: Story = {
-  args: {},
-  render: (args) => (
-    <I18nProviderClient locale={"en"}>
-      <Component {...args} />
-    </I18nProviderClient>
-  ),
+  render: () => {
+    const [type, settType] = useState("");
+    return (
+      <Component>
+        <YStack gap="$4">
+          <XStack gap="$2">
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" placeholder="type this" />
+          </XStack>
+          <XStack gap="$2">
+            <Label htmlFor="age">Age</Label>
+            <Input id="age" placeholder="type this" />
+          </XStack>
+          <XStack gap="$2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" placeholder="type this" />
+          </XStack>
+          <XStack gap="$2">
+            <Label htmlFor="type">Type</Label>
+            <Select
+              value={type}
+              options={[
+                { value: "1", label: "Type 1" },
+                { value: "2", label: "Type 2" },
+              ]}
+              onChange={settType}
+            />
+          </XStack>
+          <Component.Trigger asChild>
+            <Button>Submit</Button>
+          </Component.Trigger>
+        </YStack>
+      </Component>
+    );
+  },
 };
 
 export const Behavior: Story = {
   args: {},
-  render: (args) => (
-    <I18nProviderClient locale={"ja"}>
-      <Component {...args} />
-    </I18nProviderClient>
-  ),
+  render: (args) => <Component {...args} />,
   play: async ({ canvasElement }) => {
     const canvas = getCanvas(canvasElement);
     expect(canvas).toBeTruthy();

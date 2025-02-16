@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
 import { expect } from "@storybook/test";
-import { RadioGroup as Component } from ".";
+import { Avatar as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
@@ -12,24 +11,17 @@ export default meta;
 
 type Story = StoryObj<typeof Component>;
 
+const args: Story["args"] = {
+  src: "https://avatars.githubusercontent.com/u/12592949",
+};
+
 export const Default: Story = {
-  args: {
-    options: [
-      {
-        label: "Option 1",
-        value: "option1",
-      },
-      {
-        label: "Option 2",
-        value: "option2",
-      },
-    ],
-  },
+  args,
   render: (args) => <Component {...args} />,
 };
 
 export const Behavior: Story = {
-  args: {},
+  args,
   render: (args) => <Component {...args} />,
   play: async ({ canvasElement }) => {
     const canvas = getCanvas(canvasElement);

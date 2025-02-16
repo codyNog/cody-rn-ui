@@ -4,14 +4,13 @@ import { type CheckedState, View, YStack } from "tamagui";
 import { Checkbox } from "../Checkbox";
 
 type Parent = {
-  label: string;
   id: string;
+  label: string;
 };
 
 type Check<T> = {
   id: T;
   label: string;
-  checked: boolean;
 };
 
 /**
@@ -22,47 +21,49 @@ type Check<T> = {
 type Props<T> = {
   parent?: Parent;
   checks: Check<T>[];
-  onChangeChecks: (checks: Check<T>[]) => void;
+  checkedIds: T[];
+  onChangeChecks: (checkedIds: T[]) => void;
 };
 
 /**
- * @param {Props} props
- * @returns CheckboxList component
+ * CheckboxList component
+ * A checkbox list with parent-child relationships
  */
 export const CheckboxList = <T extends string>({
   parent,
   checks,
+  checkedIds,
   onChangeChecks,
 }: Props<T>) => {
   const onChangeChild = useCallback(
-    (id: string) => {
-      onChangeChecks(
-        checks.map((check) => {
-          if (check.id === id) return { ...check, checked: !check.checked };
-          return check;
-        }),
-      );
+    (id: T) => {
+      if (checkedIds.includes(id)) {
+        onChangeChecks(checkedIds.filter((checkId) => checkId !== id));
+        return;
+      }
+      onChangeChecks(checkedIds.concat(id));
     },
-    [onChangeChecks, checks],
+    [onChangeChecks, checkedIds],
   );
 
   const checked: CheckedState = useMemo(() => {
     // when all checkboxes are checked, check the parent checkbox
-    if (checks.every((check) => check.checked)) return true;
+    if (checks.every((check) => checkedIds.includes(check.id))) return true;
     // when some checkboxes are checked, make the parent checkbox indeterminate
-    if (checks.some((check) => check.checked)) return "indeterminate";
+    if (checks.some((check) => checkedIds.includes(check.id)))
+      return "indeterminate";
     // when all checkboxes are unchecked, uncheck the parent checkbox
     return false;
-  }, [checks]);
+  }, [checks, checkedIds]);
 
   const onChangeParent = useCallback(() => {
     // when some checkboxes are checked, uncheck all checkboxes
     if (checked) {
-      onChangeChecks(checks.map((check) => ({ ...check, checked: false })));
+      onChangeChecks([]);
       return;
     }
     // when all checkboxes are unchecked, check all checkboxes
-    onChangeChecks(checks.map((check) => ({ ...check, checked: true })));
+    onChangeChecks(checks.map((check) => check.id));
   }, [checked, checks, onChangeChecks]);
 
   return (
@@ -77,12 +78,12 @@ export const CheckboxList = <T extends string>({
           />
         </View>
       )}
-      <View>
+      <View marginLeft={"$6"}>
         {checks.map((check) => (
           <Checkbox
             key={check.id}
             {...check}
-            checked={check.checked}
+            checked={checkedIds.includes(check.id)}
             onCheckedChange={() => onChangeChild(check.id)}
           />
         ))}

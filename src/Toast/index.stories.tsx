@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { expect } from "@storybook/test";
-import { RadioGroup as Component } from ".";
+import { Toast as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
@@ -13,19 +13,8 @@ export default meta;
 type Story = StoryObj<typeof Component>;
 
 export const Default: Story = {
-  args: {
-    options: [
-      {
-        label: "Option 1",
-        value: "option1",
-      },
-      {
-        label: "Option 2",
-        value: "option2",
-      },
-    ],
-  },
-  render: (args) => <Component {...args} />,
+  args: { children: "Hello, World!" },
+  render: (args) => <Component {...args} duration={100} />,
 };
 
 export const Behavior: Story = {

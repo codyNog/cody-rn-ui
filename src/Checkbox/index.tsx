@@ -1,4 +1,4 @@
-import { Check as CheckIcon } from "@tamagui/lucide-icons";
+import { Check as CheckIcon, Minus } from "@tamagui/lucide-icons";
 import { type Ref, useId } from "react";
 import {
   Checkbox as Cb,
@@ -18,13 +18,22 @@ export const Checkbox = ({
   label,
   id = useId(),
   ref,
+  checked,
   ...checkboxProps
 }: Props) => {
   return (
     <XStack width={300} alignItems="center" gap="$4">
-      <Cb {...checkboxProps} id={id} size={size} inset={"auto"} ref={ref}>
+      <Cb
+        {...checkboxProps}
+        checked={checked}
+        id={id}
+        size={size}
+        inset={"auto"}
+        ref={ref}
+      >
         <Cb.Indicator>
-          <CheckIcon />
+          {checked === true && <CheckIcon />}
+          {checked === "indeterminate" && <Minus />}
         </Cb.Indicator>
       </Cb>
       {label && (
