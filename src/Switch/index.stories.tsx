@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { expect } from "@storybook/test";
+import { useState } from "react";
 import { Switch as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 
@@ -11,9 +12,18 @@ const meta: Meta<typeof Component> = {
 export default meta;
 
 type Story = StoryObj<typeof Component>;
+const args: Story["args"] = {
+  checked: false,
+};
 
 export const Default: Story = {
-  render: (args) => <Component {...args} />,
+  args,
+  render: (args) => {
+    const [checked, setChecked] = useState(false);
+    return (
+      <Component {...args} checked={checked} onCheckedChange={setChecked} />
+    );
+  },
 };
 
 export const Behavior: Story = {

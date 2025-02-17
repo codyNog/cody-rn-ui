@@ -39,6 +39,7 @@ export const Default: Story = {
           <XStack gap="$2">
             <Label htmlFor="type">Type</Label>
             <Select
+              id="type"
               value={type}
               options={[
                 { value: "1", label: "Type 1" },

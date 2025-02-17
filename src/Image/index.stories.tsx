@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import { Accordion as Component } from ".";
+import { Image as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
@@ -12,20 +12,11 @@ export default meta;
 type Story = StoryObj<typeof Component>;
 
 const args: Story["args"] = {
-  items: [
-    {
-      title: "First",
-      content: "First content",
-    },
-    {
-      title: "Second",
-      content: "Second content",
-    },
-    {
-      title: "Third",
-      content: "Third content",
-    },
-  ],
+  source: {
+    uri: "https://picsum.photos/200/300",
+    width: 200,
+    height: 300,
+  },
 };
 
 export const Default: Story = {

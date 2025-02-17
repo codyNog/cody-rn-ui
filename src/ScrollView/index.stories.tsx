@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import { Accordion as Component } from ".";
+import { ScrollView as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
@@ -11,22 +11,7 @@ export default meta;
 
 type Story = StoryObj<typeof Component>;
 
-const args: Story["args"] = {
-  items: [
-    {
-      title: "First",
-      content: "First content",
-    },
-    {
-      title: "Second",
-      content: "Second content",
-    },
-    {
-      title: "Third",
-      content: "Third content",
-    },
-  ],
-};
+const args: Story["args"] = {};
 
 export const Default: Story = {
   args,

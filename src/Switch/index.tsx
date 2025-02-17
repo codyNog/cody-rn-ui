@@ -11,18 +11,21 @@ import {
 type Props = SwitchProps & {
   label?: string;
   ref?: Ref<TamaguiElement>;
+  checked: boolean;
+  id: string;
 };
 
 export const Switch = ({
-  size,
+  size = "$3",
   defaultChecked,
   label,
   id,
   ref,
+  checked,
   ...rest
 }: Props) => {
   return (
-    <XStack alignItems="center" gap="$4">
+    <XStack width={200} alignItems="center" gap="$4">
       {label && (
         <>
           <Label
@@ -30,13 +33,14 @@ export const Switch = ({
             justifyContent="flex-end"
             size={size}
             htmlFor={id}
+            minWidth={90}
           >
             {label}
           </Label>
           <Separator minHeight={20} vertical />
         </>
       )}
-      <S {...rest} id={id} size={size} ref={ref} inset="auto">
+      <S {...rest} id={id} size={size} ref={ref} checked={checked}>
         <S.Thumb animation="quicker" />
       </S>
     </XStack>
