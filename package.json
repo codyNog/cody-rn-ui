@@ -62,7 +62,7 @@
     "expo-symbols": "^0.2.2",
     "expo-web-browser": "^14.0.2",
     "react": "^19.0.0",
-    "tamagui": "1.124.1"
+    "tamagui": "^1.125.6"
   },
   "bin": {
     "cody-rn-ui": "./dist/index.js"
