@@ -82,6 +82,7 @@
     "lint": "run-p lint:*",
     "lint:script": "npx biome check .",
     "lint:spell": "cspell . --no-progress",
-    "build-check": "tsc --noEmit"
+    "build-check": "tsc --noEmit",
+    "dev": "bun storybook:web"
   }
 }
