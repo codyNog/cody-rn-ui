@@ -89,9 +89,10 @@ type InputProps = {
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
+  disabled?: boolean;
 };
 
-const Input = ({ ref, value, onChange, onSubmit }: InputProps) => {
+const Input = ({ ref, value, onChange, onSubmit, disabled }: InputProps) => {
   const onKeyPress = useCallback(
     (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
       // @ts-ignore
@@ -109,6 +110,7 @@ const Input = ({ ref, value, onChange, onSubmit }: InputProps) => {
         value={value}
         onChangeText={(e) => onChange(e)}
         onKeyPress={onKeyPress}
+        disabled={disabled}
       />
       <TamaguiButton
         onPress={onSubmit}
@@ -116,6 +118,7 @@ const Input = ({ ref, value, onChange, onSubmit }: InputProps) => {
         right={0}
         top={6}
         icon={<Send />}
+        disabled={disabled}
       />
     </View>
   );
