@@ -1,6 +1,7 @@
 import type { Preview } from "@storybook/react";
 import React from "react";
 import { UIProvider } from "../src/Provider";
+import { Background } from "../src/Background";
 
 /**
  * Storybookのプレビュー設定
@@ -19,6 +20,11 @@ const preview: Preview = {
     // グローバルなパラメータを設定
     materialDesign: {
       keyColor: "#6750A4", // デフォルトのキーカラー
+    },
+    // パディングを0に設定
+    layout: "fullscreen",
+    paddings: {
+      default: "0px",
     },
   },
   // グローバルな引数を設定（Storybookのコントロールパネルで変更可能）
@@ -48,7 +54,9 @@ const preview: Preview = {
 
       return (
         <UIProvider keyColor={keyColor}>
-          <Story />
+          <Background>
+            <Story />
+          </Background>
         </UIProvider>
       );
     },

@@ -1,24 +1,24 @@
 "use client";
+import { Send } from "@tamagui/lucide-icons";
 import type { ReactNode, Ref } from "react";
+import { useCallback } from "react";
+import type {
+  NativeSyntheticEvent,
+  TextInput,
+  TextInputKeyPressEventData,
+} from "react-native";
 import {
-  styled,
+  ScrollView,
+  Button as TamaguiButton,
   type TamaguiElement,
   Text,
   TextArea,
   View,
   XStack,
   YStack,
-  Button as TamaguiButton,
-  ScrollView,
+  styled,
 } from "tamagui";
-import type {
-  NativeSyntheticEvent,
-  TextInput,
-  TextInputKeyPressEventData,
-} from "react-native";
 import { Button } from "../Button";
-import { Send } from "@tamagui/lucide-icons";
-import { useCallback } from "react";
 
 type WrapperProps = {
   children: ReactNode;

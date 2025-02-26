@@ -1,21 +1,22 @@
 import {
+  type TonalPalette,
   argbFromHex,
   hexFromArgb,
   themeFromSourceColor,
-  type TonalPalette,
 } from "@material/material-color-utilities";
-import { themes, tokens as tamaguiTokens } from "@tamagui/themes";
+import { createInterFont } from "@tamagui/font-inter";
+import { shorthands } from "@tamagui/shorthands";
+import { tokens as tamaguiTokens, themes } from "@tamagui/themes";
+import { ToastProvider } from "@tamagui/toast";
+import type { ReactNode } from "react";
 import {
-  createTamagui,
-  createTokens,
+  type GenericFont,
   TamaguiProvider,
   Theme,
-  type GenericFont,
+  createTamagui,
+  createTokens,
 } from "tamagui";
-import { shorthands } from "@tamagui/shorthands";
-import type { ReactNode } from "react";
-import { createInterFont } from "@tamagui/font-inter";
-import { ToastProvider } from "@tamagui/toast";
+import { stateLayerOpacity } from "../theme";
 
 /**
  * Material Design 3のデザイントークンシステム
@@ -291,14 +292,6 @@ export const elevationSystem = {
       elevation: 12,
     },
   },
-};
-
-// 状態レイヤーの不透明度（Material Design 3の仕様に基づく）
-export const stateLayerOpacity = {
-  hover: 0.08,
-  focus: 0.12,
-  press: 0.12,
-  drag: 0.16,
 };
 
 // 型定義

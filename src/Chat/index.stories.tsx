@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import { Chat } from ".";
-import { getCanvas } from "../libs/storybook";
 import { useState } from "react";
+import { Chat } from ".";
 import { View } from "../View";
+import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Chat.Message> = {
   component: Chat.Message,
