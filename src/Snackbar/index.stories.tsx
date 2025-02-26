@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 import { Button, YStack } from "tamagui";
-import { Snackbar } from ".";
+import { Snackbar, useSnackbar } from ".";
 
 const meta: Meta<typeof Snackbar> = {
   component: Snackbar,
@@ -70,6 +70,17 @@ export const Interactive: Story = {
           />
         )}
       </YStack>
+    );
+  },
+};
+
+export const Hook: Story = {
+  render: () => {
+    const { show } = useSnackbar({ isNative: false });
+    return (
+      <Button onPress={() => show({ message: "メッセージが表示されました" })}>
+        スナックバーを表示
+      </Button>
     );
   },
 };
