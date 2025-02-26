@@ -3,6 +3,6 @@ import { styled, View } from "tamagui";
 
 export const Background = styled(View, {
   backgroundColor: "$background",
-  height: "100%",
+  flexDirection: "column",
   flex: 1,
 });

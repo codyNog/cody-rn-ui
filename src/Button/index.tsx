@@ -1,5 +1,5 @@
 import { styled } from "tamagui";
-import { Button as TamaguiButton } from "tamagui";
+import { Button as TamaguiButton, type ButtonProps } from "tamagui";
 import { elevationSystem, stateLayerOpacity } from "../theme";
 
 /**
@@ -122,28 +122,6 @@ export const Button = styled(TamaguiButton, {
         },
       },
     },
-    // サイズバリアント
-    size: {
-      small: {
-        height: 32,
-        paddingHorizontal: "$3",
-        fontSize: 14,
-        letterSpacing: 0.1,
-      },
-      medium: {
-        height: 40, // デフォルト
-        paddingHorizontal: "$4",
-        fontSize: 16,
-        letterSpacing: 0.1,
-      },
-      large: {
-        height: 48,
-        paddingHorizontal: "$5",
-        fontSize: 16,
-        fontWeight: "500",
-        letterSpacing: 0.1,
-      },
-    },
     // 無効状態
     disabled: {
       true: {
@@ -151,5 +129,9 @@ export const Button = styled(TamaguiButton, {
         pointerEvents: "none",
       },
     },
+  } as const,
+  defaultVariants: {
+    variant: "filled",
+    disabled: false,
   },
 });

@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import { Button as Component } from ".";
 import { getCanvas } from "../libs/storybook";
+import { YStack } from "tamagui";
 
 const meta: Meta<typeof Component> = {
   component: Component,
@@ -15,23 +16,26 @@ type Story = StoryObj<typeof Component>;
 export const Default: Story = {
   args: {},
   render: (args) => (
-    <>
-      <Component {...args} variant="tonal">
-        Tonal
-      </Component>
+    <YStack space="$4" padding="$4">
       <Component {...args} variant="filled">
-        Contained
+        Filled
       </Component>
       <Component {...args} variant="outlined">
         Outlined
       </Component>
+      <Component {...args} variant="tonal">
+        Tonal
+      </Component>
+      <Component {...args} variant="elevated">
+        Elevated
+      </Component>
       <Component {...args} variant="text">
         Text
       </Component>
-      <Component {...args} variant="elevated">
-        elevated
+      <Component {...args} variant="filled" disabled>
+        disabled
       </Component>
-    </>
+    </YStack>
   ),
 };
 
