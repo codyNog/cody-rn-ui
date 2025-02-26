@@ -43,6 +43,12 @@ const StyledSwitch = styled(S, {
         },
       },
     },
+    disabled: {
+      true: {
+        opacity: 0.38,
+        pointerEvents: "none",
+      },
+    },
   } as const,
 });
 
@@ -72,6 +78,7 @@ type Props = SwitchProps & {
   ref?: Ref<TamaguiElement>;
   checked: boolean;
   id: string;
+  disabled?: boolean;
 };
 
 export const Switch = ({
@@ -81,12 +88,15 @@ export const Switch = ({
   id,
   ref,
   checked,
+  disabled = false,
   onCheckedChange,
   ...rest
 }: Props) => {
   // ラベルクリック時のハンドラー
   const handleLabelClick = () => {
-    onCheckedChange?.(!checked);
+    if (!disabled) {
+      onCheckedChange?.(!checked);
+    }
   };
 
   return (
@@ -97,6 +107,7 @@ export const Switch = ({
         size={size}
         ref={ref}
         checked={checked}
+        disabled={disabled}
         onCheckedChange={onCheckedChange}
       >
         <StyledThumb animation="quick" checked={checked} />
@@ -106,7 +117,8 @@ export const Switch = ({
           size={size}
           htmlFor={id}
           onPress={handleLabelClick}
-          cursor="pointer"
+          cursor={disabled ? "not-allowed" : "pointer"}
+          opacity={disabled ? 0.38 : 1}
         >
           {label}
         </Label>
