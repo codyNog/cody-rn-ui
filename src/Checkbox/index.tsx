@@ -95,7 +95,7 @@ export const Checkbox = ({
         ref={ref}
         onCheckedChange={onCheckedChange}
       >
-        <Cb.Indicator>
+        <Cb.Indicator forceMount>
           {checked === true && <CheckIcon color="$onPrimary" />}
           {checked === "indeterminate" && <Minus color="$onPrimary" />}
         </Cb.Indicator>

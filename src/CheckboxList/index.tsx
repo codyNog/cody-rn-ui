@@ -67,7 +67,7 @@ export const CheckboxList = <T extends string>({
   }, [checked, checks, onChangeChecks]);
 
   return (
-    <YStack>
+    <YStack gap="$2">
       {parent && (
         <View>
           <Checkbox
@@ -78,7 +78,7 @@ export const CheckboxList = <T extends string>({
           />
         </View>
       )}
-      <View marginLeft={"$6"}>
+      <View marginLeft={"$6"} gap="$2">
         {checks.map((check) => (
           <Checkbox
             key={check.id}
