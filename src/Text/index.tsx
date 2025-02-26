@@ -1,12 +1,44 @@
 "use client";
 import type { ReactNode, Ref } from "react";
-import { Text as TamaguiText, type TamaguiTextElement } from "tamagui";
+import {
+  Text as TamaguiText,
+  type TamaguiTextElement,
+  type TextProps as TamaguiTextProps,
+  styled,
+} from "tamagui";
+import { typographyScale } from "../theme";
 
-type Props = {
-  children: ReactNode;
-  ref?: Ref<TamaguiTextElement>;
-};
+// Material Design 3のタイポグラフィスタイルを適用したテキストコンポーネント
+export const Text = styled(TamaguiText, {
+  color: "$onSurface",
 
-export const Text = ({ children, ref }: Props) => {
-  return <TamaguiText ref={ref}>{children}</TamaguiText>;
-};
+  // バリアント定義
+  variants: {
+    variant: {
+      displayLarge: typographyScale.displayLarge,
+      displayMedium: typographyScale.displayMedium,
+      displaySmall: typographyScale.displaySmall,
+
+      headlineLarge: typographyScale.headlineLarge,
+      headlineMedium: typographyScale.headlineMedium,
+      headlineSmall: typographyScale.headlineSmall,
+
+      titleLarge: typographyScale.titleLarge,
+      titleMedium: typographyScale.titleMedium,
+      titleSmall: typographyScale.titleSmall,
+
+      bodyLarge: typographyScale.bodyLarge,
+      bodyMedium: typographyScale.bodyMedium,
+      bodySmall: typographyScale.bodySmall,
+
+      labelLarge: typographyScale.labelLarge,
+      labelMedium: typographyScale.labelMedium,
+      labelSmall: typographyScale.labelSmall,
+    },
+  } as const,
+
+  // デフォルトバリアント
+  defaultVariants: {
+    variant: "bodyMedium",
+  },
+});
