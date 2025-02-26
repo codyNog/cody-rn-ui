@@ -6,7 +6,9 @@ import {
   Square,
   Accordion as TamaguiAccordion,
   type TamaguiElement,
+  styled,
 } from "tamagui";
+import { stateLayerOpacity } from "../theme";
 
 type Props = {
   ref?: Ref<TamaguiElement>;
@@ -14,38 +16,97 @@ type Props = {
     title: string;
     content: ReactNode;
   }[];
+  // 開いているアイテムの値の配列
+  value?: string[];
+  // 値が変更されたときのコールバック
+  onChange?: (value: string[]) => void;
+  // デフォルトで開いているアイテム
+  defaultValue?: string[];
 };
 
-export const Accordion = ({ ref, items }: Props) => {
+// Material Design 3のスタイルを適用したアコーディオントリガー
+const StyledTrigger = styled(TamaguiAccordion.Trigger, {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  paddingVertical: 16,
+  paddingHorizontal: 16,
+  backgroundColor: "$surfaceContainerLow",
+  borderWidth: 0,
+  borderColor: "$outline",
+  borderBottomLeftRadius: 0,
+  borderBottomRightRadius: 0,
+
+  // ホバー状態のスタイル
+  hoverStyle: {
+    backgroundColor: `rgba(var(--color-on-surface), ${stateLayerOpacity.hover})`,
+  },
+
+  // プレス状態のスタイル
+  pressStyle: {
+    backgroundColor: `rgba(var(--color-on-surface), ${stateLayerOpacity.press})`,
+  },
+
+  // バリアント
+  variants: {
+    open: {
+      true: {
+        borderBottomWidth: 0,
+      },
+      false: {
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+      },
+    },
+  } as const,
+});
+
+// Material Design 3のスタイルを適用したアコーディオンコンテンツ
+const StyledContent = styled(TamaguiAccordion.Content, {
+  paddingHorizontal: 16,
+  paddingVertical: 12,
+  backgroundColor: "$surfaceContainerLowest",
+  borderWidth: 0,
+  borderColor: "$outline",
+  borderTopWidth: 0,
+});
+
+export const Accordion = ({
+  ref,
+  items,
+  value,
+  onChange,
+  defaultValue,
+}: Props) => {
   return (
-    <TamaguiAccordion ref={ref} overflow="hidden" width="$20" type="multiple">
+    <TamaguiAccordion
+      ref={ref}
+      overflow="hidden"
+      width="100%"
+      type={"multiple"}
+      value={value}
+      onValueChange={onChange}
+      defaultValue={defaultValue}
+    >
       {items.map(({ title, content }) => (
         <TamaguiAccordion.Item key={title} value={title}>
-          <TamaguiAccordion.Trigger
-            flexDirection="row"
-            justifyContent="space-between"
-          >
-            {({
-              open,
-            }: {
-              open: boolean;
-            }) => (
+          <StyledTrigger>
+            {({ open }: { open: boolean }) => (
               <>
-                <Paragraph>{title}</Paragraph>
+                <Paragraph color="$onSurface">{title}</Paragraph>
                 <Square animation="quick" rotate={open ? "180deg" : "0deg"}>
-                  <ChevronDown size="$1" />
+                  <ChevronDown size={20} color="$onSurfaceVariant" />
                 </Square>
               </>
             )}
-          </TamaguiAccordion.Trigger>
-          <TamaguiAccordion.HeightAnimator animation="medium">
-            <TamaguiAccordion.Content
-              animation="medium"
-              exitStyle={{ opacity: 0 }}
-            >
-              {content}
-            </TamaguiAccordion.Content>
-          </TamaguiAccordion.HeightAnimator>
+          </StyledTrigger>
+          <TamaguiAccordion.Content
+            animation="medium"
+            enterStyle={{ opacity: 0, height: 0 }}
+            exitStyle={{ opacity: 0, height: 0 }}
+          >
+            <StyledContent>{content}</StyledContent>
+          </TamaguiAccordion.Content>
         </TamaguiAccordion.Item>
       ))}
     </TamaguiAccordion>
