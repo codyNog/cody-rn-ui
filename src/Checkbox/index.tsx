@@ -1,12 +1,69 @@
 import { Check as CheckIcon, Minus } from "@tamagui/lucide-icons";
-import { type Ref, useId } from "react";
+import { useId, type Ref } from "react";
 import {
   Checkbox as Cb,
   type CheckboxProps,
   Label,
   type TamaguiElement,
   XStack,
+  styled,
 } from "tamagui";
+import { stateLayerOpacity } from "../theme";
+
+// Material Design 3のスタイルを適用したCheckbox
+const StyledCheckbox = styled(Cb, {
+  // MD3のチェックボックスのスタイル
+  borderRadius: 2,
+  borderWidth: 2,
+  borderColor: "$outline",
+  backgroundColor: "transparent",
+
+  // バリアント
+  variants: {
+    checked: {
+      true: {
+        borderColor: "$primary",
+        backgroundColor: "$primary",
+        // チェック状態のホバー
+        hoverStyle: {
+          backgroundColor: "$primary",
+          opacity: 1 - stateLayerOpacity.hover,
+        },
+        // チェック状態のプレス
+        pressStyle: {
+          backgroundColor: "$primary",
+          opacity: 1 - stateLayerOpacity.press,
+        },
+      },
+      false: {
+        borderColor: "$outline",
+        backgroundColor: "transparent",
+        // 未チェック状態のホバー
+        hoverStyle: {
+          backgroundColor: `rgba(var(--color-on-surface), ${stateLayerOpacity.hover})`,
+        },
+        // 未チェック状態のプレス
+        pressStyle: {
+          backgroundColor: `rgba(var(--color-on-surface), ${stateLayerOpacity.press})`,
+        },
+      },
+      indeterminate: {
+        borderColor: "$primary",
+        backgroundColor: "$primary",
+        // 不確定状態のホバー
+        hoverStyle: {
+          backgroundColor: "$primary",
+          opacity: 1 - stateLayerOpacity.hover,
+        },
+        // 不確定状態のプレス
+        pressStyle: {
+          backgroundColor: "$primary",
+          opacity: 1 - stateLayerOpacity.press,
+        },
+      },
+    },
+  } as const,
+});
 
 type Props = CheckboxProps & {
   label?: string;
@@ -19,25 +76,37 @@ export const Checkbox = ({
   id = useId(),
   ref,
   checked,
+  onCheckedChange,
   ...checkboxProps
 }: Props) => {
+  // ラベルクリック時のハンドラー
+  const handleLabelClick = () => {
+    onCheckedChange?.(!checked);
+  };
+
   return (
     <XStack width={300} alignItems="center" gap="$4">
-      <Cb
+      <StyledCheckbox
         {...checkboxProps}
         checked={checked}
         id={id}
         size={size}
         inset={"auto"}
         ref={ref}
+        onCheckedChange={onCheckedChange}
       >
         <Cb.Indicator>
-          {checked === true && <CheckIcon />}
-          {checked === "indeterminate" && <Minus />}
+          {checked === true && <CheckIcon color="$onPrimary" />}
+          {checked === "indeterminate" && <Minus color="$onPrimary" />}
         </Cb.Indicator>
-      </Cb>
+      </StyledCheckbox>
       {label && (
-        <Label size={size} htmlFor={id}>
+        <Label
+          size={size}
+          htmlFor={id}
+          onPress={handleLabelClick}
+          cursor="pointer"
+        >
           {label}
         </Label>
       )}
