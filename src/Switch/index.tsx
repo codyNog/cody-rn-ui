@@ -35,11 +35,11 @@ const StyledSwitch = styled(S, {
         backgroundColor: "$surfaceContainerHighest",
         // 未チェック状態のホバー
         hoverStyle: {
-          backgroundColor: `rgba(var(--color-on-surface), ${stateLayerOpacity.hover})`,
+          backgroundColor: `$onSurface, ${stateLayerOpacity.hover})`,
         },
         // 未チェック状態のプレス
         pressStyle: {
-          backgroundColor: `rgba(var(--color-on-surface), ${stateLayerOpacity.press})`,
+          backgroundColor: `$onSurface, ${stateLayerOpacity.press})`,
         },
       },
     },

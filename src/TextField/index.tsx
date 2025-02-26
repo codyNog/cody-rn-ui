@@ -28,7 +28,7 @@ const StyledInput = styled(TamaguiInput, {
 
   // ホバー状態のスタイル
   hoverStyle: {
-    backgroundColor: `rgba(var(--color-on-surface), ${stateLayerOpacity.hover})`,
+    backgroundColor: `$onSurface, ${stateLayerOpacity.hover})`,
   },
 
   // バリアント

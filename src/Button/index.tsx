@@ -70,11 +70,11 @@ export const Button = styled(TamaguiButton, {
         color: "$primary",
         // ホバー時のスタイル
         hoverStyle: {
-          backgroundColor: `rgba(var(--color-primary), ${stateLayerOpacity.hover})`,
+          backgroundColor: `$primary, ${stateLayerOpacity.hover})`,
         },
         // プレス時のスタイル
         pressStyle: {
-          backgroundColor: `rgba(var(--color-primary), ${stateLayerOpacity.press})`,
+          backgroundColor: `$primary, ${stateLayerOpacity.press})`,
         },
       },
       tonal: {
@@ -114,11 +114,11 @@ export const Button = styled(TamaguiButton, {
         paddingHorizontal: "$2",
         // ホバー時のスタイル
         hoverStyle: {
-          backgroundColor: `rgba(var(--color-primary), ${stateLayerOpacity.hover})`,
+          backgroundColor: `$primary, ${stateLayerOpacity.hover})`,
         },
         // プレス時のスタイル
         pressStyle: {
-          backgroundColor: `rgba(var(--color-primary), ${stateLayerOpacity.press})`,
+          backgroundColor: `$primary, ${stateLayerOpacity.press})`,
         },
       },
     },
