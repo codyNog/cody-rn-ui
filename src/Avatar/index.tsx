@@ -3,8 +3,8 @@ import type { Ref } from "react";
 import {
   Avatar as TamaguiAvatar,
   type TamaguiElement,
-  styled,
   Text,
+  styled,
 } from "tamagui";
 import { elevationSystem } from "../theme";
 

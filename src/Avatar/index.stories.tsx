@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Text, XStack, YStack } from "tamagui";
 import { Avatar } from ".";
-import { YStack, XStack, Text } from "tamagui";
 
 /**
  * Material Design 3のガイドラインに基づいたアバターコンポーネント

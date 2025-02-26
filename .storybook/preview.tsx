@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/react";
 import React from "react";
-import { UIProvider } from "../src/Provider";
 import { Background } from "../src/Background";
+import { UIProvider } from "../src/Provider";
 
 /**
  * Storybookのプレビュー設定

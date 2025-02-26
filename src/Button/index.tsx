@@ -1,5 +1,5 @@
 import { styled } from "tamagui";
-import { Button as TamaguiButton, type ButtonProps } from "tamagui";
+import { type ButtonProps, Button as TamaguiButton } from "tamagui";
 import { elevationSystem, stateLayerOpacity } from "../theme";
 
 /**

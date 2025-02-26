@@ -1,5 +1,5 @@
 "use client";
-import { styled, View } from "tamagui";
+import { View, styled } from "tamagui";
 
 export const Background = styled(View, {
   backgroundColor: "$background",
