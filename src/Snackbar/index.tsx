@@ -1,10 +1,10 @@
 "use client";
 import { X } from "@tamagui/lucide-icons";
-import { Text, XStack, styled } from "tamagui";
-import { elevationSystem } from "../theme";
-import { Button } from "../Button";
+import { ToastViewport, useToastController } from "@tamagui/toast";
 import { useCallback, useState } from "react";
-import { useToastController, ToastViewport } from "@tamagui/toast";
+import { Text, XStack, styled } from "tamagui";
+import { Button } from "../Button";
+import { elevationSystem } from "../theme";
 
 export type SnackbarProps = {
   message: string;

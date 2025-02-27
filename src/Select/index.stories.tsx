@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { expect } from "@storybook/test";
 import { useState } from "react";
 import { YStack } from "tamagui";
-import { expect } from "@storybook/test";
 import { Select as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 
