@@ -156,12 +156,7 @@ const StyledTrigger = styled(TamaguiSelect.Trigger, {
         },
       },
     },
-  },
-
-  // デフォルトバリアント
-  defaultVariants: {
-    variant: "outlined",
-  },
+  } as const,
 });
 
 // スタイル付きのSelectコンテンツ
@@ -214,7 +209,7 @@ export const Select = ({
   options,
   value,
   onChange,
-  variant,
+  variant = "outlined",
   disabled,
 }: Props) => {
   const [open, setOpen] = useState(false);
@@ -294,7 +289,7 @@ export const Select = ({
           backgroundColor={
             variant === "filled" ? "$surfaceContainerHighest" : "$background"
           }
-          marginTop={variant === "outlined" && (open || isSelected) ? -8 : 0}
+          marginTop={variant === "outlined" && (open || isSelected) ? -10 : 0}
         >
           {label}
         </Label>
