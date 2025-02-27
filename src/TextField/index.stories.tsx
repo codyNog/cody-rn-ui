@@ -34,7 +34,7 @@ export const Default: Story = {
           value={value}
           onChange={setValue}
           label="label"
-          variant="filled"
+          variant="outlined"
           maxLength={100}
         />
       </YStack>
@@ -61,7 +61,7 @@ export const Multiline: Story = {
           value={value}
           onChange={setValue}
           label="マルチライン入力 (outlined)"
-          variant="filled"
+          variant="outlined"
           multiline={true}
           numberOfLines={3}
         />
