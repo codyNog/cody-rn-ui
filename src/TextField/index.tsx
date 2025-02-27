@@ -238,6 +238,7 @@ export const TextField = ({
           numberOfLines={multiline ? numberOfLines : 1}
           textAlignVertical={multiline ? "top" : "center"}
           height={multiline ? undefined : 56}
+          minHeight={multiline ? 24 * numberOfLines + 40 : 56}
           paddingTop={multiline ? 24 : 16}
           {...props}
         />
