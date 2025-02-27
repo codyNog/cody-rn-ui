@@ -16,6 +16,7 @@ import { getCanvas } from "../libs/storybook";
  * - デフォルト値の設定
  * - 最小値・最大値の設定
  * - Material Design 3のスタイリング
+ * - カウンター表示オプション
  */
 const meta: Meta<typeof Component> = {
   component: Component,
@@ -24,30 +25,18 @@ const meta: Meta<typeof Component> = {
     defaultValue: {
       control: "number",
       description: "スライダーのデフォルト値",
-      table: {
-        defaultValue: { summary: 0 },
-      },
     },
     min: {
       control: "number",
       description: "スライダーの最小値",
-      table: {
-        defaultValue: { summary: 0 },
-      },
     },
     max: {
       control: "number",
       description: "スライダーの最大値",
-      table: {
-        defaultValue: { summary: 100 },
-      },
     },
     step: {
       control: "number",
       description: "スライダーのステップ値",
-      table: {
-        defaultValue: { summary: 1 },
-      },
     },
     size: {
       control: {
@@ -55,9 +44,10 @@ const meta: Meta<typeof Component> = {
         options: ["$2", "$3", "$4", "$5"],
       },
       description: "スライダーのサイズ",
-      table: {
-        defaultValue: { summary: "$3" },
-      },
+    },
+    showCounter: {
+      control: "boolean",
+      description: "値のカウンターを表示するかどうか",
     },
   },
 };
@@ -130,13 +120,31 @@ export const Ranges: Story = {
   ),
 };
 
+// カウンター表示
+export const WithCounter: Story = {
+  render: () => (
+    <YStack space="$4" padding="$4">
+      <Text variant="labelMedium">カウンター表示あり</Text>
+      <Component defaultValue={[50]} showCounter />
+
+      <Text variant="labelMedium">カウンター表示なし（デフォルト）</Text>
+      <Component defaultValue={[70]} />
+    </YStack>
+  ),
+};
+
 export const Behavior: Story = {
   args,
   render: (args) => {
     const [value, setValue] = useState([50]);
     return (
       <YStack space="$4" padding="$4">
-        <Component {...args} value={value} onValueChange={setValue} />
+        <Component
+          {...args}
+          value={value}
+          onValueChange={setValue}
+          showCounter
+        />
         <Text>スライダー値: {value[0]}</Text>
       </YStack>
     );

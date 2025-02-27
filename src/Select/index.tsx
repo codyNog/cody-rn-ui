@@ -1,216 +1,309 @@
 "use client";
-import { Check, ChevronDown, ChevronUp } from "@tamagui/lucide-icons";
-import { type Ref, useMemo } from "react";
-import type { FontSizeTokens, SelectProps, TamaguiElement } from "tamagui";
+import { ChevronDown } from "@tamagui/lucide-icons";
+import { useState } from "react";
 import {
+  Select as TamaguiSelect,
   Adapt,
   Sheet,
-  Select as TamaguiSelect,
-  Text,
   YStack,
-  getFontSize,
+  Text,
+  XStack,
   styled,
 } from "tamagui";
-import { LinearGradient } from "tamagui/linear-gradient";
-import { stateLayerOpacity } from "../theme";
+import { elevationSystem, stateLayerOpacity } from "../theme";
 
-type Option = {
-  value: string;
+// 選択肢の型定義
+export type SelectOption = {
   label: string;
+  value: string;
 };
 
-type Group = {
-  group: string;
-  options: Option[];
-};
+// ヘルパーテキスト
+const HelperText = styled(Text, {
+  fontSize: 12,
+  color: "$onSurfaceVariant",
+  marginTop: 4,
+  marginLeft: 16,
 
-type Props = Omit<SelectProps, "onChange"> & {
-  value?: string;
-  onChange?: (value: string) => void;
-  options: Option[] | Group[];
-  ref?: Ref<TamaguiElement>;
-  placeholder?: string;
-  error?: string;
-  disabled?: boolean;
-};
+  // バリアント
+  variants: {
+    error: {
+      true: {
+        color: "$error",
+      },
+    },
+  },
+});
 
-// Material Design 3のスタイルを適用したSelectトリガー
+// ラベルコンポーネント
+const Label = styled(Text, {
+  position: "absolute",
+  left: 16,
+  top: 16,
+  fontSize: 16,
+  color: "$onSurfaceVariant",
+  transition: "all 0.2s ease",
+  transformOrigin: "left top",
+  zIndex: 1,
+  backgroundColor: "transparent",
+  paddingHorizontal: 4,
+
+  // バリアント
+  variants: {
+    variant: {
+      filled: {
+        // filledバリアントのデフォルトスタイル
+      },
+      outlined: {
+        // outlinedバリアントのデフォルトスタイル
+      },
+    },
+    focused: {
+      true: {
+        top: 4,
+        fontSize: 12,
+        color: "$primary",
+        transform: [{ translateY: 0 }],
+      },
+    },
+    selected: {
+      true: {
+        top: 4,
+        fontSize: 12,
+        transform: [{ translateY: 0 }],
+      },
+    },
+    error: {
+      true: {
+        color: "$error",
+      },
+    },
+    disabled: {
+      true: {
+        color: "$onSurfaceVariant",
+        opacity: 0.38,
+      },
+    },
+  },
+
+  // デフォルトバリアント
+  defaultVariants: {
+    variant: "filled",
+  },
+});
+
+// スタイル付きのSelectトリガー
 const StyledTrigger = styled(TamaguiSelect.Trigger, {
   height: 56,
-  borderWidth: 1,
-  borderColor: "$outline",
   borderRadius: 4,
   paddingHorizontal: 16,
-  paddingVertical: 8,
+  paddingVertical: 12,
   backgroundColor: "$surfaceContainerHighest",
+  color: "$onSurface",
+  fontSize: 16,
+  justifyContent: "space-between",
+  alignItems: "center",
 
-  // ホバー状態のスタイル
+  // ホバー状態
   hoverStyle: {
     backgroundColor: `$onSurface, ${stateLayerOpacity.hover})`,
   },
 
   // バリアント
   variants: {
-    error: {
-      true: {
-        borderColor: "$error",
+    variant: {
+      filled: {
+        borderWidth: 0,
+        borderBottomWidth: 1,
+        borderColor: "$outline",
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        backgroundColor: "$surfaceContainerHighest",
+
+        // フォーカス状態
+        focusStyle: {
+          borderWidth: 0,
+          borderBottomWidth: 2,
+          borderColor: "$primary",
+          outlineWidth: 0,
+        },
+      },
+      outlined: {
+        borderWidth: 1,
+        borderColor: "$outline",
+        backgroundColor: "transparent",
+
+        // フォーカス状態
+        focusStyle: {
+          borderWidth: 2,
+          borderColor: "$primary",
+          outlineWidth: 0,
+        },
       },
     },
     disabled: {
       true: {
         opacity: 0.38,
-        pointerEvents: "none",
         borderColor: "$outlineVariant",
         backgroundColor: "$surfaceContainerLowest",
       },
     },
-  } as const,
+    error: {
+      true: {
+        borderColor: "$error",
+        focusStyle: {
+          borderColor: "$error",
+        },
+      },
+    },
+  },
+
+  // デフォルトバリアント
+  defaultVariants: {
+    variant: "outlined",
+  },
 });
 
+// スタイル付きのSelectコンテンツ
+const StyledContent = styled(TamaguiSelect.Content, {
+  backgroundColor: "$surfaceContainerHigh",
+  borderRadius: 4,
+  overflow: "hidden",
+  ...elevationSystem.shadows.level3,
+});
+
+// スタイル付きのSelectアイテム
+const StyledItem = styled(TamaguiSelect.Item, {
+  paddingHorizontal: 16,
+  paddingVertical: 12,
+  backgroundColor: "transparent",
+  cursor: "pointer",
+
+  // ホバー状態
+  hoverStyle: {
+    backgroundColor: `$onSurface, ${stateLayerOpacity.hover})`,
+  },
+
+  // 選択状態
+  pressStyle: {
+    backgroundColor: `$primary, ${stateLayerOpacity.hover})`,
+  },
+});
+
+// スタイル付きのSelectアイテムテキスト
+const StyledItemText = styled(TamaguiSelect.ItemText, {
+  fontSize: 16,
+  color: "$onSurface",
+});
+
+type Props = {
+  label: string;
+  helperText?: string;
+  error?: string;
+  options: SelectOption[];
+  value?: string;
+  onChange: (value: string) => void;
+  variant?: "filled" | "outlined";
+  disabled?: boolean;
+};
+
 export const Select = ({
+  label,
+  helperText,
+  error,
+  options,
   value,
   onChange,
-  options,
-  ref,
-  placeholder,
-  error,
-  disabled = false,
-  ...props
+  variant,
+  disabled,
 }: Props) => {
-  const normalizedOptions = useMemo(() => {
-    // フラットな配列の場合は、デフォルトグループに包む
-    if (options.length > 0 && "value" in options[0]) {
-      return [
-        {
-          group: "",
-          options: options as Option[],
-        },
-      ];
-    }
-    return options as Group[];
-  }, [options]);
+  const [open, setOpen] = useState(false);
+  const hasError = !!error;
+  const selectedOption = options.find((option) => option.value === value);
+  const isSelected = !!selectedOption;
 
   return (
-    <>
-      <TamaguiSelect value={value} onValueChange={onChange} {...props}>
-        <StyledTrigger
-          ref={ref}
-          width="100%"
-          iconAfter={ChevronDown}
-          error={!!error}
-          disabled={disabled}
+    <YStack width="100%">
+      <XStack position="relative" width="100%">
+        <TamaguiSelect
+          id={label}
+          value={value}
+          onValueChange={onChange}
+          open={open}
+          onOpenChange={setOpen}
+          disablePreventBodyScroll
         >
-          <TamaguiSelect.Value placeholder={placeholder} />
-        </StyledTrigger>
+          <StyledTrigger
+            variant={variant}
+            error={hasError}
+            disabled={disabled}
+            iconAfter={<ChevronDown size={24} color="$onSurfaceVariant" />}
+          >
+            <TamaguiSelect.Value />
+          </StyledTrigger>
 
-        <Adapt platform="touch">
-          <Sheet
-            native={!!props.native}
-            modal
-            dismissOnSnapToBottom
-            animation="medium"
-          >
-            <Sheet.Frame>
-              <Sheet.ScrollView>
-                <Adapt.Contents />
-              </Sheet.ScrollView>
-            </Sheet.Frame>
-            <Sheet.Overlay
-              backgroundColor="$shadowColor"
-              animation="lazy"
-              enterStyle={{ opacity: 0 }}
-              exitStyle={{ opacity: 0 }}
-            />
-          </Sheet>
-        </Adapt>
-        <TamaguiSelect.Content zIndex={200000}>
-          <TamaguiSelect.ScrollUpButton
-            alignItems="center"
-            justifyContent="center"
-            position="relative"
-            width="100%"
-            height="$3"
-          >
-            <YStack zIndex={10}>
-              <ChevronUp size={20} />
-            </YStack>
-            <LinearGradient
-              start={[0, 0]}
-              end={[0, 1]}
-              fullscreen
-              colors={["$background", "transparent"]}
-              borderRadius="$4"
-            />
-          </TamaguiSelect.ScrollUpButton>
-          <TamaguiSelect.Viewport minWidth={200} width="auto" maxHeight={400}>
-            {normalizedOptions.map((group, groupIndex) => {
-              return (
-                <TamaguiSelect.Group key={group.group || groupIndex}>
-                  {group.group && (
-                    <TamaguiSelect.Label>{group.group}</TamaguiSelect.Label>
-                  )}
-                  {group.options.map((item, i) => {
-                    return (
-                      <TamaguiSelect.Item
-                        index={i}
-                        key={item.value}
-                        value={item.value}
-                      >
-                        <TamaguiSelect.ItemText>
-                          {item.label}
-                        </TamaguiSelect.ItemText>
-                        <TamaguiSelect.ItemIndicator marginLeft="auto">
-                          <Check size={16} />
-                        </TamaguiSelect.ItemIndicator>
-                      </TamaguiSelect.Item>
-                    );
-                  })}
-                </TamaguiSelect.Group>
-              );
-            })}
-            {props.native && (
-              <YStack
-                position="absolute"
-                right={0}
-                top={0}
-                bottom={0}
-                alignItems="center"
-                justifyContent="center"
-                width={"$4"}
-                pointerEvents="none"
-              >
-                <ChevronDown
-                  size={getFontSize((props.size as FontSizeTokens) ?? "$true")}
-                />
-              </YStack>
-            )}
-          </TamaguiSelect.Viewport>
+          <Adapt platform="touch">
+            <Sheet
+              modal
+              dismissOnSnapToBottom
+              snapPointsMode="fit"
+              animationConfig={{
+                type: "spring",
+                damping: 20,
+                stiffness: 250,
+              }}
+            >
+              <Sheet.Frame>
+                <Sheet.ScrollView>
+                  <Adapt.Contents />
+                </Sheet.ScrollView>
+              </Sheet.Frame>
+              <Sheet.Overlay
+                animation="lazy"
+                enterStyle={{ opacity: 0 }}
+                exitStyle={{ opacity: 0 }}
+              />
+            </Sheet>
+          </Adapt>
 
-          <TamaguiSelect.ScrollDownButton
-            alignItems="center"
-            justifyContent="center"
-            position="relative"
-            width="100%"
-            height="$3"
-          >
-            <YStack zIndex={10}>
-              <ChevronDown size={20} />
-            </YStack>
-            <LinearGradient
-              start={[0, 0]}
-              end={[0, 1]}
-              fullscreen
-              colors={["transparent", "$background"]}
-              borderRadius="$4"
-            />
-          </TamaguiSelect.ScrollDownButton>
-        </TamaguiSelect.Content>
-      </TamaguiSelect>
-      {error && (
-        <Text color="$error" fontSize={12} marginTop={4}>
-          {error}
-        </Text>
+          <StyledContent>
+            <TamaguiSelect.ScrollUpButton />
+            <TamaguiSelect.Viewport>
+              <TamaguiSelect.Group>
+                {options.map((option, index) => (
+                  <StyledItem
+                    key={option.value}
+                    index={index}
+                    value={option.value}
+                  >
+                    <StyledItemText>{option.label}</StyledItemText>
+                  </StyledItem>
+                ))}
+              </TamaguiSelect.Group>
+            </TamaguiSelect.Viewport>
+            <TamaguiSelect.ScrollDownButton />
+          </StyledContent>
+        </TamaguiSelect>
+
+        <Label
+          variant={variant}
+          focused={open}
+          selected={isSelected}
+          error={hasError}
+          disabled={disabled}
+          backgroundColor={
+            variant === "filled" ? "$surfaceContainerHighest" : "$background"
+          }
+          marginTop={variant === "outlined" && (open || isSelected) ? -8 : 0}
+        >
+          {label}
+        </Label>
+      </XStack>
+
+      {/* ヘルパーテキスト */}
+      {(helperText || error) && (
+        <HelperText error={hasError}>{error || helperText}</HelperText>
       )}
-    </>
+    </YStack>
   );
 };
