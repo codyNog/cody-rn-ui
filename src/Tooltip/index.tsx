@@ -1,6 +1,12 @@
 "use client";
 import { X } from "@tamagui/lucide-icons";
-import { type ReactNode, type Ref, useCallback, useState } from "react";
+import {
+  type ReactNode,
+  type Ref,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import {
   type TamaguiElement,
   Tooltip as TamaguiTooltip,
@@ -123,12 +129,7 @@ export const Tooltip = ({
 
   const onTriggerMouseLeave = useCallback(() => {
     setIsHoveringTrigger(false);
-
-    // トリガーからマウスが離れても、コンテンツにマウスがある場合は閉じない
-    if (!isHoveringContent) {
-      setOpen(false);
-    }
-  }, [isHoveringContent]);
+  }, []);
 
   // コンテンツのマウスイベント - ポインターイベントを使用
   const onContentPointerEnter = useCallback(() => {
@@ -137,23 +138,21 @@ export const Tooltip = ({
 
   const onContentPointerLeave = useCallback(() => {
     setIsHoveringContent(false);
+  }, []);
 
-    // コンテンツからマウスが離れても、トリガーにマウスがある場合は閉じない
-    if (!isHoveringTrigger) {
-      setOpen(false);
+  const open = useMemo(() => {
+    return isOpen || isHoveringTrigger || isHoveringContent;
+  }, [isOpen, isHoveringTrigger, isHoveringContent]);
+
+  const delay = useMemo(() => {
+    if (rich) {
+      return { open: 0, close: 1000 };
     }
-  }, [isHoveringTrigger]);
+    return undefined;
+  }, [rich]);
 
   return (
-    <TamaguiTooltip
-      open={isOpen}
-      onOpenChange={(open) => {
-        if (open) {
-          setOpen(true);
-        }
-      }}
-      delay={{ open: 0, close: 500 }}
-    >
+    <TamaguiTooltip open={open} onOpenChange={setOpen} delay={delay}>
       <TamaguiTooltip.Trigger asChild>
         <YStack
           onMouseEnter={onTriggerMouseEnter}
