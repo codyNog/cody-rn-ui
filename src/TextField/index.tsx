@@ -14,7 +14,7 @@ import { stateLayerOpacity } from "../theme";
 
 // スタイル付きのInputコンポーネント
 const StyledInput = styled(TamaguiInput, {
-  height: 56,
+  minHeight: 56,
   fontSize: 16,
   lineHeight: 24,
   color: "$onSurface",
@@ -179,16 +179,18 @@ const CounterText = styled(Text, {
   marginRight: 16,
 });
 
-type Props = Omit<InputProps, "ref"> & {
+type Props = Omit<InputProps, "ref" | "onChangeText" | "onChange"> & {
   ref?: Ref<TextInput>;
   label: string;
   helperText?: string;
   error?: string;
   maxLength?: number;
   secureTextEntry?: boolean;
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
   variant?: "filled" | "outlined";
+  multiline?: boolean;
+  numberOfLines?: number;
 };
 
 export const TextField = ({
@@ -201,7 +203,9 @@ export const TextField = ({
   secureTextEntry,
   disabled,
   onChange,
-  variant = "filled",
+  variant = "outlined",
+  multiline = false,
+  numberOfLines = 1,
   ...props
 }: Props) => {
   const [focused, setFocused] = useState(false);
@@ -230,6 +234,11 @@ export const TextField = ({
           maxLength={maxLength}
           onChangeText={onChange}
           width="100%"
+          multiline={multiline}
+          numberOfLines={multiline ? numberOfLines : 1}
+          textAlignVertical={multiline ? "top" : "center"}
+          height={multiline ? undefined : 56}
+          paddingTop={multiline ? 24 : 16}
           {...props}
         />
         <Label

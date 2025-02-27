@@ -21,26 +21,58 @@ export const Default: Story = {
     const [value, setValue] = useState("");
     return (
       <YStack gap="$4">
+        <Component {...args} value={value} onChange={setValue} label="label" />
         <Component
           {...args}
           value={value}
-          onChangeText={setValue}
-          label="label"
-        />
-        <Component
-          {...args}
-          value={value}
-          onChangeText={setValue}
+          onChange={setValue}
           label="label"
           variant="outlined"
         />
         <Component
           {...args}
           value={value}
-          onChangeText={setValue}
+          onChange={setValue}
           label="label"
-          variant="outlined"
+          variant="filled"
           maxLength={100}
+        />
+      </YStack>
+    );
+  },
+};
+
+export const Multiline: Story = {
+  args,
+  render: (args) => {
+    const [value, setValue] = useState("");
+    return (
+      <YStack gap="$4">
+        <Component
+          {...args}
+          value={value}
+          onChange={setValue}
+          label="マルチライン入力"
+          multiline={true}
+          numberOfLines={3}
+        />
+        <Component
+          {...args}
+          value={value}
+          onChange={setValue}
+          label="マルチライン入力 (outlined)"
+          variant="filled"
+          multiline={true}
+          numberOfLines={3}
+        />
+        <Component
+          {...args}
+          value={value}
+          onChange={setValue}
+          label="マルチライン入力 (with maxLength)"
+          multiline={true}
+          numberOfLines={4}
+          maxLength={200}
         />
       </YStack>
     );
@@ -53,5 +85,36 @@ export const Behavior: Story = {
   play: async ({ canvasElement }) => {
     const canvas = getCanvas(canvasElement);
     expect(canvas).toBeTruthy();
+  },
+};
+
+export const FilledWithContent: Story = {
+  args,
+  render: (args) => {
+    const [singleLineValue, setSingleLineValue] = useState(
+      "これはシングルラインのテキストです",
+    );
+    const [multiLineValue, setMultiLineValue] = useState(
+      "これはマルチラインのテキストです。\n複数行にわたるテキストを入力できます。\nMaterial Design 3のガイドラインに従っています。",
+    );
+
+    return (
+      <YStack gap="$4">
+        <Component
+          {...args}
+          value={singleLineValue}
+          onChange={setSingleLineValue}
+          label="シングルライン"
+        />
+        <Component
+          {...args}
+          value={multiLineValue}
+          onChange={setMultiLineValue}
+          label="マルチライン"
+          multiline={true}
+          numberOfLines={4}
+        />
+      </YStack>
+    );
   },
 };
