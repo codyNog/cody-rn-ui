@@ -3,8 +3,8 @@ import { expect } from "@storybook/test";
 import { useState } from "react";
 import { YStack } from "tamagui";
 import { Accordion as Component } from ".";
-import { getCanvas } from "../libs/storybook";
 import { Text } from "../Text";
+import { getCanvas } from "../libs/storybook";
 
 /**
  * Material Design 3のガイドラインに基づいたアコーディオンコンポーネント
