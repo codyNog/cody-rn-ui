@@ -64,12 +64,22 @@ export const Variants: Story = {
     const [outlinedValue, setOutlinedValue] = useState<string>("");
 
     return (
-      <Component
-        label="選択してください"
-        options={options}
-        value={outlinedValue}
-        onChange={setOutlinedValue}
-      />
+      <YStack gap="$4">
+        <Component
+          label="Filled Select"
+          options={options}
+          value={filledValue}
+          onChange={setFilledValue}
+          variant="filled"
+        />
+        <Component
+          label="Outlined Select"
+          options={options}
+          value={outlinedValue}
+          onChange={setOutlinedValue}
+          variant="outlined"
+        />
+      </YStack>
     );
   },
 };
