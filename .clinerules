@@ -1,0 +1,23 @@
+# このリポジトリは何
+- React Native の UI コンポーネントライブラリ
+    - Tamagui を利用しているクロスプラットフォームUI
+
+# デザイン
+- Material Design 3 のテーマに基づく
+    - テーマに関係する変数は `src/theme/index.ts` に記述
+    - 現状は Material Design 3 を踏襲しているが、将来的に独自のデザインを採用する
+    - カラーに関しては Material Design 3 のカラーパレットを参考にしている
+
+# コーディング規則
+- コードは TypeScript で記述
+- Biome による Lint と Format
+- Arrow Function を利用
+- plop を利用したコード生成
+    - `bun plop ui <name>` でコード生成
+
+# 動作確認
+- `bun dev` で動作確認
+    - localhost:6006 で Storybook を確認
+
+# テスト
+`bun test` でテスト
