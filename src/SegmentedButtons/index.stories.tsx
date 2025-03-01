@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import { useState } from "react";
+import { YStack } from "tamagui";
 import { SegmentedButtons as Component } from ".";
 import { getCanvas } from "../libs/storybook";
-import { YStack } from "tamagui";
 
 const meta: Meta<typeof Component> = {
   component: Component,

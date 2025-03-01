@@ -1,13 +1,13 @@
 "use client";
-import { useCallback, type Ref } from "react";
-import {
-  XStack,
-  type TamaguiElement,
-  type ColorTokens,
-  Button,
-  Text,
-} from "tamagui";
 import { Check } from "@tamagui/lucide-icons";
+import { type Ref, useCallback } from "react";
+import {
+  Button,
+  type ColorTokens,
+  type TamaguiElement,
+  Text,
+  XStack,
+} from "tamagui";
 import { stateLayerOpacity } from "../theme";
 
 // セグメントボタンのオプション型
