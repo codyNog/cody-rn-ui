@@ -1,17 +1,17 @@
 "use client";
 import { X } from "@tamagui/lucide-icons";
 import { useState } from "react";
+import type { ReactNode, Ref } from "react";
 import {
   Dialog as TamaguiDialog,
-  XStack,
-  YStack,
   type TamaguiElement,
   Text,
+  XStack,
+  YStack,
   styled,
 } from "tamagui";
 import { Button, type ButtonVariant } from "../Button";
 import { typographyScale } from "../theme";
-import type { ReactNode, Ref } from "react";
 
 type Action = {
   label: string;

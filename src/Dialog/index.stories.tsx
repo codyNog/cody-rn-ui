@@ -1,11 +1,11 @@
-import { Info } from "@tamagui/lucide-icons";
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
+import { Info } from "@tamagui/lucide-icons";
 import { useState } from "react";
 import { Button, YStack } from "tamagui";
 import { Dialog as Component } from ".";
-import { getCanvas } from "../libs/storybook";
 import { Text } from "../Text";
+import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
   component: Component,
