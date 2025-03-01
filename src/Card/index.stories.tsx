@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { expect } from "@storybook/test";
+import { Text } from "tamagui";
 import { Card as Component } from ".";
 import { getCanvas } from "../libs/storybook";
-import { Text } from "tamagui";
 
 const meta: Meta<typeof Component> = {
   component: Component,

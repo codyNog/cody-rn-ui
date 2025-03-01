@@ -2,12 +2,12 @@
 import { ChevronDown } from "@tamagui/lucide-icons";
 import { useState } from "react";
 import {
-  Select as TamaguiSelect,
   Adapt,
   Sheet,
-  YStack,
+  Select as TamaguiSelect,
   Text,
   XStack,
+  YStack,
   styled,
 } from "tamagui";
 import { elevationSystem, stateLayerOpacity } from "../theme";

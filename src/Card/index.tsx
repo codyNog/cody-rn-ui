@@ -1,12 +1,12 @@
 "use client";
 import type { ReactNode, Ref } from "react";
 import {
-  Card as TamaguiCard,
   Image,
-  Paragraph,
-  Text,
-  type TamaguiElement,
   type ImageProps,
+  Paragraph,
+  Card as TamaguiCard,
+  type TamaguiElement,
+  Text,
   XStack,
   YStack,
   styled,
