@@ -1,6 +1,6 @@
-import { Check, Plus, X } from "@tamagui/lucide-icons";
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
+import { Check, Plus, X } from "@tamagui/lucide-icons";
 import { XStack, YStack } from "tamagui";
 import { Chip as Component } from ".";
 import { getCanvas } from "../libs/storybook";

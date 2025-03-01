@@ -1,12 +1,12 @@
 "use client";
 import type { ReactNode, Ref } from "react";
 import {
+  type GetProps,
   type TamaguiElement,
   Text,
   XStack,
   YStack,
   styled,
-  type GetProps,
 } from "tamagui";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 
