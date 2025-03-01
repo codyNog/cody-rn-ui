@@ -5,8 +5,8 @@ import { XStack, YStack } from "tamagui";
 import { Form as Component } from ".";
 import { Button } from "../Button";
 import { Select } from "../Select";
-import { getCanvas } from "../libs/storybook";
 import { TextField } from "../TextField";
+import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
   component: Component,

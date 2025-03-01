@@ -1,6 +1,13 @@
 import { styled } from "tamagui";
-import { type ButtonProps, Button as TamaguiButton } from "tamagui";
+import { Button as TamaguiButton } from "tamagui";
 import { elevationSystem, stateLayerOpacity } from "../theme";
+
+export type ButtonVariant =
+  | "filled"
+  | "outlined"
+  | "tonal"
+  | "elevated"
+  | "text";
 
 /**
  * Material Design 3のスタイルを適用したボタンコンポーネント
