@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { expect } from "@storybook/test";
 import {
   ArrowRight,
   Filter,
@@ -6,7 +7,6 @@ import {
   Search as SearchIcon,
   X,
 } from "@tamagui/lucide-icons";
-import { expect } from "@storybook/test";
 import { useState } from "react";
 import { YStack } from "tamagui";
 import { Search as Component } from ".";

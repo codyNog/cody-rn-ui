@@ -2,10 +2,10 @@
 import { Search as SearchIcon, X } from "@tamagui/lucide-icons";
 import { type ReactNode, type Ref, useState } from "react";
 import {
-  TouchableOpacity,
   type NativeSyntheticEvent,
   type TextInput,
   type TextInputKeyPressEventData,
+  TouchableOpacity,
 } from "react-native";
 import {
   type InputProps,

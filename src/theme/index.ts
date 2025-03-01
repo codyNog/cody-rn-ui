@@ -1,3 +1,407 @@
+import {
+  type TonalPalette,
+  argbFromHex,
+  hexFromArgb,
+  themeFromSourceColor,
+} from "@material/material-color-utilities";
+import { createInterFont } from "@tamagui/font-inter";
+import { shorthands } from "@tamagui/shorthands";
+import { tokens as tamaguiTokens, themes } from "@tamagui/themes";
+import type { GenericFont } from "tamagui";
+import { createTamagui, createTokens } from "tamagui";
+
+// キーカラーからMaterial Design 3のテーマを生成する関数
+export function generateMaterialTheme(
+  sourceColorHex: string,
+): MaterialColorScheme {
+  // 16進数カラーコードをARGBに変換
+  const sourceColor = argbFromHex(sourceColorHex);
+
+  // Material Color Utilitiesを使用してテーマを生成
+  const theme = themeFromSourceColor(sourceColor);
+
+  // パレットを取得
+  const palettes = theme.palettes;
+
+  const surface = (mode: "light" | "dark") => {
+    if (mode === "light") {
+      return {
+        // サーフェスエレベーション（MD3ではトーンを使用してエレベーションを表現）
+        surfaceDim: hexFromArgb(palettes.neutral.tone(87)),
+        surface1: hexFromArgb(palettes.neutral.tone(98)), // 低エレベーション
+        surface2: hexFromArgb(palettes.neutral.tone(96)), // 中エレベーション
+        surface3: hexFromArgb(palettes.neutral.tone(94)), // 高エレベーション
+        surface4: hexFromArgb(palettes.neutral.tone(92)), // 最高エレベーション
+        surface5: hexFromArgb(palettes.neutral.tone(90)), // 特別なエレベーション
+
+        // Material Design 3の追加サーフェスカラー
+        surfaceBright: hexFromArgb(palettes.neutral.tone(98)),
+        surfaceContainerLowest: hexFromArgb(palettes.neutral.tone(100)),
+        surfaceContainer: hexFromArgb(palettes.neutral.tone(94)),
+        surfaceContainerLow: hexFromArgb(palettes.neutral.tone(96)),
+        surfaceContainerHigh: hexFromArgb(palettes.neutral.tone(92)),
+        surfaceContainerHighest: hexFromArgb(palettes.neutral.tone(90)),
+      };
+    }
+
+    return {
+      // サーフェスエレベーション（ダークモードでは異なるトーンを使用）
+      surfaceDim: hexFromArgb(palettes.neutral.tone(6)),
+      surface1: hexFromArgb(palettes.neutral.tone(10)), // 低エレベーション
+      surface2: hexFromArgb(palettes.neutral.tone(12)), // 中エレベーション
+      surface3: hexFromArgb(palettes.neutral.tone(14)), // 高エレベーション
+      surface4: hexFromArgb(palettes.neutral.tone(16)), // 最高エレベーション
+      surface5: hexFromArgb(palettes.neutral.tone(18)), // 特別なエレベーション
+
+      // Material Design 3の追加サーフェスカラー（ダークモード）
+      surfaceBright: hexFromArgb(palettes.neutral.tone(24)),
+      surfaceContainerLowest: hexFromArgb(palettes.neutral.tone(4)),
+      surfaceContainer: hexFromArgb(palettes.neutral.tone(12)),
+      surfaceContainerLow: hexFromArgb(palettes.neutral.tone(10)),
+      surfaceContainerHigh: hexFromArgb(palettes.neutral.tone(17)),
+      surfaceContainerHighest: hexFromArgb(palettes.neutral.tone(22)),
+    };
+  };
+
+  const scheme = (mode: "light" | "dark") => {
+    return {
+      // ベースカラー
+      primary: hexFromArgb(theme.schemes[mode].primary),
+      onPrimary: hexFromArgb(theme.schemes[mode].onPrimary),
+      primaryContainer: hexFromArgb(theme.schemes[mode].primaryContainer),
+      onPrimaryContainer: hexFromArgb(theme.schemes[mode].onPrimaryContainer),
+
+      secondary: hexFromArgb(theme.schemes[mode].secondary),
+      onSecondary: hexFromArgb(theme.schemes[mode].onSecondary),
+      secondaryContainer: hexFromArgb(theme.schemes[mode].secondaryContainer),
+      onSecondaryContainer: hexFromArgb(
+        theme.schemes[mode].onSecondaryContainer,
+      ),
+
+      tertiary: hexFromArgb(theme.schemes[mode].tertiary),
+      onTertiary: hexFromArgb(theme.schemes[mode].onTertiary),
+      tertiaryContainer: hexFromArgb(theme.schemes[mode].tertiaryContainer),
+      onTertiaryContainer: hexFromArgb(theme.schemes[mode].onTertiaryContainer),
+
+      error: hexFromArgb(theme.schemes[mode].error),
+      onError: hexFromArgb(theme.schemes[mode].onError),
+      errorContainer: hexFromArgb(theme.schemes[mode].errorContainer),
+      onErrorContainer: hexFromArgb(theme.schemes[mode].onErrorContainer),
+
+      background: hexFromArgb(theme.schemes[mode].background),
+      onBackground: hexFromArgb(theme.schemes[mode].onBackground),
+
+      surface: hexFromArgb(theme.schemes[mode].surface),
+      onSurface: hexFromArgb(theme.schemes[mode].onSurface),
+      surfaceVariant: hexFromArgb(theme.schemes[mode].surfaceVariant),
+      onSurfaceVariant: hexFromArgb(theme.schemes[mode].onSurfaceVariant),
+
+      outline: hexFromArgb(theme.schemes[mode].outline),
+      outlineVariant: hexFromArgb(theme.schemes[mode].outlineVariant),
+
+      inverseSurface: hexFromArgb(theme.schemes[mode].inverseSurface),
+      inverseOnSurface: hexFromArgb(theme.schemes[mode].inverseOnSurface),
+      inversePrimary: hexFromArgb(theme.schemes[mode].inversePrimary),
+
+      // スクリムと影のカラー
+      scrim: hexFromArgb(palettes.neutral.tone(0)),
+      shadow: hexFromArgb(palettes.neutral.tone(0)),
+
+      ...surface(mode),
+    };
+  };
+
+  // カラースキームを生成（ライトモード）
+  const lightScheme = scheme("light");
+
+  // カラースキームを生成（ダークモード）
+  const darkScheme = scheme("dark");
+
+  return {
+    light: lightScheme,
+    dark: darkScheme,
+    // トーナルパレットも返す（カスタムカラーが必要な場合に使用）
+    palettes: {
+      primary: palettes.primary,
+      secondary: palettes.secondary,
+      tertiary: palettes.tertiary,
+      neutral: palettes.neutral,
+      neutralVariant: palettes.neutralVariant,
+      error: palettes.error,
+    },
+  };
+}
+
+// 特定のトーンの色を取得する関数（カスタムカラーが必要な場合）
+export function getTone(palette: TonalPalette, tone: number): string {
+  return hexFromArgb(palette.tone(tone));
+}
+
+// 型定義
+export interface ColorScheme {
+  // ベースカラー
+  primary: string;
+  onPrimary: string;
+  primaryContainer: string;
+  onPrimaryContainer: string;
+
+  secondary: string;
+  onSecondary: string;
+  secondaryContainer: string;
+  onSecondaryContainer: string;
+
+  tertiary: string;
+  onTertiary: string;
+  tertiaryContainer: string;
+  onTertiaryContainer: string;
+
+  error: string;
+  onError: string;
+  errorContainer: string;
+  onErrorContainer: string;
+
+  background: string;
+  onBackground: string;
+
+  surface: string;
+  onSurface: string;
+  surfaceVariant: string;
+  onSurfaceVariant: string;
+
+  outline: string;
+  outlineVariant: string;
+
+  inverseSurface: string;
+  inverseOnSurface: string;
+  inversePrimary: string;
+
+  // スクリムと影
+  scrim: string;
+  shadow: string;
+
+  // サーフェスエレベーション
+  surfaceDim: string;
+  surface1: string;
+  surface2: string;
+  surface3: string;
+  surface4: string;
+  surface5: string;
+
+  // 追加のサーフェスカラー
+  surfaceBright: string;
+  surfaceContainerLowest: string;
+  surfaceContainer: string;
+  surfaceContainerLow: string;
+  surfaceContainerHigh: string;
+  surfaceContainerHighest: string;
+}
+
+export interface MaterialColorScheme {
+  light: ColorScheme;
+  dark: ColorScheme;
+  palettes: {
+    primary: TonalPalette;
+    secondary: TonalPalette;
+    tertiary: TonalPalette;
+    neutral: TonalPalette;
+    neutralVariant: TonalPalette;
+    error: TonalPalette;
+  };
+}
+
+// キーカラーからTamaguiのトークンを生成
+export function createMaterialTokens(keyColor: string) {
+  // Material Design 3のカラースキームを生成
+  const materialTheme = generateMaterialTheme(keyColor);
+
+  // トークンを作成（必須トークンをすべて含める）
+  const tokens = createTokens({
+    // カラートークン
+    color: {
+      // ライトモードのカラー
+      ...materialTheme.light,
+
+      // ダークモードのカラー
+      darkPrimary: materialTheme.dark.primary,
+      darkOnPrimary: materialTheme.dark.onPrimary,
+      darkPrimaryContainer: materialTheme.dark.primaryContainer,
+      darkOnPrimaryContainer: materialTheme.dark.onPrimaryContainer,
+
+      darkSecondary: materialTheme.dark.secondary,
+      darkOnSecondary: materialTheme.dark.onSecondary,
+      darkSecondaryContainer: materialTheme.dark.secondaryContainer,
+      darkOnSecondaryContainer: materialTheme.dark.onSecondaryContainer,
+
+      darkTertiary: materialTheme.dark.tertiary,
+      darkOnTertiary: materialTheme.dark.onTertiary,
+      darkTertiaryContainer: materialTheme.dark.tertiaryContainer,
+      darkOnTertiaryContainer: materialTheme.dark.onTertiaryContainer,
+
+      darkError: materialTheme.dark.error,
+      darkOnError: materialTheme.dark.onError,
+      darkErrorContainer: materialTheme.dark.errorContainer,
+      darkOnErrorContainer: materialTheme.dark.onErrorContainer,
+
+      darkBackground: materialTheme.dark.background,
+      darkOnBackground: materialTheme.dark.onBackground,
+
+      darkSurface: materialTheme.dark.surface,
+      darkOnSurface: materialTheme.dark.onSurface,
+      darkSurfaceVariant: materialTheme.dark.surfaceVariant,
+      darkOnSurfaceVariant: materialTheme.dark.onSurfaceVariant,
+
+      darkOutline: materialTheme.dark.outline,
+      darkOutlineVariant: materialTheme.dark.outlineVariant,
+
+      // サーフェスエレベーション
+      surfaceDim: materialTheme.light.surfaceDim,
+      surface1: materialTheme.light.surface1,
+      surface2: materialTheme.light.surface2,
+      surface3: materialTheme.light.surface3,
+      surface4: materialTheme.light.surface4,
+      surface5: materialTheme.light.surface5,
+
+      darkSurfaceDim: materialTheme.dark.surfaceDim,
+      darkSurface1: materialTheme.dark.surface1,
+      darkSurface2: materialTheme.dark.surface2,
+      darkSurface3: materialTheme.dark.surface3,
+      darkSurface4: materialTheme.dark.surface4,
+      darkSurface5: materialTheme.dark.surface5,
+
+      // 追加のサーフェスカラー（ライトモード）
+      surfaceBright: materialTheme.light.surfaceBright,
+      surfaceContainerLowest: materialTheme.light.surfaceContainerLowest,
+      surfaceContainer: materialTheme.light.surfaceContainer,
+      surfaceContainerLow: materialTheme.light.surfaceContainerLow,
+      surfaceContainerHigh: materialTheme.light.surfaceContainerHigh,
+      surfaceContainerHighest: materialTheme.light.surfaceContainerHighest,
+
+      // 追加のサーフェスカラー（ダークモード）
+      darkSurfaceBright: materialTheme.dark.surfaceBright,
+      darkSurfaceContainerLowest: materialTheme.dark.surfaceContainerLowest,
+      darkSurfaceContainer: materialTheme.dark.surfaceContainer,
+      darkSurfaceContainerLow: materialTheme.dark.surfaceContainerLow,
+      darkSurfaceContainerHigh: materialTheme.dark.surfaceContainerHigh,
+      darkSurfaceContainerHighest: materialTheme.dark.surfaceContainerHighest,
+
+      // その他のトークン
+      shadow: materialTheme.light.shadow,
+      scrim: materialTheme.light.scrim,
+      darkShadow: materialTheme.dark.shadow,
+      darkScrim: materialTheme.dark.scrim,
+    },
+
+    // スペーシングトークン（Material Design 3のスペーシングシステム）
+    space: {
+      $0: 0,
+      $1: 4,
+      $2: 8,
+      $3: 12,
+      $4: 16,
+      $5: 24,
+      $6: 32,
+      $7: 48,
+      $8: 64,
+    },
+
+    // サイズトークン（必須）
+    size: {
+      $0: 0,
+      $1: 4,
+      $2: 8,
+      $3: 12,
+      $4: 16,
+      $5: 24,
+      $6: 32,
+      $7: 48,
+      $8: 64,
+      // Material Design 3のコンポーネントサイズ
+      $button: 40,
+      $input: 48,
+      $checkbox: 20,
+      $switch: 32,
+      $icon: 24,
+      $avatar: 40,
+    },
+
+    // 角丸トークン（Material Design 3のシェイプシステム）
+    radius: {
+      $0: 0,
+      $1: 4,
+      $2: 8,
+      $3: 12,
+      $4: 16,
+      $5: 28,
+      // Material Design 3の角丸
+      $small: 4,
+      $medium: 8,
+      $large: 16,
+      $extraLarge: 28,
+      $full: 9999,
+    },
+
+    // エレベーション（影の深さ）トークン
+    zIndex: {
+      $0: 0,
+      $1: 1,
+      $2: 2,
+      $3: 3,
+      $4: 4,
+      $5: 5,
+    },
+  });
+
+  return {
+    tokens,
+    // 生のカラースキームも返す（必要に応じて）
+    colorScheme: materialTheme,
+    // タイポグラフィスケールも返す
+    typography: typographyScale,
+    // エレベーションシステムも返す
+    elevation: elevationSystem,
+    // 状態レイヤーの不透明度も返す
+    stateLayerOpacity,
+  };
+}
+
+// フォントの設定
+export const headingFont = createInterFont();
+export const bodyFont = createInterFont();
+
+// デフォルトのキーカラー（Material Design 3のデフォルト紫色）
+export const DEFAULT_KEY_COLOR = "#6750A4";
+
+export const useTheme = ({
+  keyColor,
+  bodyFont,
+  headingFont,
+}: { keyColor: string; bodyFont: GenericFont; headingFont: GenericFont }) => {
+  const { colorScheme } = createMaterialTokens(keyColor);
+  const sourceColor = argbFromHex(keyColor);
+
+  // Material Color Utilitiesを使用してテーマを生成
+  const theme = themeFromSourceColor(sourceColor);
+
+  const config = createTamagui({
+    themes: {
+      ...themes,
+      // Material Design 3のカラーをテーマに追加
+      // @ts-ignore
+      custom_light: colorScheme.light,
+      // @ts-ignore
+      custom_dark: colorScheme.dark,
+    },
+    tokens: tamaguiTokens,
+    shorthands,
+    fonts: {
+      body: bodyFont,
+      heading: headingFont,
+    },
+  });
+
+  return { colorScheme, theme, config };
+};
+
 // Material Design 3のタイポグラフィスケール
 export const typographyScale = {
   // ディスプレイ
