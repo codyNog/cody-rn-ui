@@ -1,13 +1,13 @@
 "use client";
 import { ChevronRight } from "@tamagui/lucide-icons";
-import { useState, type ReactNode, type Ref } from "react";
+import { type ReactNode, type Ref, useState } from "react";
 import {
+  Stack,
   type TamaguiElement,
   Text,
   XStack,
   YStack,
   styled,
-  Stack,
 } from "tamagui";
 import { Divider } from "../Divider";
 import { elevationSystem, stateLayerOpacity } from "../theme";
