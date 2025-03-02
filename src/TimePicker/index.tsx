@@ -5,8 +5,8 @@ import type { TextInput } from "react-native";
 import {
   Adapt,
   type InputProps,
-  Input as TamaguiInput,
   Sheet,
+  Input as TamaguiInput,
   Text,
   XStack,
   YStack,
