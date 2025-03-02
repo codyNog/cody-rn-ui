@@ -1,6 +1,6 @@
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import { Text, View, YStack } from "tamagui";
 import { Tabs as Component } from ".";
