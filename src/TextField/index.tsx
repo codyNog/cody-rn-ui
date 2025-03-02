@@ -179,7 +179,10 @@ const CounterText = styled(Text, {
   marginRight: 16,
 });
 
-type Props = Omit<InputProps, "ref" | "onChangeText" | "onChange"> & {
+type Props = Omit<
+  InputProps,
+  "ref" | "onChangeText" | "onChange" | "placeholder"
+> & {
   ref?: Ref<TextInput>;
   label: string;
   helperText?: string;
