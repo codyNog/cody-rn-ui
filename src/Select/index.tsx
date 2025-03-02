@@ -45,8 +45,8 @@ const Label = styled(Text, {
   transition: "all 0.2s ease",
   transformOrigin: "left top",
   zIndex: 1,
-  backgroundColor: "transparent",
   paddingHorizontal: 4,
+  backgroundColor: "transparent",
 
   // バリアント
   variants: {
@@ -106,7 +106,7 @@ const StyledTrigger = styled(TamaguiSelect.Trigger, {
 
   // ホバー状態
   hoverStyle: {
-    backgroundColor: `$onSurface, ${stateLayerOpacity.hover})`,
+    backgroundColor: `$onSurface${stateLayerOpacity.hover}`,
   },
 
   // バリアント
@@ -176,12 +176,12 @@ const StyledItem = styled(TamaguiSelect.Item, {
 
   // ホバー状態
   hoverStyle: {
-    backgroundColor: `$onSurface, ${stateLayerOpacity.hover})`,
+    backgroundColor: `$onSurface${stateLayerOpacity.hover}`,
   },
 
   // 選択状態
   pressStyle: {
-    backgroundColor: `$primary, ${stateLayerOpacity.hover})`,
+    backgroundColor: `$primary${stateLayerOpacity.hover}`,
   },
 });
 
@@ -237,8 +237,8 @@ export const Select = ({
             <TamaguiSelect.Value />
           </StyledTrigger>
 
-          <Adapt platform="touch">
-            <Sheet
+          <TamaguiSelect.Adapt platform="touch">
+            <TamaguiSelect.Sheet
               modal
               dismissOnSnapToBottom
               snapPointsMode="fit"
@@ -248,19 +248,18 @@ export const Select = ({
                 stiffness: 250,
               }}
             >
-              <Sheet.Frame>
-                <Sheet.ScrollView>
-                  <Adapt.Contents />
-                </Sheet.ScrollView>
-              </Sheet.Frame>
-              <Sheet.Overlay
+              <TamaguiSelect.Sheet.Frame>
+                <TamaguiSelect.Sheet.ScrollView>
+                  <TamaguiSelect.Adapt.Contents />
+                </TamaguiSelect.Sheet.ScrollView>
+              </TamaguiSelect.Sheet.Frame>
+              <TamaguiSelect.Sheet.Overlay
                 animation="lazy"
                 enterStyle={{ opacity: 0 }}
                 exitStyle={{ opacity: 0 }}
               />
-            </Sheet>
-          </Adapt>
-
+            </TamaguiSelect.Sheet>
+          </TamaguiSelect.Adapt>
           <StyledContent>
             <TamaguiSelect.ScrollUpButton />
             <TamaguiSelect.Viewport>
@@ -286,9 +285,6 @@ export const Select = ({
           selected={isSelected}
           error={hasError}
           disabled={disabled}
-          backgroundColor={
-            variant === "filled" ? "$surfaceContainerHighest" : "$background"
-          }
           marginTop={variant === "outlined" && (open || isSelected) ? -10 : 0}
         >
           {label}
