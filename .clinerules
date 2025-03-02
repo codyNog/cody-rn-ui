@@ -1,23 +1,57 @@
-# このリポジトリは何
-- React Native の UI コンポーネントライブラリ
-    - Tamagui を利用しているクロスプラットフォームUI
+# React Native UI コンポーネントライブラリ - プロジェクト概要
 
-# デザイン
-- Material Design 3 のテーマに基づく
-    - テーマに関係する変数は `src/theme/index.ts` に記述
-    - 現状は Material Design 3 を踏襲しているが、将来的に独自のデザインを採用する
-    - カラーに関しては Material Design 3 のカラーパレットを参考にしている
+このプロジェクトは Tamagui を利用したクロスプラットフォーム対応の React Native UI コンポーネントライブラリです。Material Design 3 のデザイン原則に基づいており、TypeScript で実装されています。
 
-# コーディング規則
-- コードは TypeScript で記述
-- Biome による Lint と Format
-- Arrow Function を利用
-- plop を利用したコード生成
-    - `bun plop ui <name>` でコード生成
+## プロジェクト構造
 
-# 動作確認
-- `bun dev` で動作確認
-    - localhost:6006 で Storybook を確認
+- `src/` - すべてのコンポーネントが配置されています
+  - 各コンポーネントは独自のディレクトリを持ち、`index.tsx`と`index.stories.tsx`を含みます
+  - コンポーネントは利用先でコピーされるため、`src/index.ts`からのexportは不要です
+- `src/theme/` - テーマ関連のファイル（Material Design 3ベース）
+  - `src/theme/index.ts` - テーマ変数の定義
+- `src/libs/` - ユーティリティライブラリ
+- `plop-templates/` - コンポーネント生成用のテンプレート
 
-# テスト
-`bun test` でテスト
+## デザインシステム
+
+- **基本**: Material Design 3 のテーマとガイドラインに準拠
+- **カラーパレット**: Material Design 3 のカラーシステムを採用
+- **将来計画**: 独自のデザインシステムへの移行を予定
+
+## 開発ガイドライン
+
+### コーディング規則
+- TypeScript による実装
+- Arrow Function の使用を推奨
+- Biome による Lint と Format の適用
+
+### コンポーネント開発
+- 新規コンポーネント作成: `bun plop ui <ComponentName>`
+  - 例: `bun plop ui Button` → `src/Button/index.tsx` と `src/Button/index.stories.tsx` が生成されます
+- 各コンポーネントは独立して動作し、再利用可能であること
+
+## 開発ワークフロー
+
+### 環境セットアップ
+```bash
+# 依存関係のインストール
+bun install
+```
+
+### 開発サーバー起動
+```bash
+# Storybook を起動
+bun dev
+# → http://localhost:6006 でアクセス可能
+```
+
+### テスト実行
+```bash
+# テストの実行
+bun test
+```
+
+## 注意事項
+- コンポーネントの変更は Storybook で視覚的に確認してください
+- 新機能追加時は対応するストーリーも作成してください
+- TypeScript の型定義を適切に行ってください
