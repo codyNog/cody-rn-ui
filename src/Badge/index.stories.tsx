@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import type React from "react";
-import { Badge as Component } from ".";
-import { getCanvas } from "../libs/storybook";
-import { View } from "../View";
 import { XStack, YStack } from "tamagui";
+import { Badge as Component } from ".";
+import { View } from "../View";
+import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
   component: Component,

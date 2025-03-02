@@ -29,6 +29,7 @@
 - 新規コンポーネント作成: `bun plop ui <ComponentName>`
   - 例: `bun plop ui Button` → `src/Button/index.tsx` と `src/Button/index.stories.tsx` が生成されます
 - 各コンポーネントは独立して動作し、再利用可能であること
+- アイコンは `@tamagui/lucide-icons` を使用
 
 ## 開発ワークフロー
 
