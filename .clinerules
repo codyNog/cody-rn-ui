@@ -25,6 +25,10 @@
 - Arrow Function の使用を推奨
 - Biome による Lint と Format の適用
 
+### テスト
+- Storybook の Play Function を利用して、コンポーネントの動作を確認
+- Behavior Driven Development (BDD) の観点からテストを記述
+
 ### コンポーネント開発
 - 新規コンポーネント作成: `bun plop ui <ComponentName>`
   - 例: `bun plop ui Button` → `src/Button/index.tsx` と `src/Button/index.stories.tsx` が生成されます

@@ -1,6 +1,9 @@
+#!/usr/bin/env node
+
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { Octokit } from "@octokit/rest";
+// @ts-ignore
 import AdmZip from "adm-zip";
 import * as dotenv from "dotenv";
 
@@ -197,7 +200,8 @@ const GitHubFileExtractor = (token: string) => {
       const targetPathInZip = `${rootDir}/${CONFIG.path}/`;
       const _extractPath = path.join(outputPath, rootDir);
       const packageJsonEntry = entries.find(
-        (entry) => entry.entryName === `${rootDir}/package.json`,
+        (entry: { entryName: string }) =>
+          entry.entryName === `${rootDir}/package.json`,
       );
 
       if (packageJsonEntry) {
@@ -205,7 +209,7 @@ const GitHubFileExtractor = (token: string) => {
         repoPackageJson = JSON.parse(content);
       }
 
-      const filteredEntries = entries.filter((entry) =>
+      const filteredEntries = entries.filter((entry: { entryName: string }) =>
         entry.entryName.startsWith(targetPathInZip),
       );
       if (filteredEntries.length === 0) {
