@@ -2,23 +2,23 @@
 
 import { start, updateView } from "@storybook/react-native";
 
-import "@storybook/addon-ondevice-actions/register";
-import "@storybook/addon-ondevice-backgrounds/register";
-import "@storybook/addon-ondevice-controls/register";
 import "@storybook/addon-ondevice-notes/register";
+import "@storybook/addon-ondevice-controls/register";
+import "@storybook/addon-ondevice-backgrounds/register";
+import "@storybook/addon-ondevice-actions/register";
 
 const normalizedStories = [
   {
     titlePrefix: "",
     directory: "./src",
-    files: "**/*.stories.tsx",
+    files: "**/*.stories.?(ts|tsx|js|jsx)",
     importPathMatcher:
-      /^\.(?:(?:^|\/|(?:(?:(?!(?:^|\/)\.).)*?)\/)(?!\.)(?=.)[^/]*?\.stories\.tsx)$/,
+      /^\.(?:(?:^|\/|(?:(?:(?!(?:^|\/)\.).)*?)\/)(?!\.)(?=.)[^/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/,
     // @ts-ignore
     req: require.context(
       "../src",
       true,
-      /^\.(?:(?:^|\/|(?:(?:(?!(?:^|\/)\.).)*?)\/)(?!\.)(?=.)[^/]*?\.stories\.tsx)$/
+      /^\.(?:(?:^|\/|(?:(?:(?!(?:^|\/)\.).)*?)\/)(?!\.)(?=.)[^/]*?\.stories\.(?:ts|tsx|js|jsx)?)$/
     ),
   },
 ];

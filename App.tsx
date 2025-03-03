@@ -1,24 +1,33 @@
-import React, { useEffect } from "react";
-import { getStorybookUI } from "@storybook/react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Platform } from "react-native";
-import "./storybook.requires.js";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { UIProvider } from "./src/Provider";
+import { Background } from "./src/Background";
 
-// Storybookの設定
-const StorybookUIRoot = getStorybookUI({
-  // オプション設定
-  asyncStorage: AsyncStorage,
-  onDeviceUI: true,
-  disableWebsockets: Platform.OS !== "android", // Androidの場合はWebsocketsを有効に
-  shouldPersistSelection: true,
+function App() {
+  return (
+    <UIProvider>
+      <Background>
+        <View style={styles.container}>
+          <Text>Open up App.tsx to start working on your app!</Text>
+        </View>
+      </Background>
+    </UIProvider>
+  );
+}
+
+// 環境変数に基づいてStorybookを表示するかどうかを決定
+let AppEntryPoint = App;
+
+if (process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === "true") {
+  AppEntryPoint = require("./.rnstorybook").default;
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
-// Expoアプリのエントリーポイント
-export default function App() {
-  useEffect(() => {
-    // ここでアプリの初期化処理を行うことができます
-    console.log("Storybook for React Native initialized");
-  }, []);
-
-  return <StorybookUIRoot />;
-}
+export default AppEntryPoint;
