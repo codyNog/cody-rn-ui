@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { UIProvider } from "./src/Provider";
 import { Background } from "./src/Background";
+import { UIProvider } from "./src/Provider";
 
 function App() {
   return (

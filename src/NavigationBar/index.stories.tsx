@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import { NavigationBar as Component } from ".";
-import { getCanvas } from "../libs/storybook";
+import { Bell, Home, Search, Settings, User } from "@tamagui/lucide-icons";
 import { YStack } from "tamagui";
-import { Home, Search, Settings, User, Bell } from "@tamagui/lucide-icons";
+import { NavigationBar as Component } from ".";
 import type { BadgeVariant } from "../Badge";
+import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
   component: Component,

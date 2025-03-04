@@ -2,15 +2,15 @@
 import type { ReactNode, Ref } from "react";
 import { useState } from "react";
 import {
+  Stack,
   type TamaguiElement,
   Text,
   XStack,
   YStack,
-  Stack,
   styled,
 } from "tamagui";
-import { elevationSystem, typographyScale } from "../theme";
 import { Badge, type BadgeVariant } from "../Badge";
+import { elevationSystem, typographyScale } from "../theme";
 
 type NavigationItem = {
   icon: ReactNode;

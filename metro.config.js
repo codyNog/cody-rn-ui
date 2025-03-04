@@ -1,7 +1,7 @@
-// Learn more https://docs.expo.io/guides/customizing-metro
-import { getDefaultConfig } from "expo/metro-config.js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+// Learn more https://docs.expo.io/guides/customizing-metro
+import { getDefaultConfig } from "expo/metro-config.js";
 
 // ES Modulesでは__dirnameが使えないため、同等の機能を実装
 const __filename = fileURLToPath(import.meta.url);
