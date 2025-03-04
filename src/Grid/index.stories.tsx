@@ -1,9 +1,9 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
+import React from "react";
+import { Text, View, YStack } from "tamagui";
 import { Grid } from ".";
 import { getCanvas } from "../libs/storybook";
-import { Text, View, YStack } from "tamagui";
 
 const meta: Meta<typeof Grid> = {
   title: "Layout/Grid",
