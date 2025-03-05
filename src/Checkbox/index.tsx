@@ -65,7 +65,7 @@ const StyledCheckbox = styled(Cb, {
   } as const,
 });
 
-type Props = CheckboxProps & {
+type Props = Omit<CheckboxProps, "AnimatedNode" | "inset"> & {
   label?: string;
   ref?: Ref<TamaguiElement>;
 };
@@ -77,7 +77,6 @@ export const Checkbox = ({
   ref,
   checked,
   onCheckedChange,
-  ...checkboxProps
 }: Props) => {
   // ラベルクリック時のハンドラー
   const handleLabelClick = () => {
@@ -87,11 +86,9 @@ export const Checkbox = ({
   return (
     <XStack width={300} alignItems="center" gap="$4">
       <StyledCheckbox
-        {...checkboxProps}
         checked={checked}
         id={id}
         size={size}
-        inset={"auto"}
         ref={ref}
         onCheckedChange={onCheckedChange}
       >

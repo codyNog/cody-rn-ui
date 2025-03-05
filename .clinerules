@@ -1,3 +1,6 @@
+Think in English,
+Reply in Language used in the question.
+
 # React Native UI コンポーネントライブラリ - プロジェクト概要
 
 このプロジェクトは Tamagui を利用したクロスプラットフォーム対応の React Native UI コンポーネントライブラリです。Material Design 3 のデザイン原則に基づいており、TypeScript で実装されています。
@@ -30,7 +33,7 @@
 - Behavior Driven Development (BDD) の観点からテストを記述
 
 ### コンポーネント開発
-- 新規コンポーネント作成: `bun plop ui <ComponentName>`
+- 新規コンポーネント作成: `npm run plop ui <ComponentName>`
   - 例: `bun plop ui Button` → `src/Button/index.tsx` と `src/Button/index.stories.tsx` が生成されます
 - 各コンポーネントは独立して動作し、再利用可能であること
 - アイコンは `@tamagui/lucide-icons` を使用
@@ -40,20 +43,20 @@
 ### 環境セットアップ
 ```bash
 # 依存関係のインストール
-bun install
+npm install
 ```
 
 ### 開発サーバー起動
 ```bash
 # Storybook を起動
-bun dev
+npm run dev
 # → http://localhost:6006 でアクセス可能
 ```
 
 ### テスト実行
 ```bash
 # テストの実行
-bun test
+npm run test
 ```
 
 ## 注意事項

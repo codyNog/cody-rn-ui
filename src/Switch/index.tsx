@@ -90,7 +90,6 @@ export const Switch = ({
   checked,
   disabled = false,
   onCheckedChange,
-  ...rest
 }: Props) => {
   // ラベルクリック時のハンドラー
   const handleLabelClick = () => {
@@ -102,13 +101,13 @@ export const Switch = ({
   return (
     <XStack width={300} alignItems="center" gap="$4">
       <StyledSwitch
-        {...rest}
         id={id}
         size={size}
         ref={ref}
         checked={checked}
         disabled={disabled}
         onCheckedChange={onCheckedChange}
+        defaultChecked={defaultChecked}
       >
         <StyledThumb animation="quick" checked={checked} />
       </StyledSwitch>

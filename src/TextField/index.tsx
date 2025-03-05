@@ -11,6 +11,7 @@ import {
   styled,
 } from "tamagui";
 import { stateLayerOpacity } from "../theme";
+import React from "react";
 
 // スタイル付きのInputコンポーネント
 const StyledInput = styled(TamaguiInput, {

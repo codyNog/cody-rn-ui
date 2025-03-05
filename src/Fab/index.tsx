@@ -43,7 +43,7 @@ export const FabContainer = styled(YStack, {
   right: "$4",
   bottom: "$4",
   zIndex: 100,
-} as StackProps);
+});
 
 /**
  * Material Design 3のFAB（Floating Action Button）コンポーネント
