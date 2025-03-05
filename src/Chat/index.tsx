@@ -222,25 +222,31 @@ const Input = forwardRef<TextInput, InputProps>(
     );
 
     return (
-      <View justifyContent="center">
-        <StyledInput
-          ref={ref}
-          value={value}
-          onChangeText={(e) => onChange(e)}
-          onKeyPress={onKeyPress}
-          disabled={disabled}
-        />
-        <TamaguiButton
-          onPress={onSubmit}
-          position="absolute"
-          right={8}
-          top={8}
-          size="$3"
-          circular
-          icon={<Send size="$1" color="$primary" />}
-          backgroundColor="$primaryContainer"
-          disabled={disabled}
-        />
+      <View
+        backgroundColor="$surfaceContainer"
+        padding="$3"
+        borderRadius="$medium"
+      >
+        <View justifyContent="center">
+          <StyledInput
+            ref={ref}
+            value={value}
+            onChangeText={(e) => onChange(e)}
+            onKeyPress={onKeyPress}
+            disabled={disabled}
+          />
+          <TamaguiButton
+            onPress={onSubmit}
+            position="absolute"
+            right={8}
+            top={8}
+            size="$3"
+            circular
+            icon={<Send size="$1" color="$primary" />}
+            backgroundColor="$primaryContainer"
+            disabled={disabled}
+          />
+        </View>
       </View>
     );
   },
