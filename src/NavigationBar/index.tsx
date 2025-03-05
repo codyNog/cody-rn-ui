@@ -41,10 +41,6 @@ const Container = styled(XStack, {
   alignItems: "center",
   justifyContent: "space-around",
   backgroundColor: "$surfaceContainer",
-  borderTopWidth: 1,
-  borderTopColor: "$outlineVariant",
-  // エレベーション（Material Design 3では0-3dp）
-  ...elevationSystem.shadows.level2,
 
   variants: {
     variant: {

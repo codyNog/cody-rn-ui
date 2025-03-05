@@ -28,7 +28,7 @@
     "@storybook/react-native-web-vite": "^8.5.3",
     "@storybook/test": "^8.5.3",
     "@types/adm-zip": "^0.5.7",
-    "@types/react": "~18.3.12",
+    "@types/react": "18.3.1",
     "babel-plugin-module-resolver": "^5.0.2",
     "babel-plugin-react-docgen-typescript": "^1.5.1",
     "babel-plugin-react-native-web": "^0.19.10",
