@@ -37,8 +37,13 @@ type ContentProps = {
 
 const Content = ({ children }: ContentProps) => {
   return (
-    <ScrollView flex={1}>
-      <YStack gap="$4" padding="$2" flex={1}>
+    <ScrollView
+      flex={1}
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+    >
+      <YStack gap="$4" padding="$3" flex={1}>
         {children}
       </YStack>
     </ScrollView>
@@ -51,20 +56,29 @@ type MessageProps = {
 };
 
 const MessageStyled = styled(Text, {
-  padding: "$2",
-  borderRadius: "$2",
-  borderColor: "$gray200",
-  borderWidth: 1,
+  padding: "$3",
+  borderRadius: "$medium",
   width: "fit-content",
+  maxWidth: "80%",
+  // Material Design 3のエレベーションを適用
+  shadowColor: "$shadow",
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.18,
+  shadowRadius: 1,
+  elevation: 1,
   variants: {
     type: {
       sent: {
         alignSelf: "flex-end",
-        backgroundColor: "$gray200",
+        backgroundColor: "$primaryContainer",
+        color: "$onPrimaryContainer",
+        borderBottomRightRadius: "$1",
       },
       received: {
         alignSelf: "flex-start",
-        backgroundColor: "$gray100",
+        backgroundColor: "$surfaceContainer",
+        color: "$onSurface",
+        borderBottomLeftRadius: "$1",
       },
     },
   } as const,
@@ -82,6 +96,11 @@ const Message = forwardRef<TamaguiElement, MessageProps>(
 
 const StyledInput = styled(TextArea, {
   height: 56,
+  borderRadius: "$medium",
+  backgroundColor: "$surfaceContainerLow",
+  borderColor: "$outline",
+  borderWidth: 1,
+  paddingRight: 40, // 送信ボタン用のスペース
 });
 
 type InputProps = {
@@ -115,9 +134,12 @@ const Input = forwardRef<TextInput, InputProps>(
         <TamaguiButton
           onPress={onSubmit}
           position="absolute"
-          right={0}
-          top={6}
-          icon={<Send />}
+          right={8}
+          top={8}
+          size="$3"
+          circular
+          icon={<Send size="$1" color="$primary" />}
+          backgroundColor="$primaryContainer"
           disabled={disabled}
         />
       </View>
@@ -137,9 +159,21 @@ type ActionsProps = {
 
 const Actions = ({ actions }: ActionsProps) => {
   return (
-    <XStack gap="$2" alignItems="flex-end" marginLeft={"auto"}>
+    <XStack
+      gap="$2"
+      alignItems="flex-end"
+      marginLeft={"auto"}
+      paddingHorizontal="$2"
+    >
       {actions.map(({ onPress, label }) => (
-        <Button key={label} onPress={onPress}>
+        <Button
+          key={label}
+          onPress={onPress}
+          size="$3"
+          backgroundColor="$surfaceContainerHigh"
+          color="$primary"
+          borderRadius="$medium"
+        >
           {label}
         </Button>
       ))}
