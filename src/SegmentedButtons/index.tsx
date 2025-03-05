@@ -23,16 +23,32 @@ export type SegmentedButtonType = "single" | "multiple";
 export type SegmentedButtonValue<T extends SegmentedButtonType> =
   T extends "single" ? string : string[];
 
-// セグメントボタンのプロパティ型
-export type SegmentedButtonProps<T extends SegmentedButtonType = "single"> = {
+// 単一選択用のプロパティ型
+export interface SingleSegmentedButtonProps {
   options: SegmentedButtonOption[];
-  value?: SegmentedButtonValue<T>;
-  onChange: (value: SegmentedButtonValue<T>) => void;
+  value?: string;
+  onChange: (value: string) => void;
   size?: "small" | "medium" | "large";
   color?: ColorTokens;
   disabled?: boolean;
-  type?: T;
-};
+  type?: "single";
+}
+
+// 複数選択用のプロパティ型
+export interface MultipleSegmentedButtonProps {
+  options: SegmentedButtonOption[];
+  value?: string[];
+  onChange: (value: string[]) => void;
+  size?: "small" | "medium" | "large";
+  color?: ColorTokens;
+  disabled?: boolean;
+  type: "multiple";
+}
+
+// セグメントボタンのプロパティ型（単一選択または複数選択）
+export type SegmentedButtonProps =
+  | SingleSegmentedButtonProps
+  | MultipleSegmentedButtonProps;
 
 /**
  * Material Design 3のスタイルを適用したSegmented Buttonコンポーネント
@@ -48,15 +64,15 @@ export type SegmentedButtonProps<T extends SegmentedButtonType = "single"> = {
  * - large: 大サイズ
  */
 export const SegmentedButtons = forwardRef(
-  <T extends SegmentedButtonType = "single">(
+  (
     {
       options,
       value,
       onChange,
       size = "medium",
       disabled = false,
-      type = "single" as T,
-    }: SegmentedButtonProps<T>,
+      type = "single",
+    }: SegmentedButtonProps,
     ref: Ref<TamaguiElement>,
   ) => {
     // 値が選択されているかチェックする関数
@@ -74,22 +90,21 @@ export const SegmentedButtons = forwardRef(
       (selectedValue: string) => {
         if (type === "multiple") {
           // 複数選択の場合
+          const multipleOnChange = onChange as (value: string[]) => void;
           const currentValues = Array.isArray(value) ? [...value] : [];
 
           if (currentValues.includes(selectedValue)) {
             // すでに選択されている場合は削除
             const newValues = currentValues.filter((v) => v !== selectedValue);
-            onChange(newValues as SegmentedButtonValue<T>);
+            multipleOnChange(newValues);
           } else {
             // 選択されていない場合は追加
-            onChange([
-              ...currentValues,
-              selectedValue,
-            ] as SegmentedButtonValue<T>);
+            multipleOnChange([...currentValues, selectedValue]);
           }
         } else {
           // 単一選択の場合
-          onChange(selectedValue as SegmentedButtonValue<T>);
+          const singleOnChange = onChange as (value: string) => void;
+          singleOnChange(selectedValue);
         }
       },
       [onChange, value, type],

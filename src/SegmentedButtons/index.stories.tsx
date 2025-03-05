@@ -27,7 +27,8 @@ export const Default: Story = {
           { value: "option3", label: "オプション3" },
         ]}
         value={value}
-        onChange={setValue}
+        type="single"
+        onChange={(val) => setValue(val)}
       />
     );
   },
@@ -48,7 +49,7 @@ export const Multiple: Story = {
           { value: "option3", label: "オプション3" },
         ]}
         value={value}
-        onChange={setValue}
+        onChange={(val) => setValue(val)}
       />
     );
   },
@@ -74,7 +75,7 @@ export const Sizes: Story = {
             { value: "small3", label: "小 3" },
           ]}
           value={smallValue}
-          onChange={setSmallValue}
+          onChange={(val) => setSmallValue(val)}
         />
 
         <Component
@@ -85,7 +86,7 @@ export const Sizes: Story = {
             { value: "medium3", label: "中 3" },
           ]}
           value={mediumValue}
-          onChange={setMediumValue}
+          onChange={(val) => setMediumValue(val)}
         />
 
         <Component
@@ -96,7 +97,7 @@ export const Sizes: Story = {
             { value: "large3", label: "大 3" },
           ]}
           value={largeValue}
-          onChange={setLargeValue}
+          onChange={(val) => setLargeValue(val)}
         />
       </YStack>
     );
@@ -116,7 +117,7 @@ export const TwoOptions: Story = {
           { value: "no", label: "いいえ" },
         ]}
         value={value}
-        onChange={setValue}
+        onChange={(val) => setValue(val)}
       />
     );
   },
@@ -186,7 +187,7 @@ export const Behavior: Story = {
           { value: "option3", label: "オプション3" },
         ]}
         value={value}
-        onChange={setValue}
+        onChange={(val) => setValue(val)}
       />
     );
   },

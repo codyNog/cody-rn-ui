@@ -1,5 +1,6 @@
 "use client";
-import type { ReactNode, forwardRef } from "react";
+import type { ReactNode } from "react";
+import { forwardRef } from "react";
 import { type TamaguiElement, Text, XStack, YStack, styled } from "tamagui";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 
@@ -17,6 +18,7 @@ type ChipProps = {
 
 // スタイル付きのChipコンテナ
 const StyledChip = styled(XStack, {
+  name: "ChipContainer", // 名前を追加
   alignItems: "center",
   justifyContent: "center",
   borderRadius: 8,
@@ -130,6 +132,7 @@ const StyledChip = styled(XStack, {
 
 // チップのテキスト
 const ChipText = styled(Text, {
+  name: "ChipText", // 名前を追加
   ...typographyScale.labelLarge,
   color: "$onSurfaceVariant",
 
