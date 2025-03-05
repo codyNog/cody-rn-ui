@@ -88,11 +88,7 @@ const Wrapper = ({ children, onSubmit }: WrapperProps) => {
     return child;
   });
 
-  return (
-    <YStack gap="$4" flex={1}>
-      {enhancedChildren}
-    </YStack>
-  );
+  return <YStack flex={1}>{enhancedChildren}</YStack>;
 };
 
 type ContentProps = {
