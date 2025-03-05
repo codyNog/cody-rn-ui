@@ -69,7 +69,6 @@ const ItemContainer = styled(YStack, {
   alignItems: "center",
   justifyContent: "center",
   paddingVertical: "$2",
-  paddingHorizontal: "$2",
   gap: "$1",
   flex: 1,
   height: "100%",

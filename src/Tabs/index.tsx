@@ -156,6 +156,8 @@ export const Tabs = forwardRef<TamaguiElement, Props>(
           setActiveValue(value);
           onValueChange(value);
         }}
+        flex={1}
+        height="100%"
       >
         <YStack
           backgroundColor={isPrimary ? "$surfaceContainerLow" : "transparent"}
@@ -256,20 +258,23 @@ export const Tabs = forwardRef<TamaguiElement, Props>(
           )}
         </YStack>
 
-        {tabs.map(({ value, children, scrollable = false }) => {
+        {tabs.map(({ value, children }) => {
           return (
             <TamaguiTabs.Content
               key={value}
               value={value}
               backgroundColor="$surface"
-              padding={isPrimary ? "$4" : "$3"}
               flex={1}
             >
-              {scrollable ? (
-                <ScrollView flex={1}>{children}</ScrollView>
-              ) : (
-                <View flex={1}>{children}</View>
-              )}
+              <ScrollView
+                flex={1}
+                contentContainerStyle={{
+                  padding: isPrimary ? 16 : 12,
+                  paddingBottom: 32, // スクロール時に下部が見切れないように余分にパディングを追加
+                }}
+              >
+                {children}
+              </ScrollView>
             </TamaguiTabs.Content>
           );
         })}

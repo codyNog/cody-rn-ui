@@ -5,21 +5,35 @@ import { Grid } from "../Grid";
 import { NavigationBar } from "../NavigationBar";
 import type { ComponentProps, ReactNode } from "react";
 import { TopAppBar } from "../TopAppBar";
+import { Tabs } from "../Tabs";
+import { ScrollView, YStack } from "tamagui";
 
 type Props = {
-  children: ReactNode;
+  children?: ReactNode;
   topAppBar?: ComponentProps<typeof TopAppBar>;
   navigationBar?: ComponentProps<typeof NavigationBar>;
+  tabs?: ComponentProps<typeof Tabs>;
 };
 
-export const AppLayout = ({ children, topAppBar, navigationBar }: Props) => {
+export const AppLayout = ({
+  children,
+  topAppBar,
+  navigationBar,
+  tabs,
+}: Props) => {
   return (
-    <Background>
-      {topAppBar && <TopAppBar {...topAppBar} />}
-      <SafeAreaView style={{ flex: 1 }}>
-        <Grid.Container>{children}</Grid.Container>
-      </SafeAreaView>
-      {navigationBar && <NavigationBar {...navigationBar} />}
-    </Background>
+    <YStack flex={1} height="100vh" maxHeight="100vh">
+      <Background>
+        {topAppBar && <TopAppBar {...topAppBar} />}
+        <SafeAreaView style={{ flex: 1 }}>
+          {tabs ? (
+            <Tabs {...tabs} />
+          ) : (
+            <Grid.Container>{children}</Grid.Container>
+          )}
+        </SafeAreaView>
+        {navigationBar && <NavigationBar {...navigationBar} />}
+      </Background>
+    </YStack>
   );
 };

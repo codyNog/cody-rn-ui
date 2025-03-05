@@ -13,6 +13,7 @@ import {
 } from "@tamagui/lucide-icons";
 import { useState } from "react";
 import { ScrollView, Text, View, XStack, YStack } from "tamagui";
+import { AppLayout } from "./AppLayout";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Checkbox } from "./Checkbox";
@@ -22,9 +23,7 @@ import { Form } from "./Form";
 import { IconSymbol } from "./IconSymbol";
 import { Menu } from "./Menu";
 import { Select } from "./Select";
-import { Tabs } from "./Tabs";
 import { TextField } from "./TextField";
-import { TopAppBar } from "./TopAppBar";
 
 // アイコンの共通スタイル
 const iconProps = { size: 22, color: "$onSurfaceVariant" };
@@ -94,38 +93,61 @@ const SandboxApp = () => {
     },
   ];
 
+  // ナビゲーションバーのアイテム
+  const navigationItems = [
+    {
+      icon: <Home size={24} color="$onSurfaceVariant" />,
+      activeIcon: <Home size={24} color="$primary" />,
+      label: "ホーム",
+      value: "home",
+    },
+    {
+      icon: <User size={24} color="$onSurfaceVariant" />,
+      activeIcon: <User size={24} color="$primary" />,
+      label: "プロフィール",
+      value: "profile",
+    },
+    {
+      icon: <MessageCircle size={24} color="$onSurfaceVariant" />,
+      activeIcon: <MessageCircle size={24} color="$primary" />,
+      label: "メッセージ",
+      value: "messages",
+      badge: {
+        content: "3",
+        variant: "small" as const,
+        visible: true,
+      },
+    },
+    {
+      icon: <Settings size={24} color="$onSurfaceVariant" />,
+      activeIcon: <Settings size={24} color="$primary" />,
+      label: "設定",
+      value: "settings",
+    },
+  ];
+
   return (
-    <YStack flex={1} backgroundColor="$background">
-      {/* トップアプリバー */}
-      <TopAppBar
-        variant="small"
-        headline="UI コンポーネントサンドボックス"
-        leadingIcon={
+    <AppLayout
+      topAppBar={{
+        variant: "small",
+        headline: "UI コンポーネントサンドボックス",
+        leadingIcon: (
           <MenuIcon {...iconProps} onPress={() => setShowMenu(!showMenu)} />
-        }
-        trailingIcons={[
+        ),
+        trailingIcons: [
           <Search {...iconProps} key="search" />,
           <Bell {...iconProps} key="bell" />,
           <MoreVertical {...iconProps} key="more" />,
-        ]}
-      />
-
-      {/* メニュー（表示/非表示） */}
-      {showMenu && (
-        <YStack
-          position="absolute"
-          top={64}
-          left={16}
-          zIndex={1000}
-          onPress={() => setShowMenu(false)}
-        >
-          <Menu items={menuItems} />
-        </YStack>
-      )}
-
-      {/* タブナビゲーション */}
-      <Tabs
-        tabs={[
+        ],
+      }}
+      navigationBar={{
+        items: navigationItems,
+        defaultValue: activeTab,
+        onValueChange: setActiveTab,
+        variant: "standard",
+      }}
+      tabs={{
+        tabs: [
           {
             value: "home",
             label: "ホーム",
@@ -194,9 +216,6 @@ const SandboxApp = () => {
                           onChange={setNewTodo}
                           flex={1}
                         />
-                        <Button variant="filled" onPress={addTodo}>
-                          追加
-                        </Button>
                       </XStack>
                     </YStack>
                   </Card>
@@ -387,11 +406,24 @@ const SandboxApp = () => {
               </ScrollView>
             ),
           },
-        ]}
-        defaultValue={activeTab}
-        onValueChange={setActiveTab}
-      />
-    </YStack>
+        ],
+        defaultValue: activeTab,
+        onValueChange: setActiveTab,
+      }}
+    >
+      {/* メニュー（表示/非表示） */}
+      {showMenu && (
+        <YStack
+          position="absolute"
+          top={64}
+          left={16}
+          zIndex={1000}
+          onPress={() => setShowMenu(false)}
+        >
+          <Menu items={menuItems} />
+        </YStack>
+      )}
+    </AppLayout>
   );
 };
 

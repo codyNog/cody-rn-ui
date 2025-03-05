@@ -21,7 +21,6 @@ const Container = styled(XStack, {
   maxWidth: 1440, // Material Design 3の最大幅
   alignItems: "center",
   justifyContent: "space-between",
-  paddingHorizontal: "$4", // モバイル: 16dp
   backgroundColor: "$surfaceContainer",
   // エレベーション（Material Design 3では0-4dp）
   ...elevationSystem.shadows.level1,
@@ -30,28 +29,15 @@ const Container = styled(XStack, {
     variant: {
       center: {
         height: 64, // 64dp
-        paddingHorizontal: "$4", // モバイル: 16dp
       },
       small: {
         height: 64, // 64dp
-        paddingHorizontal: "$4", // モバイル: 16dp
       },
       medium: {
         height: 112, // 112dp
-        paddingHorizontal: "$4", // モバイル: 16dp
       },
       large: {
         height: 152, // 152dp
-        paddingHorizontal: "$4", // モバイル: 16dp
-      },
-    },
-    // レスポンシブ対応（タブレット/デスクトップ）
-    responsive: {
-      tablet: {
-        paddingHorizontal: "$5", // タブレット: 24dp
-      },
-      desktop: {
-        paddingHorizontal: "$5", // デスクトップ: 24dp
       },
     },
   },
@@ -181,7 +167,6 @@ export const TopAppBar = forwardRef<TamaguiElement, Props>(
           <XStack
             width="100%"
             maxWidth={1440}
-            paddingHorizontal="$4"
             paddingBottom="$4"
             backgroundColor="$surfaceContainer"
             justifyContent="flex-start"
