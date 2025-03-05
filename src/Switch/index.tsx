@@ -1,4 +1,4 @@
-import type { Ref } from "react";
+import { forwardRef } from "react";
 import {
   Label,
   Switch as S,
@@ -75,53 +75,56 @@ const StyledThumb = styled(S.Thumb, {
 
 type Props = SwitchProps & {
   label?: string;
-  ref?: Ref<TamaguiElement>;
   checked: boolean;
   id: string;
   disabled?: boolean;
 };
 
-export const Switch = ({
-  size = "$3",
-  defaultChecked,
-  label,
-  id,
-  ref,
-  checked,
-  disabled = false,
-  onCheckedChange,
-}: Props) => {
-  // ラベルクリック時のハンドラー
-  const handleLabelClick = () => {
-    if (!disabled) {
-      onCheckedChange?.(!checked);
-    }
-  };
+export const Switch = forwardRef<TamaguiElement, Props>(
+  (
+    {
+      size = "$3",
+      defaultChecked,
+      label,
+      id,
+      checked,
+      disabled = false,
+      onCheckedChange,
+    },
+    ref,
+  ) => {
+    // ラベルクリック時のハンドラー
+    const handleLabelClick = () => {
+      if (!disabled) {
+        onCheckedChange?.(!checked);
+      }
+    };
 
-  return (
-    <XStack width={300} alignItems="center" gap="$4">
-      <StyledSwitch
-        id={id}
-        size={size}
-        ref={ref}
-        checked={checked}
-        disabled={disabled}
-        onCheckedChange={onCheckedChange}
-        defaultChecked={defaultChecked}
-      >
-        <StyledThumb animation="quick" checked={checked} />
-      </StyledSwitch>
-      {label && (
-        <Label
+    return (
+      <XStack width={300} alignItems="center" gap="$4">
+        <StyledSwitch
+          id={id}
           size={size}
-          htmlFor={id}
-          onPress={handleLabelClick}
-          cursor={disabled ? "not-allowed" : "pointer"}
-          opacity={disabled ? 0.38 : 1}
+          ref={ref}
+          checked={checked}
+          disabled={disabled}
+          onCheckedChange={onCheckedChange}
+          defaultChecked={defaultChecked}
         >
-          {label}
-        </Label>
-      )}
-    </XStack>
-  );
-};
+          <StyledThumb animation="quick" checked={checked} />
+        </StyledSwitch>
+        {label && (
+          <Label
+            size={size}
+            htmlFor={id}
+            onPress={handleLabelClick}
+            cursor={disabled ? "not-allowed" : "pointer"}
+            opacity={disabled ? 0.38 : 1}
+          >
+            {label}
+          </Label>
+        )}
+      </XStack>
+    );
+  },
+);

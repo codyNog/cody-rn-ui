@@ -1,11 +1,5 @@
 "use client";
-import type { ReactNode, Ref } from "react";
-import {
-  Text as TamaguiText,
-  type TamaguiTextElement,
-  type TextProps as TamaguiTextProps,
-  styled,
-} from "tamagui";
+import { Text as TamaguiText, styled } from "tamagui";
 import { typographyScale } from "../theme";
 
 // Material Design 3のタイポグラフィスタイルを適用したテキストコンポーネント

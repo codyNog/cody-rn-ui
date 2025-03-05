@@ -1,6 +1,6 @@
 "use client";
-import type { ReactNode, Ref } from "react";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
+import type { ReactNode } from "react";
 import {
   Stack,
   type TamaguiElement,
@@ -27,7 +27,6 @@ type NavigationItem = {
 };
 
 type Props = {
-  ref?: Ref<TamaguiElement>;
   items: NavigationItem[];
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -119,70 +118,66 @@ const Label = styled(Text, {
  * - labeled: ラベル付きナビゲーションバー（アイコンとラベル、アクティブ時に強調表示）
  * - unlabeled: ラベルなしナビゲーションバー（アイコンのみ）
  */
-export const NavigationBar = ({
-  ref,
-  items,
-  defaultValue,
-  onValueChange,
-  variant = "standard",
-}: Props) => {
-  const initialValue = defaultValue || items[0]?.value || "";
-  const [activeValue, setActiveValue] = useState(initialValue);
+export const NavigationBar = forwardRef<TamaguiElement, Props>(
+  ({ items, defaultValue, onValueChange, variant = "standard" }, ref) => {
+    const initialValue = defaultValue || items[0]?.value || "";
+    const [activeValue, setActiveValue] = useState(initialValue);
 
-  return (
-    <XStack width="100%" justifyContent="center">
-      <Container ref={ref} variant={variant} position="relative">
-        {/* ナビゲーションアイテム */}
-        {items.map((item) => {
-          const isActive = item.value === activeValue;
-          const showLabel = variant !== "unlabeled" || isActive;
+    return (
+      <XStack width="100%" justifyContent="center">
+        <Container ref={ref} variant={variant} position="relative">
+          {/* ナビゲーションアイテム */}
+          {items.map((item) => {
+            const isActive = item.value === activeValue;
+            const showLabel = variant !== "unlabeled" || isActive;
 
-          return (
-            <ItemContainer
-              key={item.value}
-              onPress={() => {
-                setActiveValue(item.value);
-                onValueChange?.(item.value);
-              }}
-              pressStyle={{
-                backgroundColor: "$surfaceContainerHigh",
-                opacity: 0.9,
-              }}
-              hoverStyle={{
-                backgroundColor: "$surfaceContainerHigh",
-                opacity: 0.8,
-              }}
-            >
-              <Stack position="relative">
-                <IconContainer scale={isActive ? 1.05 : 1} animation="quick">
-                  {isActive && item.activeIcon ? item.activeIcon : item.icon}
-                </IconContainer>
+            return (
+              <ItemContainer
+                key={item.value}
+                onPress={() => {
+                  setActiveValue(item.value);
+                  onValueChange?.(item.value);
+                }}
+                pressStyle={{
+                  backgroundColor: "$surfaceContainerHigh",
+                  opacity: 0.9,
+                }}
+                hoverStyle={{
+                  backgroundColor: "$surfaceContainerHigh",
+                  opacity: 0.8,
+                }}
+              >
+                <Stack position="relative">
+                  <IconContainer scale={isActive ? 1.05 : 1} animation="quick">
+                    {isActive && item.activeIcon ? item.activeIcon : item.icon}
+                  </IconContainer>
 
-                {item.badge && (
-                  <Badge
-                    variant={item.badge.variant || "small"}
-                    content={item.badge.content}
-                    max={item.badge.max}
-                    showZero={item.badge.showZero}
-                    visible={item.badge.visible}
-                    direction="topRight"
-                  />
+                  {item.badge && (
+                    <Badge
+                      variant={item.badge.variant || "small"}
+                      content={item.badge.content}
+                      max={item.badge.max}
+                      showZero={item.badge.showZero}
+                      visible={item.badge.visible}
+                      direction="topRight"
+                    />
+                  )}
+                </Stack>
+
+                {showLabel && (
+                  <Label
+                    active={isActive}
+                    scale={isActive ? 1.05 : 1}
+                    animation="quick"
+                  >
+                    {item.label}
+                  </Label>
                 )}
-              </Stack>
-
-              {showLabel && (
-                <Label
-                  active={isActive}
-                  scale={isActive ? 1.05 : 1}
-                  animation="quick"
-                >
-                  {item.label}
-                </Label>
-              )}
-            </ItemContainer>
-          );
-        })}
-      </Container>
-    </XStack>
-  );
-};
+              </ItemContainer>
+            );
+          })}
+        </Container>
+      </XStack>
+    );
+  },
+);

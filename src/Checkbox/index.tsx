@@ -1,5 +1,5 @@
 import { Check as CheckIcon, Minus } from "@tamagui/lucide-icons";
-import { type Ref, useId } from "react";
+import { forwardRef, useId } from "react";
 import {
   Checkbox as Cb,
   type CheckboxProps,
@@ -67,46 +67,40 @@ const StyledCheckbox = styled(Cb, {
 
 type Props = Omit<CheckboxProps, "AnimatedNode" | "inset"> & {
   label?: string;
-  ref?: Ref<TamaguiElement>;
 };
 
-export const Checkbox = ({
-  size,
-  label,
-  id = useId(),
-  ref,
-  checked,
-  onCheckedChange,
-}: Props) => {
-  // ラベルクリック時のハンドラー
-  const handleLabelClick = () => {
-    onCheckedChange?.(!checked);
-  };
+export const Checkbox = forwardRef<TamaguiElement, Props>(
+  ({ size, label, id = useId(), checked, onCheckedChange }, ref) => {
+    // ラベルクリック時のハンドラー
+    const handleLabelClick = () => {
+      onCheckedChange?.(!checked);
+    };
 
-  return (
-    <XStack width={300} alignItems="center" gap="$4">
-      <StyledCheckbox
-        checked={checked}
-        id={id}
-        size={size}
-        ref={ref}
-        onCheckedChange={onCheckedChange}
-      >
-        <Cb.Indicator forceMount>
-          {checked === true && <CheckIcon color="$onPrimary" />}
-          {checked === "indeterminate" && <Minus color="$onPrimary" />}
-        </Cb.Indicator>
-      </StyledCheckbox>
-      {label && (
-        <Label
+    return (
+      <XStack width={300} alignItems="center" gap="$4">
+        <StyledCheckbox
+          checked={checked}
+          id={id}
           size={size}
-          htmlFor={id}
-          onPress={handleLabelClick}
-          cursor="pointer"
+          ref={ref}
+          onCheckedChange={onCheckedChange}
         >
-          {label}
-        </Label>
-      )}
-    </XStack>
-  );
-};
+          <Cb.Indicator forceMount>
+            {checked === true && <CheckIcon color="$onPrimary" />}
+            {checked === "indeterminate" && <Minus color="$onPrimary" />}
+          </Cb.Indicator>
+        </StyledCheckbox>
+        {label && (
+          <Label
+            size={size}
+            htmlFor={id}
+            onPress={handleLabelClick}
+            cursor="pointer"
+          >
+            {label}
+          </Label>
+        )}
+      </XStack>
+    );
+  },
+);

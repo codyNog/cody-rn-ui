@@ -1,6 +1,6 @@
 "use client";
 import { ChevronRight } from "@tamagui/lucide-icons";
-import { type ReactNode, type Ref, useState } from "react";
+import { type ReactNode, forwardRef, useState } from "react";
 import {
   Stack,
   type TamaguiElement,
@@ -16,10 +16,6 @@ import { elevationSystem, stateLayerOpacity } from "../theme";
  * メニュー項目のプロパティ
  */
 type MenuItemProps = {
-  /**
-   * 参照オブジェクト
-   */
-  ref?: Ref<TamaguiElement>;
   /**
    * メニュー項目のラベル
    */
@@ -126,102 +122,102 @@ const MenuItemTrailingText = styled(Text, {
 /**
  * メニュー項目コンポーネント
  */
-const MenuItem = ({
-  ref,
-  label,
-  onPress,
-  leadingIcon,
-  trailingIcon,
-  trailingText,
-  items,
-  disabled = false,
-}: MenuItemProps) => {
-  const [showSubMenu, setShowSubMenu] = useState(false);
-  const hasSubMenu = items && items.length > 0;
+const MenuItem = forwardRef<TamaguiElement, MenuItemProps>(
+  (
+    {
+      label,
+      onPress,
+      leadingIcon,
+      trailingIcon,
+      trailingText,
+      items,
+      disabled = false,
+    },
+    ref,
+  ) => {
+    const [showSubMenu, setShowSubMenu] = useState(false);
+    const hasSubMenu = items && items.length > 0;
 
-  // サブメニューを持つ場合、クリック時にサブメニューの表示/非表示を切り替える
-  const handlePress = () => {
-    if (disabled) return;
+    // サブメニューを持つ場合、クリック時にサブメニューの表示/非表示を切り替える
+    const handlePress = () => {
+      if (disabled) return;
 
-    if (hasSubMenu) {
-      setShowSubMenu(!showSubMenu);
-    } else {
-      onPress();
-    }
-  };
+      if (hasSubMenu) {
+        setShowSubMenu(!showSubMenu);
+      } else {
+        onPress();
+      }
+    };
 
-  return (
-    <YStack>
-      <StyledMenuItem
-        ref={ref}
-        onPress={handlePress}
-        disabled={disabled}
-        role="menuitem"
-        aria-disabled={disabled}
-      >
-        {/* 先頭アイコン */}
-        {leadingIcon && (
-          <Stack marginLeft={4} opacity={disabled ? 0.38 : 1}>
-            {leadingIcon}
-          </Stack>
-        )}
-
-        {/* ラベル */}
-        <MenuItemLabel disabled={disabled}>{label}</MenuItemLabel>
-
-        {/* 末尾テキスト（存在する場合） */}
-        {trailingText && (
-          <MenuItemTrailingText disabled={disabled}>
-            {trailingText}
-          </MenuItemTrailingText>
-        )}
-
-        {/* 末尾アイコン（存在する場合）またはサブメニューを示す矢印 */}
-        {trailingIcon ? (
-          <Stack marginRight={4} opacity={disabled ? 0.38 : 1}>
-            {trailingIcon}
-          </Stack>
-        ) : hasSubMenu ? (
-          <ChevronRight
-            size={20}
-            color="$onSurfaceVariant"
-            opacity={disabled ? 0.38 : 1}
-          />
-        ) : null}
-      </StyledMenuItem>
-
-      {/* サブメニュー（表示されている場合） */}
-      {hasSubMenu && showSubMenu && (
-        <YStack
-          position="absolute"
-          left="calc(100% - 20px)"
-          top={-8}
-          backgroundColor="$surfaceContainerLow"
-          borderRadius={4}
-          overflow="hidden"
-          minWidth={112}
-          maxWidth={280}
-          paddingVertical={8}
-          zIndex={1000}
-          {...elevationSystem.shadows.level2}
+    return (
+      <YStack>
+        <StyledMenuItem
+          ref={ref}
+          onPress={handlePress}
+          disabled={disabled}
+          role="menuitem"
+          aria-disabled={disabled}
         >
-          {items.map((item) => (
-            <MenuItem key={item.label} {...item} />
-          ))}
-        </YStack>
-      )}
-    </YStack>
-  );
-};
+          {/* 先頭アイコン */}
+          {leadingIcon && (
+            <Stack marginLeft={4} opacity={disabled ? 0.38 : 1}>
+              {leadingIcon}
+            </Stack>
+          )}
+
+          {/* ラベル */}
+          <MenuItemLabel disabled={disabled}>{label}</MenuItemLabel>
+
+          {/* 末尾テキスト（存在する場合） */}
+          {trailingText && (
+            <MenuItemTrailingText disabled={disabled}>
+              {trailingText}
+            </MenuItemTrailingText>
+          )}
+
+          {/* 末尾アイコン（存在する場合）またはサブメニューを示す矢印 */}
+          {trailingIcon ? (
+            <Stack marginRight={4} opacity={disabled ? 0.38 : 1}>
+              {trailingIcon}
+            </Stack>
+          ) : hasSubMenu ? (
+            <ChevronRight
+              size={20}
+              color="$onSurfaceVariant"
+              opacity={disabled ? 0.38 : 1}
+            />
+          ) : null}
+        </StyledMenuItem>
+
+        {/* サブメニュー（表示されている場合） */}
+        {hasSubMenu && showSubMenu && (
+          <YStack
+            position="absolute"
+            left="calc(100% - 20px)"
+            top={-8}
+            backgroundColor="$surfaceContainerLow"
+            borderRadius={4}
+            overflow="hidden"
+            minWidth={112}
+            maxWidth={280}
+            paddingVertical={8}
+            zIndex={1000}
+            {...elevationSystem.shadows.level2}
+          >
+            {items.map((item) => (
+              <MenuItem key={item.label} {...item} />
+            ))}
+          </YStack>
+        )}
+      </YStack>
+    );
+  },
+);
 
 /**
  * メニューセクションのプロパティ
  */
 type MenuItemSectionProps = {
-  /**
-   * 参照オブジェクト
-   */
-  ref?: Ref<TamaguiElement>;
   /**
    * セクションの一意のキー
    */
@@ -235,7 +231,10 @@ type MenuItemSectionProps = {
 /**
  * メニューセクションコンポーネント
  */
-const MenuItemSection = ({ ref, items }: MenuItemSectionProps) => {
+const MenuItemSection = forwardRef<
+  TamaguiElement,
+  Omit<MenuItemSectionProps, "key"> & { key?: string }
+>(({ items }, ref) => {
   return (
     <YStack ref={ref} role="group">
       {items.map((item) => (
@@ -243,17 +242,12 @@ const MenuItemSection = ({ ref, items }: MenuItemSectionProps) => {
       ))}
     </YStack>
   );
-};
+});
 
 /**
  * メニューコンポーネントのプロパティ
  */
-type Props = {
-  /**
-   * 参照オブジェクト
-   */
-  ref?: Ref<TamaguiElement>;
-} & (
+type Props =
   | {
       /**
        * メニューセクションの配列
@@ -267,8 +261,7 @@ type Props = {
        */
       items: MenuItemProps[];
       sections?: never;
-    }
-);
+    };
 
 /**
  * Material Design 3のガイドラインに基づいたメニューコンポーネント
@@ -276,28 +269,30 @@ type Props = {
  * メニューは、一時的なサーフェス上に表示される項目のリストです。
  * ユーザーがボタン、アクション、その他のコントロールを操作すると表示されます。
  */
-export const Menu = ({ ref, sections = [], items = [] }: Props) => {
-  return (
-    <YStack
-      ref={ref}
-      backgroundColor="$surfaceContainerLow"
-      borderRadius={4}
-      overflow="hidden"
-      minWidth={112}
-      maxWidth={280}
-      paddingVertical={8}
-      {...elevationSystem.shadows.level1}
-      role="menu"
-    >
-      {items?.map((item) => (
-        <MenuItem key={item.label} {...item} />
-      ))}
-      {sections?.map((section, i) => (
-        <Stack key={section.key}>
-          <MenuItemSection {...section} />
-          {i !== sections.length - 1 && <Divider />}
-        </Stack>
-      ))}
-    </YStack>
-  );
-};
+export const Menu = forwardRef<TamaguiElement, Props>(
+  ({ sections = [], items = [] }, ref) => {
+    return (
+      <YStack
+        ref={ref}
+        backgroundColor="$surfaceContainerLow"
+        borderRadius={4}
+        overflow="hidden"
+        minWidth={112}
+        maxWidth={280}
+        paddingVertical={8}
+        {...elevationSystem.shadows.level1}
+        role="menu"
+      >
+        {items?.map((item) => (
+          <MenuItem key={item.label} {...item} />
+        ))}
+        {sections?.map((section, i) => (
+          <Stack key={section.key}>
+            <MenuItemSection key={section.key} items={section.items} />
+            {i !== sections.length - 1 && <Divider />}
+          </Stack>
+        ))}
+      </YStack>
+    );
+  },
+);

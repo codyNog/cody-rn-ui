@@ -1,11 +1,11 @@
 'use client';
-import type { Ref } from "react";
+import { forwardRef } from "react";
 import { Text, type TamaguiElement } from "tamagui";
 
 type Props = {
-  ref?: Ref<TamaguiElement>
+  // コンポーネントのプロパティをここに定義
 }
 
-export const {{pascalCase name}} = ({ref}: Props) => {
+export const {{pascalCase name}} = forwardRef<TamaguiElement, Props>((props, ref) => {
   return <Text ref={ref}>{{pascalCase name}}</Text>
-};
+});

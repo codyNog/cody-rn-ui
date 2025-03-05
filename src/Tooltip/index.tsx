@@ -2,7 +2,7 @@
 import { X } from "@tamagui/lucide-icons";
 import {
   type ReactNode,
-  type Ref,
+  forwardRef,
   useCallback,
   useMemo,
   useState,
@@ -94,7 +94,6 @@ const CloseButton = styled(XStack, {
 });
 
 type Props = {
-  ref?: Ref<TamaguiElement>;
   children: ReactNode;
   content: ReactNode;
   title?: string;
@@ -106,107 +105,101 @@ type Props = {
   };
 };
 
-export const Tooltip = ({
-  ref,
-  children,
-  title,
-  onClose,
-  variant = "plain",
-  action,
-  content,
-}: Props) => {
-  const rich = variant === "rich";
-  const [isOpen, setOpen] = useState(false);
-  const [isHoveringTrigger, setIsHoveringTrigger] = useState(false);
-  const [isHoveringContent, setIsHoveringContent] = useState(false);
+export const Tooltip = forwardRef<TamaguiElement, Props>(
+  ({ children, title, onClose, variant = "plain", action, content }, ref) => {
+    const rich = variant === "rich";
+    const [isOpen, setOpen] = useState(false);
+    const [isHoveringTrigger, setIsHoveringTrigger] = useState(false);
+    const [isHoveringContent, setIsHoveringContent] = useState(false);
 
-  // トリガーのマウスイベント
-  const onTriggerMouseEnter = useCallback(() => {
-    setIsHoveringTrigger(true);
-  }, []);
+    // トリガーのマウスイベント
+    const onTriggerMouseEnter = useCallback(() => {
+      setIsHoveringTrigger(true);
+    }, []);
 
-  const onTriggerMouseLeave = useCallback(() => {
-    setIsHoveringTrigger(false);
-  }, []);
+    const onTriggerMouseLeave = useCallback(() => {
+      setIsHoveringTrigger(false);
+    }, []);
 
-  // コンテンツのマウスイベント - ポインターイベントを使用
-  const onContentPointerEnter = useCallback(() => {
-    setIsHoveringContent(true);
-  }, []);
+    // コンテンツのマウスイベント - ポインターイベントを使用
+    const onContentPointerEnter = useCallback(() => {
+      setIsHoveringContent(true);
+    }, []);
 
-  const onContentPointerLeave = useCallback(() => {
-    setIsHoveringContent(false);
-  }, []);
+    const onContentPointerLeave = useCallback(() => {
+      setIsHoveringContent(false);
+    }, []);
 
-  const open = useMemo(() => {
-    return isOpen || isHoveringTrigger || isHoveringContent;
-  }, [isOpen, isHoveringTrigger, isHoveringContent]);
+    const open = useMemo(() => {
+      return isOpen || isHoveringTrigger || isHoveringContent;
+    }, [isOpen, isHoveringTrigger, isHoveringContent]);
 
-  const delay = useMemo(() => {
-    if (rich) {
-      return { open: 0, close: 1000 };
-    }
-    return undefined;
-  }, [rich]);
+    const delay = useMemo(() => {
+      if (rich) {
+        return { open: 0, close: 1000 };
+      }
+      return undefined;
+    }, [rich]);
 
-  return (
-    <TamaguiTooltip open={open} onOpenChange={setOpen} delay={delay}>
-      <TamaguiTooltip.Trigger asChild>
-        <YStack
-          onMouseEnter={onTriggerMouseEnter}
-          onMouseLeave={onTriggerMouseLeave}
-          padding="$1"
-          margin="-$1"
+    return (
+      <TamaguiTooltip open={open} onOpenChange={setOpen} delay={delay}>
+        <TamaguiTooltip.Trigger asChild>
+          <YStack
+            onMouseEnter={onTriggerMouseEnter}
+            onMouseLeave={onTriggerMouseLeave}
+            padding="$1"
+            margin="-$1"
+          >
+            {children}
+          </YStack>
+        </TamaguiTooltip.Trigger>
+        <TamaguiTooltip.Content
+          padding={0}
+          enterStyle={{ opacity: 1 }}
+          exitStyle={{ opacity: 0 }}
+          pointerEvents="auto" // これが重要！
         >
-          {children}
-        </YStack>
-      </TamaguiTooltip.Trigger>
-      <TamaguiTooltip.Content
-        padding={0}
-        enterStyle={{ opacity: 1 }}
-        exitStyle={{ opacity: 0 }}
-        pointerEvents="auto" // これが重要！
-      >
-        <TooltipContainer
-          ref={ref}
-          rich={rich}
-          onPointerEnter={onContentPointerEnter}
-          onPointerLeave={onContentPointerLeave}
-          // タッチデバイス用
-          onTouchStart={onContentPointerEnter}
-          onTouchEnd={onContentPointerLeave}
-        >
-          {rich && (
-            <>
-              {title && (
-                <XStack justifyContent="space-between" alignItems="center">
-                  <TooltipTitle>{title}</TooltipTitle>
-                  {onClose && (
-                    <CloseButton
-                      onPress={() => {
-                        setOpen(false);
-                        onClose?.();
-                      }}
-                    >
-                      <X size={18} color="$onSurfaceVariant" />
-                    </CloseButton>
-                  )}
-                </XStack>
-              )}
-              <TooltipText rich={rich}>{content}</TooltipText>
-              {action && (
-                <ActionContainer>
-                  <Button variant="text" onPress={action.onClick}>
-                    {action.label}
-                  </Button>
-                </ActionContainer>
-              )}
-            </>
-          )}
+          <TooltipContainer
+            ref={ref}
+            rich={rich}
+            onPointerEnter={onContentPointerEnter}
+            onPointerLeave={onContentPointerLeave}
+            // タッチデバイス用
+            onTouchStart={onContentPointerEnter}
+            onTouchEnd={onContentPointerLeave}
+          >
+            {rich && (
+              <>
+                {title && (
+                  <XStack justifyContent="space-between" alignItems="center">
+                    <TooltipTitle>{title}</TooltipTitle>
+                    {onClose && (
+                      <CloseButton
+                        onPress={() => {
+                          setOpen(false);
+                          onClose?.();
+                        }}
+                      >
+                        <X size={18} color="$onSurfaceVariant" />
+                      </CloseButton>
+                    )}
+                  </XStack>
+                )}
+                <TooltipText rich={rich}>{content}</TooltipText>
+                {action && (
+                  <ActionContainer>
+                    <Button variant="text" onPress={action.onClick}>
+                      {action.label}
+                    </Button>
+                  </ActionContainer>
+                )}
+              </>
+            )}
 
-          {!rich && <TooltipText rich={rich}>{content}</TooltipText>}
-        </TooltipContainer>
-      </TamaguiTooltip.Content>
-    </TamaguiTooltip>
-  );
-};
+            {!rich && <TooltipText rich={rich}>{content}</TooltipText>}
+          </TooltipContainer>
+        </TamaguiTooltip.Content>
+      </TamaguiTooltip>
+    );
+  },
+);

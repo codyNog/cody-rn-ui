@@ -1,6 +1,6 @@
 "use client";
 import { Clock } from "@tamagui/lucide-icons";
-import { type Ref, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import type { TextInput } from "react-native";
 import {
   Adapt,
@@ -276,7 +276,6 @@ const isValidTime = (hours: number, minutes: number): boolean => {
 };
 
 type Props = Omit<InputProps, "ref" | "onChangeText" | "onChange" | "value"> & {
-  ref?: Ref<TextInput>;
   label: string;
   helperText?: string;
   error?: string;
@@ -411,178 +410,182 @@ const TimePickerContent = ({
   );
 };
 
-export const TimePicker = ({
-  ref,
-  label,
-  helperText,
-  error,
-  value,
-  onChange,
-  variant = "outlined",
-  use24Hour = false,
-  disabled,
-  ...props
-}: Props) => {
-  const [focused, setFocused] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [selectedHours, setSelectedHours] = useState(value?.hours || 12);
-  const [selectedMinutes, setSelectedMinutes] = useState(value?.minutes || 0);
-  const [selectedPeriod, setSelectedPeriod] = useState<"AM" | "PM">(
-    value?.hours && value.hours >= 12 ? "PM" : "AM",
-  );
+export const TimePicker = forwardRef<TextInput, Props>(
+  (
+    {
+      label,
+      helperText,
+      error,
+      value,
+      onChange,
+      variant = "outlined",
+      use24Hour = false,
+      disabled,
+      ...props
+    },
+    ref,
+  ) => {
+    const [focused, setFocused] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [inputValue, setInputValue] = useState("");
+    const [selectedHours, setSelectedHours] = useState(value?.hours || 12);
+    const [selectedMinutes, setSelectedMinutes] = useState(value?.minutes || 0);
+    const [selectedPeriod, setSelectedPeriod] = useState<"AM" | "PM">(
+      value?.hours && value.hours >= 12 ? "PM" : "AM",
+    );
 
-  // 値が変更されたときに入力値を更新
-  useEffect(() => {
-    if (value) {
-      setSelectedHours(value.hours);
-      setSelectedMinutes(value.minutes);
-      setSelectedPeriod(value.hours >= 12 ? "PM" : "AM");
-      setInputValue(formatTime(value.hours, value.minutes, use24Hour));
-    } else {
-      setInputValue("");
-    }
-  }, [value, use24Hour]);
+    // 値が変更されたときに入力値を更新
+    useEffect(() => {
+      if (value) {
+        setSelectedHours(value.hours);
+        setSelectedMinutes(value.minutes);
+        setSelectedPeriod(value.hours >= 12 ? "PM" : "AM");
+        setInputValue(formatTime(value.hours, value.minutes, use24Hour));
+      } else {
+        setInputValue("");
+      }
+    }, [value, use24Hour]);
 
-  const hasError = !!error;
-  const isFilled = !!inputValue && inputValue.length > 0;
+    const hasError = !!error;
+    const isFilled = !!inputValue && inputValue.length > 0;
 
-  // 時間選択を確定する関数
-  const confirmTimeSelection = () => {
-    const newHours =
-      selectedPeriod === "PM" && selectedHours < 12
-        ? selectedHours + 12
-        : selectedPeriod === "AM" && selectedHours === 12
-          ? 0
-          : selectedHours;
+    // 時間選択を確定する関数
+    const confirmTimeSelection = () => {
+      const newHours =
+        selectedPeriod === "PM" && selectedHours < 12
+          ? selectedHours + 12
+          : selectedPeriod === "AM" && selectedHours === 12
+            ? 0
+            : selectedHours;
 
-    if (isValidTime(newHours, selectedMinutes)) {
-      onChange({ hours: newHours, minutes: selectedMinutes });
-      setInputValue(formatTime(newHours, selectedMinutes, use24Hour));
-    }
-    setOpen(false);
-  };
+      if (isValidTime(newHours, selectedMinutes)) {
+        onChange({ hours: newHours, minutes: selectedMinutes });
+        setInputValue(formatTime(newHours, selectedMinutes, use24Hour));
+      }
+      setOpen(false);
+    };
 
-  // 入力値が変更されたときの処理
-  const handleInputChange = (text: string) => {
-    setInputValue(text);
+    // 入力値が変更されたときの処理
+    const handleInputChange = (text: string) => {
+      setInputValue(text);
 
-    const parsedTime = parseTimeString(text, use24Hour);
-    if (parsedTime) {
-      setSelectedHours(parsedTime.hours);
-      setSelectedMinutes(parsedTime.minutes);
-      setSelectedPeriod(parsedTime.hours >= 12 ? "PM" : "AM");
-      onChange(parsedTime);
-    } else if (text === "") {
-      onChange(null);
-    }
-  };
+      const parsedTime = parseTimeString(text, use24Hour);
+      if (parsedTime) {
+        setSelectedHours(parsedTime.hours);
+        setSelectedMinutes(parsedTime.minutes);
+        setSelectedPeriod(parsedTime.hours >= 12 ? "PM" : "AM");
+        onChange(parsedTime);
+      } else if (text === "") {
+        onChange(null);
+      }
+    };
 
-  // 時間選択ダイアログを開く
-  const openTimePicker = () => {
-    if (!disabled) {
-      setOpen(true);
-    }
-  };
+    // 時間選択ダイアログを開く
+    const openTimePicker = () => {
+      if (!disabled) {
+        setOpen(true);
+      }
+    };
 
-  // 時間の選択肢を生成
-  const hourOptions = use24Hour
-    ? Array.from({ length: 24 }, (_, i) => i)
-    : Array.from({ length: 12 }, (_, i) => i + 1);
+    // 時間の選択肢を生成
+    const hourOptions = use24Hour
+      ? Array.from({ length: 24 }, (_, i) => i)
+      : Array.from({ length: 12 }, (_, i) => i + 1);
 
-  // 分の選択肢を生成（5分間隔）
-  const minuteOptions = Array.from({ length: 12 }, (_, i) => i * 5);
+    // 分の選択肢を生成（5分間隔）
+    const minuteOptions = Array.from({ length: 12 }, (_, i) => i * 5);
 
-  return (
-    <YStack width="100%">
-      <XStack position="relative" width="100%">
-        <StyledInput
-          ref={ref}
-          value={inputValue}
-          variant={variant}
-          error={hasError}
-          disabled={disabled}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          onChangeText={handleInputChange}
-          width="100%"
-          placeholder={use24Hour ? "HH:MM" : "HH:MM AM/PM"}
-          onPressIn={openTimePicker}
-          {...props}
-        />
-        <Label
-          variant={variant}
-          focused={focused || open}
-          filled={isFilled}
-          error={hasError}
-          disabled={disabled}
-          backgroundColor={
-            variant === "filled" ? "$surfaceContainerHighest" : "$background"
-          }
-          paddingHorizontal={4}
-          zIndex={1}
-          marginTop={
-            variant === "outlined" && (focused || isFilled || open) ? -8 : 0
-          }
-        >
-          {label}
-        </Label>
-
-        <XStack
-          position="absolute"
-          right={12}
-          top={16}
-          onPress={openTimePicker}
-          cursor="pointer"
-        >
-          <Clock size={24} color="$onSurfaceVariant" />
-        </XStack>
-      </XStack>
-
-      {/* ヘルパーテキスト */}
-      {(helperText || error) && (
-        <HelperText error={hasError}>{error || helperText}</HelperText>
-      )}
-
-      {/* 時間選択シート */}
-      <Adapt platform={"touch"}>
-        <Sheet
-          modal
-          open={open}
-          onOpenChange={setOpen}
-          snapPointsMode="fit"
-          dismissOnSnapToBottom
-          animationConfig={{
-            type: "spring",
-            damping: 20,
-            stiffness: 250,
-          }}
-        >
-          <Sheet.Frame>
-            <Sheet.ScrollView>
-              <Adapt.Contents />
-              <TimePickerContent
-                hourOptions={hourOptions}
-                minuteOptions={minuteOptions}
-                selectedHours={selectedHours}
-                setSelectedHours={setSelectedHours}
-                selectedMinutes={selectedMinutes}
-                setSelectedMinutes={setSelectedMinutes}
-                selectedPeriod={selectedPeriod}
-                setSelectedPeriod={setSelectedPeriod}
-                use24Hour={use24Hour}
-                onCancel={() => setOpen(false)}
-                onConfirm={confirmTimeSelection}
-              />
-            </Sheet.ScrollView>
-          </Sheet.Frame>
-          <Sheet.Overlay
-            animation="lazy"
-            enterStyle={{ opacity: 0 }}
-            exitStyle={{ opacity: 0 }}
+    return (
+      <YStack width="100%">
+        <XStack position="relative" width="100%">
+          <StyledInput
+            ref={ref}
+            value={inputValue}
+            variant={variant}
+            error={hasError}
+            disabled={disabled}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            onChangeText={handleInputChange}
+            width="100%"
+            placeholder={use24Hour ? "HH:MM" : "HH:MM AM/PM"}
+            onPressIn={openTimePicker}
+            {...props}
           />
-        </Sheet>
-      </Adapt>
-    </YStack>
-  );
-};
+          <Label
+            variant={variant}
+            focused={focused || open}
+            filled={isFilled}
+            error={hasError}
+            disabled={disabled}
+            backgroundColor={
+              variant === "filled" ? "$surfaceContainerHighest" : "$background"
+            }
+            paddingHorizontal={4}
+            zIndex={1}
+            marginTop={
+              variant === "outlined" && (focused || isFilled || open) ? -8 : 0
+            }
+          >
+            {label}
+          </Label>
+
+          <XStack
+            position="absolute"
+            right={12}
+            top={16}
+            onPress={openTimePicker}
+            cursor="pointer"
+          >
+            <Clock size={24} color="$onSurfaceVariant" />
+          </XStack>
+        </XStack>
+
+        {/* ヘルパーテキスト */}
+        {(helperText || error) && (
+          <HelperText error={hasError}>{error || helperText}</HelperText>
+        )}
+
+        {/* 時間選択シート */}
+        <Adapt platform={"touch"}>
+          <Sheet
+            modal
+            open={open}
+            onOpenChange={setOpen}
+            snapPointsMode="fit"
+            dismissOnSnapToBottom
+            animationConfig={{
+              type: "spring",
+              damping: 20,
+              stiffness: 250,
+            }}
+          >
+            <Sheet.Frame>
+              <Sheet.ScrollView>
+                <Adapt.Contents />
+                <TimePickerContent
+                  hourOptions={hourOptions}
+                  minuteOptions={minuteOptions}
+                  selectedHours={selectedHours}
+                  setSelectedHours={setSelectedHours}
+                  selectedMinutes={selectedMinutes}
+                  setSelectedMinutes={setSelectedMinutes}
+                  selectedPeriod={selectedPeriod}
+                  setSelectedPeriod={setSelectedPeriod}
+                  use24Hour={use24Hour}
+                  onCancel={() => setOpen(false)}
+                  onConfirm={confirmTimeSelection}
+                />
+              </Sheet.ScrollView>
+            </Sheet.Frame>
+            <Sheet.Overlay
+              animation="lazy"
+              enterStyle={{ opacity: 0 }}
+              exitStyle={{ opacity: 0 }}
+            />
+          </Sheet>
+        </Adapt>
+      </YStack>
+    );
+  },
+);

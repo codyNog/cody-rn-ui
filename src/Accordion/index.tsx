@@ -1,6 +1,7 @@
 "use client";
 import { ChevronDown } from "@tamagui/lucide-icons";
-import type { ReactNode, Ref } from "react";
+import { forwardRef } from "react";
+import type { ReactNode } from "react";
 import {
   Paragraph,
   Square,
@@ -11,7 +12,6 @@ import {
 import { stateLayerOpacity } from "../theme";
 
 type Props = {
-  ref?: Ref<TamaguiElement>;
   items: {
     title: string;
     content: ReactNode;
@@ -73,42 +73,38 @@ const StyledContent = styled(TamaguiAccordion.Content, {
   borderTopWidth: 0,
 });
 
-export const Accordion = ({
-  ref,
-  items,
-  value,
-  onChange,
-  defaultValue,
-}: Props) => (
-  <TamaguiAccordion
-    ref={ref}
-    overflow="hidden"
-    width="100%"
-    type={"multiple"}
-    value={value}
-    onValueChange={onChange}
-    defaultValue={defaultValue}
-  >
-    {items.map(({ title, content }) => (
-      <TamaguiAccordion.Item key={title} value={title}>
-        <StyledTrigger>
-          {({ open }: { open: boolean }) => (
-            <>
-              <Paragraph color="$onSurface">{title}</Paragraph>
-              <Square animation="quick" rotate={open ? "180deg" : "0deg"}>
-                <ChevronDown size={20} color="$onSurfaceVariant" />
-              </Square>
-            </>
-          )}
-        </StyledTrigger>
-        <TamaguiAccordion.Content
-          animation="medium"
-          enterStyle={{ opacity: 0, height: 0 }}
-          exitStyle={{ opacity: 0, height: 0 }}
-        >
-          <StyledContent>{content}</StyledContent>
-        </TamaguiAccordion.Content>
-      </TamaguiAccordion.Item>
-    ))}
-  </TamaguiAccordion>
+export const Accordion = forwardRef<TamaguiElement, Props>(
+  ({ items, value, onChange, defaultValue }, ref) => (
+    <TamaguiAccordion
+      ref={ref}
+      overflow="hidden"
+      width="100%"
+      type={"multiple"}
+      value={value}
+      onValueChange={onChange}
+      defaultValue={defaultValue}
+    >
+      {items.map(({ title, content }) => (
+        <TamaguiAccordion.Item key={title} value={title}>
+          <StyledTrigger>
+            {({ open }: { open: boolean }) => (
+              <>
+                <Paragraph color="$onSurface">{title}</Paragraph>
+                <Square animation="quick" rotate={open ? "180deg" : "0deg"}>
+                  <ChevronDown size={20} color="$onSurfaceVariant" />
+                </Square>
+              </>
+            )}
+          </StyledTrigger>
+          <TamaguiAccordion.Content
+            animation="medium"
+            enterStyle={{ opacity: 0, height: 0 }}
+            exitStyle={{ opacity: 0, height: 0 }}
+          >
+            <StyledContent>{content}</StyledContent>
+          </TamaguiAccordion.Content>
+        </TamaguiAccordion.Item>
+      ))}
+    </TamaguiAccordion>
+  ),
 );

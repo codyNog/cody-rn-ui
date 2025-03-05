@@ -1,10 +1,10 @@
 "use client";
-import type { ReactNode, Ref } from "react";
+import { forwardRef } from "react";
+import type { ReactNode } from "react";
 import { type TamaguiElement, Text, XStack, YStack, styled } from "tamagui";
 import { elevationSystem, typographyScale } from "../theme";
 
 type Props = {
-  ref?: Ref<TamaguiElement>;
   variant?: "center" | "small" | "medium" | "large";
   headline?: string;
   leadingIcon?: ReactNode;
@@ -114,86 +114,84 @@ const IconWrapper = styled(XStack, {
  * - medium: 左配置のタイトル（高さ112dp）
  * - large: 下部配置のタイトル（高さ152dp）
  */
-export const TopAppBar = ({
-  ref,
-  variant = "center",
-  headline,
-  leadingIcon,
-  trailingIcons,
-  children,
-}: Props) => {
-  // centerバリアントの場合のレイアウト
-  if (variant === "center") {
-    return (
-      <XStack width="100%" justifyContent="center">
-        <Container ref={ref} variant={variant}>
-          <IconContainer>
-            {leadingIcon ? <IconWrapper>{leadingIcon}</IconWrapper> : null}
-          </IconContainer>
+export const TopAppBar = forwardRef<TamaguiElement, Props>(
+  (
+    { variant = "center", headline, leadingIcon, trailingIcons, children },
+    ref,
+  ) => {
+    // centerバリアントの場合のレイアウト
+    if (variant === "center") {
+      return (
+        <XStack width="100%" justifyContent="center">
+          <Container ref={ref} variant={variant}>
+            <IconContainer>
+              {leadingIcon ? <IconWrapper>{leadingIcon}</IconWrapper> : null}
+            </IconContainer>
 
-          <Headline variant={variant}>{headline}</Headline>
-
-          <IconContainer>
-            {trailingIcons && trailingIcons.length > 0 ? (
-              <IconWrapper>{trailingIcons[0]}</IconWrapper>
-            ) : null}
-          </IconContainer>
-        </Container>
-      </XStack>
-    );
-  }
-
-  // その他のバリアント
-  return (
-    <YStack width="100%" alignItems="center">
-      <Container ref={ref} variant={variant}>
-        <XStack alignItems="center" gap="$4">
-          {leadingIcon && <IconWrapper>{leadingIcon}</IconWrapper>}
-
-          {variant !== "large" && (
             <Headline variant={variant}>{headline}</Headline>
-          )}
-        </XStack>
 
-        {trailingIcons && trailingIcons.length > 0 && (
-          <IconContainer>
-            {/* 
+            <IconContainer>
+              {trailingIcons && trailingIcons.length > 0 ? (
+                <IconWrapper>{trailingIcons[0]}</IconWrapper>
+              ) : null}
+            </IconContainer>
+          </Container>
+        </XStack>
+      );
+    }
+
+    // その他のバリアント
+    return (
+      <YStack width="100%" alignItems="center">
+        <Container ref={ref} variant={variant}>
+          <XStack alignItems="center" gap="$4">
+            {leadingIcon && <IconWrapper>{leadingIcon}</IconWrapper>}
+
+            {variant !== "large" && (
+              <Headline variant={variant}>{headline}</Headline>
+            )}
+          </XStack>
+
+          {trailingIcons && trailingIcons.length > 0 && (
+            <IconContainer>
+              {/* 
               アイコンを個別に表示することで、mapとインデックスキーの使用を回避
               最大5つのアイコンまでサポート
             */}
-            {Array.isArray(trailingIcons) && trailingIcons[0] && (
-              <IconWrapper key="icon-0">{trailingIcons[0]}</IconWrapper>
-            )}
-            {Array.isArray(trailingIcons) && trailingIcons[1] && (
-              <IconWrapper key="icon-1">{trailingIcons[1]}</IconWrapper>
-            )}
-            {Array.isArray(trailingIcons) && trailingIcons[2] && (
-              <IconWrapper key="icon-2">{trailingIcons[2]}</IconWrapper>
-            )}
-            {Array.isArray(trailingIcons) && trailingIcons[3] && (
-              <IconWrapper key="icon-3">{trailingIcons[3]}</IconWrapper>
-            )}
-            {Array.isArray(trailingIcons) && trailingIcons[4] && (
-              <IconWrapper key="icon-4">{trailingIcons[4]}</IconWrapper>
-            )}
-          </IconContainer>
+              {Array.isArray(trailingIcons) && trailingIcons[0] && (
+                <IconWrapper key="icon-0">{trailingIcons[0]}</IconWrapper>
+              )}
+              {Array.isArray(trailingIcons) && trailingIcons[1] && (
+                <IconWrapper key="icon-1">{trailingIcons[1]}</IconWrapper>
+              )}
+              {Array.isArray(trailingIcons) && trailingIcons[2] && (
+                <IconWrapper key="icon-2">{trailingIcons[2]}</IconWrapper>
+              )}
+              {Array.isArray(trailingIcons) && trailingIcons[3] && (
+                <IconWrapper key="icon-3">{trailingIcons[3]}</IconWrapper>
+              )}
+              {Array.isArray(trailingIcons) && trailingIcons[4] && (
+                <IconWrapper key="icon-4">{trailingIcons[4]}</IconWrapper>
+              )}
+            </IconContainer>
+          )}
+        </Container>
+
+        {variant === "large" && (
+          <XStack
+            width="100%"
+            maxWidth={1440}
+            paddingHorizontal="$4"
+            paddingBottom="$4"
+            backgroundColor="$surfaceContainer"
+            justifyContent="flex-start"
+          >
+            <Headline variant={variant}>{headline}</Headline>
+          </XStack>
         )}
-      </Container>
 
-      {variant === "large" && (
-        <XStack
-          width="100%"
-          maxWidth={1440}
-          paddingHorizontal="$4"
-          paddingBottom="$4"
-          backgroundColor="$surfaceContainer"
-          justifyContent="flex-start"
-        >
-          <Headline variant={variant}>{headline}</Headline>
-        </XStack>
-      )}
-
-      {children}
-    </YStack>
-  );
-};
+        {children}
+      </YStack>
+    );
+  },
+);

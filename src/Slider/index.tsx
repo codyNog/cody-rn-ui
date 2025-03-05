@@ -1,6 +1,7 @@
 "use client";
+import { forwardRef } from "react";
 import type { Ref } from "react";
-import type { SliderProps, TamaguiElement } from "tamagui";
+import type { TamaguiElement } from "tamagui";
 import { Slider as TamaguiSlider, Text, XStack, styled } from "tamagui";
 import { stateLayerOpacity } from "../theme";
 
@@ -122,45 +123,47 @@ type SliderCompProps = {
 };
 
 // 外部に公開するコンポーネントのprops
-type Props = SliderCompProps & {
+type Props = Omit<SliderCompProps, "ref"> & {
   showCounter?: boolean;
 };
 
 /**
  * Material Design 3のガイドラインに従ったSliderコンポーネント
  */
-export const Slider = ({ ref, size = "$3", showCounter, ...props }: Props) => {
-  // スライダーの現在値を取得
-  const value = Array.isArray(props.value)
-    ? props.value[0]
-    : Array.isArray(props.defaultValue)
-      ? props.defaultValue[0]
-      : 0;
+export const Slider = forwardRef<TamaguiElement, Props>(
+  ({ size = "$3", showCounter, ...props }, ref) => {
+    // スライダーの現在値を取得
+    const value = Array.isArray(props.value)
+      ? props.value[0]
+      : Array.isArray(props.defaultValue)
+        ? props.defaultValue[0]
+        : 0;
 
-  // Tamaguiコンポーネントに渡すprops
-  const sliderProps = {
-    ref,
-    size,
-    ...props,
-  };
+    // Tamaguiコンポーネントに渡すprops
+    const sliderProps = {
+      ref,
+      size,
+      ...props,
+    };
 
-  return (
-    <XStack flexDirection="column" width="100%">
-      <StyledSlider
-        {...sliderProps}
-        aria-valuemin={props.min || 0}
-        aria-valuemax={props.max || 100}
-        aria-valuenow={value}
-        aria-valuetext={`${value}`}
-      >
-        <StyledTrack size={size}>
-          <StyledTrackActive />
-        </StyledTrack>
-        <StyledThumb size={size} index={0} aria-label="スライダーつまみ" />
-      </StyledSlider>
+    return (
+      <XStack flexDirection="column" width="100%">
+        <StyledSlider
+          {...sliderProps}
+          aria-valuemin={props.min || 0}
+          aria-valuemax={props.max || 100}
+          aria-valuenow={value}
+          aria-valuetext={`${value}`}
+        >
+          <StyledTrack size={size}>
+            <StyledTrackActive />
+          </StyledTrack>
+          <StyledThumb size={size} index={0} aria-label="スライダーつまみ" />
+        </StyledSlider>
 
-      {/* カウンター表示（オプション） */}
-      {showCounter && <StyledCounter>{value}</StyledCounter>}
-    </XStack>
-  );
-};
+        {/* カウンター表示（オプション） */}
+        {showCounter && <StyledCounter>{value}</StyledCounter>}
+      </XStack>
+    );
+  },
+);

@@ -1,7 +1,7 @@
 "use client";
 import { X } from "@tamagui/lucide-icons";
-import { useState } from "react";
-import type { ReactNode, Ref } from "react";
+import { forwardRef, useState } from "react";
+import type { ReactNode } from "react";
 import {
   Dialog as TamaguiDialog,
   type TamaguiElement,
@@ -21,7 +21,6 @@ type Action = {
 };
 
 type Props = {
-  ref?: Ref<TamaguiElement>;
   variant?: "basic" | "fullScreen";
   icon?: ReactNode;
   headline?: string;
@@ -116,118 +115,129 @@ const FullScreenContainer = styled(YStack, {
   padding: "$5",
 });
 
-export const Dialog = ({
-  ref,
-  variant = "basic",
-  icon,
-  headline,
-  supportingText,
-  actions,
-  open,
-  onOpenChange,
-  children,
-  content,
-}: Props) => {
-  const [isOpen, setIsOpen] = useState(open || false);
+export const Dialog = forwardRef<TamaguiElement, Props>(
+  (
+    {
+      variant = "basic",
+      icon,
+      headline,
+      supportingText,
+      actions,
+      open,
+      onOpenChange,
+      children,
+      content,
+    },
+    ref,
+  ) => {
+    const [isOpen, setIsOpen] = useState(open || false);
 
-  // 外部からのopen状態の制御と内部状態の同期
-  const handleOpenChange = (newOpen: boolean) => {
-    setIsOpen(newOpen);
-    onOpenChange?.(newOpen);
-  };
+    // 外部からのopen状態の制御と内部状態の同期
+    const handleOpenChange = (newOpen: boolean) => {
+      setIsOpen(newOpen);
+      onOpenChange?.(newOpen);
+    };
 
-  return (
-    <TamaguiDialog
-      modal
-      open={open !== undefined ? open : isOpen}
-      onOpenChange={handleOpenChange}
-    >
-      <TamaguiDialog.Trigger asChild>{children}</TamaguiDialog.Trigger>
+    return (
+      <TamaguiDialog
+        modal
+        open={open !== undefined ? open : isOpen}
+        onOpenChange={handleOpenChange}
+      >
+        <TamaguiDialog.Trigger asChild>{children}</TamaguiDialog.Trigger>
 
-      <TamaguiDialog.Portal>
-        <TamaguiDialog.Overlay
-          key="overlay"
-          animation="quick"
-          backgroundColor="$scrim"
-          opacity={0.3} // 0.5から0.3に変更して軽量化
-          enterStyle={{ opacity: 0 }}
-          exitStyle={{ opacity: 0 }}
-        />
+        <TamaguiDialog.Portal>
+          <TamaguiDialog.Overlay
+            key="overlay"
+            animation="quick"
+            backgroundColor="$scrim"
+            opacity={0.3} // 0.5から0.3に変更して軽量化
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
+          />
 
-        <StyledDialogContent
-          ref={ref}
-          variant={variant}
-          key="content"
-          animation="quick"
-          enterStyle={{ opacity: 0, scale: 0.95 }}
-          exitStyle={{ opacity: 0, scale: 0.95 }}
-          elevate
-        >
-          {variant === "fullScreen" ? (
-            <>
-              <FullScreenHeader>
-                <Button variant="text" onPress={() => handleOpenChange(false)}>
-                  <X size={24} />
-                </Button>
-                {headline && (
-                  <Text {...typographyScale.titleLarge} color="$onSurface">
-                    {headline}
-                  </Text>
-                )}
-                <Button
-                  variant="text"
-                  onPress={actions[0]?.onClick}
-                  disabled={!actions[0]}
-                >
-                  {actions[0]?.label || ""}
-                </Button>
-              </FullScreenHeader>
-              <FullScreenContainer>
-                {content}
-                {supportingText && (
-                  <DialogSupportingText>{supportingText}</DialogSupportingText>
-                )}
-              </FullScreenContainer>
-            </>
-          ) : (
-            <>
-              <TamaguiDialog.Close
-                asChild
-                position="absolute"
-                top="$3"
-                right="$3"
-              >
-                <Button variant="text" size="small" aria-label="閉じる">
-                  <X size={18} />
-                </Button>
-              </TamaguiDialog.Close>
-
-              <DialogHeader>
-                {icon && <IconContainer>{icon}</IconContainer>}
-                {headline && <DialogTitle>{headline}</DialogTitle>}
-                {supportingText && (
-                  <DialogSupportingText>{supportingText}</DialogSupportingText>
-                )}
-              </DialogHeader>
-
-              {content && <DialogContent>{content}</DialogContent>}
-
-              <DialogActions>
-                {actions.map((action) => (
+          <StyledDialogContent
+            ref={ref}
+            variant={variant}
+            key="content"
+            animation="quick"
+            enterStyle={{ opacity: 0, scale: 0.95 }}
+            exitStyle={{ opacity: 0, scale: 0.95 }}
+            elevate
+          >
+            {variant === "fullScreen" ? (
+              <>
+                <FullScreenHeader>
                   <Button
-                    key={action.label}
-                    variant={action.variant || "text"}
-                    onPress={action.onClick}
-                    href={action.href}
+                    variant="text"
+                    onPress={() => handleOpenChange(false)}
                   >
-                    {action.label}
+                    <X size={24} />
                   </Button>
-                ))}
-              </DialogActions>
-            </>
-          )}
-        </StyledDialogContent>
-      </TamaguiDialog.Portal>
-    </TamaguiDialog>
-  );
-};
+                  {headline && (
+                    <Text {...typographyScale.titleLarge} color="$onSurface">
+                      {headline}
+                    </Text>
+                  )}
+                  <Button
+                    variant="text"
+                    onPress={actions[0]?.onClick}
+                    disabled={!actions[0]}
+                  >
+                    {actions[0]?.label || ""}
+                  </Button>
+                </FullScreenHeader>
+                <FullScreenContainer>
+                  {content}
+                  {supportingText && (
+                    <DialogSupportingText>
+                      {supportingText}
+                    </DialogSupportingText>
+                  )}
+                </FullScreenContainer>
+              </>
+            ) : (
+              <>
+                <TamaguiDialog.Close
+                  asChild
+                  position="absolute"
+                  top="$3"
+                  right="$3"
+                >
+                  <Button variant="text" size="small" aria-label="閉じる">
+                    <X size={18} />
+                  </Button>
+                </TamaguiDialog.Close>
+
+                <DialogHeader>
+                  {icon && <IconContainer>{icon}</IconContainer>}
+                  {headline && <DialogTitle>{headline}</DialogTitle>}
+                  {supportingText && (
+                    <DialogSupportingText>
+                      {supportingText}
+                    </DialogSupportingText>
+                  )}
+                </DialogHeader>
+
+                {content && <DialogContent>{content}</DialogContent>}
+
+                <DialogActions>
+                  {actions.map((action) => (
+                    <Button
+                      key={action.label}
+                      variant={action.variant || "text"}
+                      onPress={action.onClick}
+                      href={action.href}
+                    >
+                      {action.label}
+                    </Button>
+                  ))}
+                </DialogActions>
+              </>
+            )}
+          </StyledDialogContent>
+        </TamaguiDialog.Portal>
+      </TamaguiDialog>
+    );
+  },
+);

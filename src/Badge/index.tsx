@@ -1,6 +1,7 @@
 "use client";
-import type { ReactNode, Ref } from "react";
-import { type TamaguiElement, Text, YStack, styled } from "tamagui";
+import { forwardRef } from "react";
+import type { ReactNode } from "react";
+import { type TamaguiElement, Text, YStack } from "tamagui";
 import { elevationSystem, typographyScale } from "../theme";
 
 export type BadgeVariant = "standard" | "small" | "large" | "dot";
@@ -11,7 +12,6 @@ export type BadgeDirection =
   | "bottomLeft";
 
 type BadgeProps = {
-  ref?: Ref<TamaguiElement>;
   variant?: BadgeVariant;
   direction?: BadgeDirection;
   content?: ReactNode;
@@ -30,89 +30,93 @@ type BadgeProps = {
  * - large: 大きいサイズのバッジ
  * - dot: ドット形式のバッジ（テキストなし）
  */
-export const Badge = ({
-  ref,
-  variant = "standard",
-  direction = "topRight",
-  content,
-  max = 99,
-  showZero = false,
-  visible = true,
-}: BadgeProps) => {
-  // コンテンツの処理
-  let displayContent: ReactNode = content;
+export const Badge = forwardRef<TamaguiElement, BadgeProps>(
+  (
+    {
+      variant = "standard",
+      direction = "topRight",
+      content,
+      max = 99,
+      showZero = false,
+      visible = true,
+    },
+    ref,
+  ) => {
+    // コンテンツの処理
+    let displayContent: ReactNode = content;
 
-  // コンテンツが数値の場合、maxを超えたら「max+」と表示
-  if (typeof content === "number") {
-    if (content === 0 && !showZero) {
-      visible = false;
-    } else if (content > max) {
-      displayContent = `${max}+`;
+    // コンテンツが数値の場合、maxを超えたら「max+」と表示
+    if (typeof content === "number") {
+      if (content === 0 && !showZero) {
+        visible = false;
+      } else if (content > max) {
+        displayContent = `${max}+`;
+      }
     }
-  }
 
-  // バッジの位置スタイルを設定
-  const positionStyle = {
-    topRight: { top: -8, right: -8 },
-    topLeft: { top: -8, left: -8 },
-    bottomRight: { bottom: -8, right: -8 },
-    bottomLeft: { bottom: -8, left: -8 },
-  }[direction];
+    // バッジの位置スタイルを設定
+    const positionStyle = {
+      topRight: { top: -8, right: -8 },
+      topLeft: { top: -8, left: -8 },
+      bottomRight: { bottom: -8, right: -8 },
+      bottomLeft: { bottom: -8, left: -8 },
+    }[direction];
 
-  // バリアントに基づくサイズスタイルを設定
-  const sizeStyle = {
-    standard: {
-      height: 20,
-      minWidth: 20,
-      paddingHorizontal: 4,
-      fontSize: 10,
-      lineHeight: 16,
-    },
-    small: {
-      height: 16,
-      minWidth: 16,
-      paddingHorizontal: 3,
-      fontSize: 9,
-      lineHeight: 14,
-    },
-    large: {
-      height: 24,
-      minWidth: 24,
-      paddingHorizontal: 5,
-      fontSize: 11,
-      lineHeight: 18,
-    },
-    dot: {
-      width: 8,
-      height: 8,
-      paddingHorizontal: 0,
-    },
-  }[variant];
+    // バリアントに基づくサイズスタイルを設定
+    const sizeStyle = {
+      standard: {
+        height: 20,
+        minWidth: 20,
+        paddingHorizontal: 4,
+        fontSize: 10,
+        lineHeight: 16,
+      },
+      small: {
+        height: 16,
+        minWidth: 16,
+        paddingHorizontal: 3,
+        fontSize: 9,
+        lineHeight: 14,
+      },
+      large: {
+        height: 24,
+        minWidth: 24,
+        paddingHorizontal: 5,
+        fontSize: 11,
+        lineHeight: 18,
+      },
+      dot: {
+        width: 8,
+        height: 8,
+        paddingHorizontal: 0,
+      },
+    }[variant];
 
-  return (
-    <YStack
-      ref={ref}
-      alignItems="center"
-      justifyContent="center"
-      borderRadius={9999}
-      position="absolute"
-      zIndex={1}
-      overflow="hidden"
-      backgroundColor="$error"
-      {...positionStyle}
-      {...sizeStyle}
-      {...(visible === false ? { display: "none" } : {})}
-    >
-      {variant !== "dot" && (
-        <Text
-          color="$onError"
-          textAlign="center"
-          fontSize={sizeStyle.fontSize}
-          lineHeight={sizeStyle.lineHeight}
-        >
-          {displayContent}
-        </Text>
-      )}
-    </YStack>
-  );
-};
+    return (
+      <YStack
+        ref={ref}
+        alignItems="center"
+        justifyContent="center"
+        borderRadius={9999}
+        position="absolute"
+        zIndex={1}
+        overflow="hidden"
+        backgroundColor="$error"
+        {...positionStyle}
+        {...sizeStyle}
+        {...(visible === false ? { display: "none" } : {})}
+      >
+        {variant !== "dot" && (
+          <Text
+            color="$onError"
+            textAlign="center"
+            fontSize={sizeStyle.fontSize}
+            lineHeight={sizeStyle.lineHeight}
+          >
+            {displayContent}
+          </Text>
+        )}
+      </YStack>
+    );
+  },
+);

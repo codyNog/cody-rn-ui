@@ -1,7 +1,6 @@
 "use client";
 import { Send } from "@tamagui/lucide-icons";
-import type { ReactNode, Ref } from "react";
-import { useCallback } from "react";
+import { forwardRef, type ReactNode, useCallback } from "react";
 import type {
   NativeSyntheticEvent,
   TextInput,
@@ -47,7 +46,6 @@ const Content = ({ children }: ContentProps) => {
 };
 
 type MessageProps = {
-  ref?: Ref<TamaguiElement>;
   children: ReactNode;
   type: "sent" | "received";
 };
@@ -72,57 +70,60 @@ const MessageStyled = styled(Text, {
   } as const,
 });
 
-const Message = ({ ref, children, type }: MessageProps) => {
-  return (
-    <MessageStyled ref={ref} type={type}>
-      {children}
-    </MessageStyled>
-  );
-};
+const Message = forwardRef<TamaguiElement, MessageProps>(
+  ({ children, type }, ref) => {
+    return (
+      <MessageStyled ref={ref} type={type}>
+        {children}
+      </MessageStyled>
+    );
+  },
+);
 
 const StyledInput = styled(TextArea, {
   height: 56,
 });
 
 type InputProps = {
-  ref?: Ref<TextInput>;
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
   disabled?: boolean;
 };
 
-const Input = ({ ref, value, onChange, onSubmit, disabled }: InputProps) => {
-  const onKeyPress = useCallback(
-    (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-      // @ts-ignore
-      if (e.key === "Enter" && e.metaKey) {
-        onSubmit();
-      }
-    },
-    [onSubmit],
-  );
+const Input = forwardRef<TextInput, InputProps>(
+  ({ value, onChange, onSubmit, disabled }, ref) => {
+    const onKeyPress = useCallback(
+      (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        // @ts-ignore
+        if (e.key === "Enter" && e.metaKey) {
+          onSubmit();
+        }
+      },
+      [onSubmit],
+    );
 
-  return (
-    <View justifyContent="center">
-      <StyledInput
-        ref={ref}
-        value={value}
-        onChangeText={(e) => onChange(e)}
-        onKeyPress={onKeyPress}
-        disabled={disabled}
-      />
-      <TamaguiButton
-        onPress={onSubmit}
-        position="absolute"
-        right={0}
-        top={6}
-        icon={<Send />}
-        disabled={disabled}
-      />
-    </View>
-  );
-};
+    return (
+      <View justifyContent="center">
+        <StyledInput
+          ref={ref}
+          value={value}
+          onChangeText={(e) => onChange(e)}
+          onKeyPress={onKeyPress}
+          disabled={disabled}
+        />
+        <TamaguiButton
+          onPress={onSubmit}
+          position="absolute"
+          right={0}
+          top={6}
+          icon={<Send />}
+          disabled={disabled}
+        />
+      </View>
+    );
+  },
+);
 
 type Action = {
   children: ReactNode;

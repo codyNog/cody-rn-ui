@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { styled } from "tamagui";
 import {
   type ButtonProps,
-  type StackProps,
   Button as TamaguiButton,
   XStack,
   YStack,

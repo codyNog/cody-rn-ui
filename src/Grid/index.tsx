@@ -1,8 +1,8 @@
 "use client";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import type { ReactNode, Ref } from "react";
 import { useWindowDimensions } from "react-native";
-import { View, XStack, useMedia } from "tamagui";
+import { View, XStack } from "tamagui";
 import type { GetProps, TamaguiElement } from "tamagui";
 
 // Material Design 3のグリッドシステムの定義

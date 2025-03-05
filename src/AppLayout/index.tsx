@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Background } from "../Background";
 import { Grid } from "../Grid";

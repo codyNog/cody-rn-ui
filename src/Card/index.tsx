@@ -1,5 +1,6 @@
 "use client";
-import type { ReactNode, Ref } from "react";
+import { forwardRef } from "react";
+import type { ReactNode } from "react";
 import {
   Image,
   type ImageProps,
@@ -144,7 +145,6 @@ type Props = {
     alt?: string; // 代替テキスト
   };
   children?: ReactNode; // 子要素
-  ref?: Ref<TamaguiElement>; // 参照
   actions?: {
     onClick: () => void;
     label: string;
@@ -153,43 +153,47 @@ type Props = {
   variant?: "elevated" | "filled" | "outlined"; // カードのバリアント
 };
 
-export const Card = ({
-  title,
-  subtitle,
-  description,
-  media,
-  children,
-  ref,
-  actions,
-  variant = "elevated",
-}: Props) => {
-  return (
-    <StyledCard ref={ref} variant={variant}>
-      {media && (
-        <CardMedia source={media.source} alt={media.alt || "Card media"} />
-      )}
+export const Card = forwardRef<TamaguiElement, Props>(
+  (
+    {
+      title,
+      subtitle,
+      description,
+      media,
+      children,
+      actions,
+      variant = "elevated",
+    },
+    ref,
+  ) => {
+    return (
+      <StyledCard ref={ref} variant={variant}>
+        {media && (
+          <CardMedia source={media.source} alt={media.alt || "Card media"} />
+        )}
 
-      {(title || subtitle) && (
-        <CardHeader>
-          {title && <CardTitle>{title}</CardTitle>}
-          {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
-        </CardHeader>
-      )}
+        {(title || subtitle) && (
+          <CardHeader>
+            {title && <CardTitle>{title}</CardTitle>}
+            {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
+          </CardHeader>
+        )}
 
-      <CardContent>
-        {description && <CardDescription>{description}</CardDescription>}
-        {children}
-      </CardContent>
+        <CardContent>
+          {description && <CardDescription>{description}</CardDescription>}
+          {children}
+        </CardContent>
 
-      {actions && actions.length > 0 && (
-        <CardFooter>
-          {actions.map(({ onClick, label, variant = "text" }) => (
-            <Button key={label} onPress={onClick} variant={variant}>
-              {label}
-            </Button>
-          ))}
-        </CardFooter>
-      )}
-    </StyledCard>
-  );
-};
+        {actions && actions.length > 0 && (
+          <CardFooter>
+            {actions.map(({ onClick, label, variant = "text" }) => (
+              <Button key={label} onPress={onClick} variant={variant}>
+                {label}
+              </Button>
+            ))}
+          </CardFooter>
+        )}
+      </StyledCard>
+    );
+  },
+);

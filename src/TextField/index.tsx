@@ -1,6 +1,6 @@
 "use client";
 import { Eye, EyeOff } from "@tamagui/lucide-icons";
-import { type Ref, useState } from "react";
+import { forwardRef, useState } from "react";
 import type { TextInput } from "react-native";
 import {
   type InputProps,
@@ -11,7 +11,6 @@ import {
   styled,
 } from "tamagui";
 import { stateLayerOpacity } from "../theme";
-import React from "react";
 
 // スタイル付きのInputコンポーネント
 const StyledInput = styled(TamaguiInput, {
@@ -184,7 +183,6 @@ type Props = Omit<
   InputProps,
   "ref" | "onChangeText" | "onChange" | "placeholder"
 > & {
-  ref?: Ref<TextInput>;
   label: string;
   helperText?: string;
   error?: string;
@@ -197,94 +195,98 @@ type Props = Omit<
   numberOfLines?: number;
 };
 
-export const TextField = ({
-  ref,
-  label,
-  helperText,
-  error,
-  value,
-  maxLength,
-  secureTextEntry,
-  disabled,
-  onChange,
-  variant = "outlined",
-  multiline = false,
-  numberOfLines = 1,
-  ...props
-}: Props) => {
-  const [focused, setFocused] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+export const TextField = forwardRef<TextInput, Props>(
+  (
+    {
+      label,
+      helperText,
+      error,
+      value,
+      maxLength,
+      secureTextEntry,
+      disabled,
+      onChange,
+      variant = "outlined",
+      multiline = false,
+      numberOfLines = 1,
+      ...props
+    },
+    ref,
+  ) => {
+    const [focused, setFocused] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-  const hasError = !!error;
-  const isFilled = !!value && value.length > 0;
-  const showSecureToggle = secureTextEntry && isFilled;
+    const hasError = !!error;
+    const isFilled = !!value && value.length > 0;
+    const showSecureToggle = secureTextEntry && isFilled;
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
 
-  return (
-    <YStack width="100%">
-      <XStack position="relative" width="100%">
-        <StyledInput
-          ref={ref}
-          value={value}
-          variant={variant}
-          error={hasError}
-          disabled={disabled}
-          secureTextEntry={secureTextEntry && !showPassword}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          maxLength={maxLength}
-          onChangeText={onChange}
-          width="100%"
-          multiline={multiline}
-          numberOfLines={multiline ? numberOfLines : 1}
-          textAlignVertical={multiline ? "top" : "center"}
-          height={multiline ? undefined : 56}
-          minHeight={multiline ? 24 * numberOfLines + 40 : 56}
-          paddingTop={multiline ? 24 : 16}
-          {...props}
-        />
-        <Label
-          variant={variant}
-          focused={focused}
-          filled={isFilled}
-          error={hasError}
-          disabled={disabled}
-          backgroundColor={
-            variant === "filled" ? "$surfaceContainerHighest" : "$background"
-          }
-          paddingHorizontal={4}
-          zIndex={1}
-          marginTop={variant === "outlined" && (focused || isFilled) ? -8 : 0}
-        >
-          {label}
-        </Label>
-
-        {showSecureToggle && (
-          <XStack
-            position="absolute"
-            right={12}
-            top={16}
-            onPress={togglePasswordVisibility}
-            cursor="pointer"
+    return (
+      <YStack width="100%">
+        <XStack position="relative" width="100%">
+          <StyledInput
+            ref={ref}
+            value={value}
+            variant={variant}
+            error={hasError}
+            disabled={disabled}
+            secureTextEntry={secureTextEntry && !showPassword}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            maxLength={maxLength}
+            onChangeText={onChange}
+            width="100%"
+            multiline={multiline}
+            numberOfLines={multiline ? numberOfLines : 1}
+            textAlignVertical={multiline ? "top" : "center"}
+            height={multiline ? undefined : 56}
+            minHeight={multiline ? 24 * numberOfLines + 40 : 56}
+            paddingTop={multiline ? 24 : 16}
+            {...props}
+          />
+          <Label
+            variant={variant}
+            focused={focused}
+            filled={isFilled}
+            error={hasError}
+            disabled={disabled}
+            backgroundColor={
+              variant === "filled" ? "$surfaceContainerHighest" : "$background"
+            }
+            paddingHorizontal={4}
+            zIndex={1}
+            marginTop={variant === "outlined" && (focused || isFilled) ? -8 : 0}
           >
-            {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
-          </XStack>
-        )}
-      </XStack>
+            {label}
+          </Label>
 
-      <XStack width="100%" justifyContent="flex-end">
-        {(helperText || error) && (
-          <HelperText error={hasError}>{error || helperText}</HelperText>
-        )}
-        {maxLength && (
-          <CounterText marginLeft={8}>
-            {value?.length || 0}/{maxLength}
-          </CounterText>
-        )}
-      </XStack>
-    </YStack>
-  );
-};
+          {showSecureToggle && (
+            <XStack
+              position="absolute"
+              right={12}
+              top={16}
+              onPress={togglePasswordVisibility}
+              cursor="pointer"
+            >
+              {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
+            </XStack>
+          )}
+        </XStack>
+
+        <XStack width="100%" justifyContent="flex-end">
+          {(helperText || error) && (
+            <HelperText error={hasError}>{error || helperText}</HelperText>
+          )}
+          {maxLength && (
+            <CounterText marginLeft={8}>
+              {value?.length || 0}/{maxLength}
+            </CounterText>
+          )}
+        </XStack>
+      </YStack>
+    );
+  },
+);

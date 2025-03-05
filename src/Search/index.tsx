@@ -1,6 +1,6 @@
 "use client";
 import { Search as SearchIcon, X } from "@tamagui/lucide-icons";
-import { type ReactNode, type Ref, useState } from "react";
+import { type ReactNode, type Ref, forwardRef, useState } from "react";
 import {
   type NativeSyntheticEvent,
   type TextInput,
@@ -97,7 +97,6 @@ const ClearButton = styled(XStack, {
 });
 
 type Props = Omit<InputProps, "ref" | "onChangeText" | "onChange"> & {
-  ref?: Ref<TextInput>;
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -109,81 +108,85 @@ type Props = Omit<InputProps, "ref" | "onChangeText" | "onChange"> & {
   onClickTrailingIcon?: () => void;
 };
 
-export const Search = ({
-  ref,
-  placeholder = "検索",
-  value = "",
-  onChange,
-  onSearch,
-  error = false,
-  disabled = false,
-  leadingIcon,
-  onClickLeadingIcon,
-  trailingIcon,
-  onClickTrailingIcon,
-  ...props
-}: Props) => {
-  const [focused, setFocused] = useState(false);
-  const isFilled = !!value && value.length > 0;
-
-  const handleChange = (text: string) => {
-    onChange?.(text);
-  };
-
-  const handleClear = () => {
-    onChange?.("");
-  };
-
-  const handleKeyPress = (
-    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
+export const Search = forwardRef<TextInput, Props>(
+  (
+    {
+      placeholder = "検索",
+      value = "",
+      onChange,
+      onSearch,
+      error = false,
+      disabled = false,
+      leadingIcon,
+      onClickLeadingIcon,
+      trailingIcon,
+      onClickTrailingIcon,
+      ...props
+    },
+    ref,
   ) => {
-    if (e.nativeEvent.key === "Enter" && onSearch) {
-      onSearch(value);
-    }
-  };
+    const [focused, setFocused] = useState(false);
+    const isFilled = !!value && value.length > 0;
 
-  return (
-    <YStack width="100%">
-      <XStack position="relative" width="100%">
-        <StyledInput
-          ref={ref}
-          value={value}
-          error={error}
-          disabled={disabled}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          onChangeText={handleChange}
-          onKeyPress={handleKeyPress}
-          placeholder={placeholder}
-          width="100%"
-          height={56}
-          {...props}
-        />
-        <LeadingIconContainer>
-          {leadingIcon ? (
-            <TouchableOpacity onPress={onClickLeadingIcon}>
-              {leadingIcon}
-            </TouchableOpacity>
-          ) : (
-            <SearchIcon
-              size={24}
-              color={focused ? "$primary" : "$onSurfaceVariant"}
-            />
-          )}
-        </LeadingIconContainer>
+    const handleChange = (text: string) => {
+      onChange?.(text);
+    };
 
-        {trailingIcon ? (
-          <TrailingIconContainer>
-            <TouchableOpacity onPress={onClickTrailingIcon}>
-              {trailingIcon}
-            </TouchableOpacity>
-          </TrailingIconContainer>
-        ) : isFilled ? (
-          <ClearButton onPress={handleClear}>
-            <X size={20} color="$onSurfaceVariant" />
-          </ClearButton>
-        ) : null}
-      </XStack>
-    </YStack>
-  );
-};
+    const handleClear = () => {
+      onChange?.("");
+    };
+
+    const handleKeyPress = (
+      e: NativeSyntheticEvent<TextInputKeyPressEventData>,
+    ) => {
+      if (e.nativeEvent.key === "Enter" && onSearch) {
+        onSearch(value);
+      }
+    };
+
+    return (
+      <YStack width="100%">
+        <XStack position="relative" width="100%">
+          <StyledInput
+            ref={ref}
+            value={value}
+            error={error}
+            disabled={disabled}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            onChangeText={handleChange}
+            onKeyPress={handleKeyPress}
+            placeholder={placeholder}
+            width="100%"
+            height={56}
+            {...props}
+          />
+          <LeadingIconContainer>
+            {leadingIcon ? (
+              <TouchableOpacity onPress={onClickLeadingIcon}>
+                {leadingIcon}
+              </TouchableOpacity>
+            ) : (
+              <SearchIcon
+                size={24}
+                color={focused ? "$primary" : "$onSurfaceVariant"}
+              />
+            )}
+          </LeadingIconContainer>
+
+          {trailingIcon ? (
+            <TrailingIconContainer>
+              <TouchableOpacity onPress={onClickTrailingIcon}>
+                {trailingIcon}
+              </TouchableOpacity>
+            </TrailingIconContainer>
+          ) : isFilled ? (
+            <ClearButton onPress={handleClear}>
+              <X size={20} color="$onSurfaceVariant" />
+            </ClearButton>
+          ) : null}
+        </XStack>
+      </YStack>
+    );
+  },
+);

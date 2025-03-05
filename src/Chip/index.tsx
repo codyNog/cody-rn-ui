@@ -1,19 +1,11 @@
 "use client";
-import type { ReactNode, Ref } from "react";
-import {
-  type GetProps,
-  type TamaguiElement,
-  Text,
-  XStack,
-  YStack,
-  styled,
-} from "tamagui";
+import type { ReactNode, forwardRef } from "react";
+import { type TamaguiElement, Text, XStack, YStack, styled } from "tamagui";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 
 export type ChipVariant = "assist" | "filter" | "input" | "suggestion";
 
 type ChipProps = {
-  ref?: Ref<TamaguiElement>;
   variant?: ChipVariant;
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
@@ -174,17 +166,19 @@ const IconContainer = styled(YStack, {
  * - input: 入力チップ
  * - suggestion: 提案チップ
  */
-export const Chip = ({
-  ref,
-  variant = "assist",
-  leadingIcon,
-  trailingIcon,
-  selected = false,
-  disabled = false,
-  onClick,
-  children,
-}: ChipProps) => {
-  return (
+export const Chip = forwardRef<TamaguiElement, Omit<ChipProps, "ref">>(
+  (
+    {
+      variant = "assist",
+      leadingIcon,
+      trailingIcon,
+      selected = false,
+      disabled = false,
+      onClick,
+      children,
+    },
+    ref,
+  ) => (
     <StyledChip
       ref={ref}
       variant={variant}
@@ -200,5 +194,5 @@ export const Chip = ({
 
       {trailingIcon && <IconContainer>{trailingIcon}</IconContainer>}
     </StyledChip>
-  );
-};
+  ),
+);
