@@ -30,7 +30,7 @@ import { Button } from "../Button";
 
 type WrapperProps = {
   children: ReactNode;
-  onSubmit?: () => void; // オプションのonSubmitコールバック
+  onSubmit?: () => void | Promise<void>; // オプションのonSubmitコールバック
 };
 
 const Wrapper = ({ children, onSubmit }: WrapperProps) => {
@@ -55,15 +55,25 @@ const Wrapper = ({ children, onSubmit }: WrapperProps) => {
     // Chat.Inputの場合、onSubmitをラップしてスクロール処理を追加
     if (isInput) {
       return cloneElement(child, {
-        onSubmit: () => {
-          // 元のonSubmitを呼び出し
+        onSubmit: async () => {
+          // 元のonSubmitを呼び出し、Promiseを返す場合は完了を待つ
           if (typeof child.props.onSubmit === "function") {
-            child.props.onSubmit();
+            const result = child.props.onSubmit();
+            // Promiseが返された場合は完了を待つ
+            if (result instanceof Promise) {
+              await result;
+            }
           }
+          // submitイベント完了後の処理
           // スクロールを最下部に移動
           scrollToBottom();
-          // 外部のonSubmitコールバックを呼び出し
-          if (onSubmit) onSubmit();
+          // 外部のonSubmitコールバックを呼び出し、Promiseを返す場合は完了を待つ
+          if (onSubmit) {
+            const result = onSubmit();
+            if (result instanceof Promise) {
+              await result;
+            }
+          }
         },
       } as Partial<InputProps>);
     }
@@ -195,7 +205,7 @@ const StyledInput = styled(TextArea, {
 type InputProps = {
   value: string;
   onChange: (value: string) => void;
-  onSubmit: () => void;
+  onSubmit: () => void | Promise<void>;
   disabled?: boolean;
 };
 
@@ -239,7 +249,7 @@ const Input = forwardRef<TextInput, InputProps>(
 type Action = {
   children: ReactNode;
   label: string;
-  onPress: () => void;
+  onPress: () => void | Promise<void>;
 };
 
 type ActionsProps = {
