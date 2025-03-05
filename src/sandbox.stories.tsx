@@ -14,6 +14,7 @@ import { ScrollView, Text, View, XStack, YStack } from "tamagui";
 import { AppLayout } from "./AppLayout";
 import { Button } from "./Button";
 import { Card } from "./Card";
+import { Chat } from "./Chat";
 import { Checkbox } from "./Checkbox";
 import { Chip } from "./Chip";
 import { Divider } from "./Divider";
@@ -287,81 +288,106 @@ const SandboxApp = () => {
           value: "messages",
           label: "メッセージ",
           icon: <MessageCircle size={20} color="var(--color-onSurface)" />,
-          children: (
-            <ScrollView padding="$4">
-              <YStack space="$4">
-                <Card title="メッセージ">
-                  <YStack space="$2">
-                    <XStack space="$2" padding="$2">
-                      <View
-                        width={40}
-                        height={40}
-                        borderRadius={20}
-                        backgroundColor="$primary"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Text color="white">A</Text>
-                      </View>
-                      <YStack flex={1}>
-                        <Text fontWeight="bold">Alice</Text>
-                        <Text numberOfLines={1}>
-                          こんにちは、新しいデザインはどうですか？
+          children: (() => {
+            const [inputValue, setInputValue] = useState("");
+            const [messages, setMessages] = useState([
+              {
+                id: "1",
+                type: "received",
+                text: "こんにちは、新しいデザインはどうですか？",
+                sender: "Alice",
+              },
+              {
+                id: "2",
+                type: "sent",
+                text: "良いと思います！いくつか修正点があります。",
+              },
+              {
+                id: "3",
+                type: "received",
+                text: "プロジェクトの進捗状況を教えてください",
+                sender: "Bob",
+              },
+              {
+                id: "4",
+                type: "sent",
+                text: "予定通り進んでいます。来週までに完了予定です。",
+              },
+              {
+                id: "5",
+                type: "received",
+                text: "新しいコンポーネントのレビューをお願いします",
+                sender: "Charlie",
+              },
+            ]);
+
+            const handleSubmit = () => {
+              if (!inputValue.trim()) return;
+
+              // メッセージを追加
+              setMessages([
+                ...messages,
+                { id: `sent-${Date.now()}`, type: "sent", text: inputValue },
+              ]);
+
+              // 入力をクリア
+              setInputValue("");
+
+              // 自動返信（デモ用）
+              setTimeout(() => {
+                const senders = ["Alice", "Bob", "Charlie"];
+                const randomSender =
+                  senders[Math.floor(Math.random() * senders.length)];
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    id: `recv-${Date.now()}`,
+                    type: "received",
+                    text: `「${inputValue}」についてもう少し詳しく教えてください。`,
+                    sender: randomSender,
+                  },
+                ]);
+              }, 1000);
+            };
+
+            return (
+              <Chat.Wrapper>
+                <Chat.Content>
+                  {messages.map((msg) => (
+                    <YStack key={msg.id} space="$1">
+                      {msg.type === "received" && (
+                        <Text fontSize="$1" paddingLeft="$3" opacity={0.7}>
+                          {msg.sender}
                         </Text>
-                      </YStack>
-                      <Text fontSize="$1" opacity={0.6}>
-                        10:30
-                      </Text>
-                    </XStack>
-                    <Divider />
-                    <XStack space="$2" padding="$2">
-                      <View
-                        width={40}
-                        height={40}
-                        borderRadius={20}
-                        backgroundColor="$secondary"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Text color="white">B</Text>
-                      </View>
-                      <YStack flex={1}>
-                        <Text fontWeight="bold">Bob</Text>
-                        <Text numberOfLines={1}>
-                          プロジェクトの進捗状況を教えてください
-                        </Text>
-                      </YStack>
-                      <Text fontSize="$1" opacity={0.6}>
-                        昨日
-                      </Text>
-                    </XStack>
-                    <Divider />
-                    <XStack space="$2" padding="$2">
-                      <View
-                        width={40}
-                        height={40}
-                        borderRadius={20}
-                        backgroundColor="$tertiary"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Text color="white">C</Text>
-                      </View>
-                      <YStack flex={1}>
-                        <Text fontWeight="bold">Charlie</Text>
-                        <Text numberOfLines={1}>
-                          新しいコンポーネントのレビューをお願いします
-                        </Text>
-                      </YStack>
-                      <Text fontSize="$1" opacity={0.6}>
-                        先週
-                      </Text>
-                    </XStack>
-                  </YStack>
-                </Card>
-              </YStack>
-            </ScrollView>
-          ),
+                      )}
+                      <Chat.Message type={msg.type as "sent" | "received"}>
+                        {msg.text}
+                      </Chat.Message>
+                    </YStack>
+                  ))}
+                  <Chat.Actions
+                    actions={[
+                      {
+                        label: "添付",
+                        onPress: () => console.log("添付ファイル"),
+                        children: "添付",
+                      },
+                      {
+                        label: "カメラ",
+                        onPress: () => console.log("カメラ"),
+                        children: "カメラ",
+                      },
+                    ]}
+                  />
+                </Chat.Content>
+                <Chat.Input
+                  value={inputValue}
+                  onChange={setInputValue}
+                  onSubmit={handleSubmit}
+                />
+              </Chat.Wrapper>
+            );
+          })(),
         },
         {
           value: "settings",
