@@ -1,11 +1,18 @@
 import type { ReactNode } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Background } from "../Background";
 import { styled, View } from "tamagui";
 
 const Wrapper = styled(View, {
   flex: 1,
   backgroundColor: "$surfaceContainer",
+});
+
+const Background = styled(View, {
+  backgroundColor: "$background",
+  flexDirection: "column",
+  flex: 1,
+  maxHeight: "100%",
+  height: "100%",
 });
 
 type Props = {
@@ -18,11 +25,9 @@ export const AppLayout = ({ children, navigationBar, topAppBar }: Props) => {
   return (
     <Wrapper>
       {topAppBar && topAppBar}
-      <Background>
-        <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1 }}>
-          {children}
-        </SafeAreaView>
-      </Background>
+      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1 }}>
+        <Background>{children}</Background>
+      </SafeAreaView>
       {navigationBar && navigationBar}
     </Wrapper>
   );

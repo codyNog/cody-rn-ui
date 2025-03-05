@@ -10,12 +10,12 @@ import {
   styled,
 } from "tamagui";
 import { Badge, type BadgeVariant } from "../Badge";
-import { elevationSystem, typographyScale } from "../theme";
+import { typographyScale } from "../theme";
 
 type NavigationItem = {
   icon: ReactNode;
   activeIcon?: ReactNode; // アクティブ時に表示する別のアイコン（オプション）
-  label: string;
+  label?: string;
   value: string;
   badge?: {
     content?: ReactNode;
