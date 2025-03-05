@@ -1,8 +1,8 @@
 import { ToastProvider } from "@tamagui/toast";
 import type { ReactNode } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TamaguiProvider, Theme } from "tamagui";
 import { DEFAULT_KEY_COLOR, bodyFont, headingFont, useTheme } from "../theme";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 
 /**
  * Material Design 3のデザイントークンシステム

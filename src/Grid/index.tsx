@@ -103,6 +103,11 @@ const Container = ({
   );
 };
 
+// Material Design 3のグリッドシステムの定数
+// カラム間のgap（Material Design 3の規則に従った固定値）
+// 8dpの倍数を使用（ここでは8dp = $2と仮定）
+const GRID_GAP = "$2";
+
 // グリッド行コンポーネント
 const Row = ({
   children,
@@ -132,6 +137,7 @@ const Row = ({
           ? -verticalGutter / 2
           : verticalGutter
       }
+      gap={GRID_GAP} // Material Design 3の規則に従った固定値
       {...props}
     >
       {children}
@@ -171,8 +177,18 @@ const Column = ({
   }, [breakpoint, sm, md, lg, xl, span]);
 
   // レスポンシブな幅の計算
+  // Material Design 3のグリッドシステムに準拠した幅計算
   const columnWidth = useMemo(() => {
-    return `${(responsiveSpan / totalColumns) * 100}%`;
+    // 各カラムの基本幅（gapを考慮しない場合）
+    const baseWidth = responsiveSpan / totalColumns;
+
+    // カラム間のgapの合計幅（カラム数 - 1）* gap
+    // 8pxはGRID_GAPの$2に相当する値と仮定
+    const gapWidth = 8; // pxで指定
+
+    // 実際の幅計算
+    // 各カラムの幅 = (基本幅 * 100%) - (gap調整)
+    return `calc(${baseWidth * 100}% - ${gapWidth * (1 - baseWidth)}px)`;
   }, [responsiveSpan, totalColumns]);
 
   // オフセットの計算
@@ -183,7 +199,6 @@ const Column = ({
 
   return (
     <View
-      flex={1}
       width={columnWidth}
       marginLeft={marginLeft}
       padding={padding}

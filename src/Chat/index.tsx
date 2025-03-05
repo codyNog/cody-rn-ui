@@ -1,6 +1,6 @@
 "use client";
 import { Send } from "@tamagui/lucide-icons";
-import { forwardRef, type ReactNode, useCallback } from "react";
+import { type ReactNode, forwardRef, useCallback } from "react";
 import type {
   NativeSyntheticEvent,
   TextInput,

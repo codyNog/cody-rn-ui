@@ -1,12 +1,12 @@
 "use client";
+import type { ComponentProps, ReactNode } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, YStack } from "tamagui";
 import { Background } from "../Background";
 import { Grid } from "../Grid";
 import { NavigationBar } from "../NavigationBar";
-import type { ComponentProps, ReactNode } from "react";
-import { TopAppBar } from "../TopAppBar";
 import { Tabs } from "../Tabs";
-import { ScrollView, YStack } from "tamagui";
+import { TopAppBar } from "../TopAppBar";
 
 type Props = {
   children?: ReactNode;

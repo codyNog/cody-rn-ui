@@ -1,5 +1,5 @@
-import * as esbuild from "esbuild";
 import { chmod, rename } from "node:fs/promises";
+import * as esbuild from "esbuild";
 
 async function build() {
   try {

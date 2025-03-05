@@ -40,7 +40,8 @@ const StyledChip = styled(XStack, {
     variant: {
       assist: {
         backgroundColor: "$surfaceContainerLow",
-        borderWidth: 0,
+        borderWidth: 1,
+        borderColor: "$outline",
         ...elevationSystem.shadows.level0,
         // ホバー時のスタイル
         hoverStyle: {
