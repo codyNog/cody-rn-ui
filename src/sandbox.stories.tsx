@@ -1,7 +1,5 @@
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import type { Meta, StoryObj } from "@storybook/react";
 import {
-  ArrowLeft,
   Bell,
   Home,
   Menu as MenuIcon,
@@ -22,8 +20,11 @@ import { Divider } from "./Divider";
 import { Form } from "./Form";
 import { IconSymbol } from "./IconSymbol";
 import { Menu } from "./Menu";
+import { NavigationBar } from "./NavigationBar";
 import { Select } from "./Select";
+import { Tabs } from "./Tabs";
 import { TextField } from "./TextField";
+import { TopAppBar } from "./TopAppBar";
 
 // アイコンの共通スタイル
 const iconProps = { size: 22, color: "$onSurfaceVariant" };
@@ -126,291 +127,293 @@ const SandboxApp = () => {
     },
   ];
 
-  return (
-    <AppLayout
-      topAppBar={{
-        variant: "small",
-        headline: "UI コンポーネントサンドボックス",
-        leadingIcon: (
-          <MenuIcon {...iconProps} onPress={() => setShowMenu(!showMenu)} />
-        ),
-        trailingIcons: [
-          <Search {...iconProps} key="search" />,
-          <Bell {...iconProps} key="bell" />,
-          <MoreVertical {...iconProps} key="more" />,
-        ],
-      }}
-      navigationBar={{
-        items: navigationItems,
-        defaultValue: activeTab,
-        onValueChange: setActiveTab,
-        variant: "standard",
-      }}
-      tabs={{
-        tabs: [
-          {
-            value: "home",
-            label: "ホーム",
-            icon: (
-              <IconSymbol
-                name="house.fill"
-                size={20}
-                color="var(--color-onSurface)"
-              />
-            ),
-            children: (
-              <ScrollView padding="$4">
-                <YStack space="$4">
-                  <Card
-                    title="ようこそ"
-                    actions={[
-                      {
-                        label: "詳細",
-                        onClick: () => console.log("詳細"),
-                        variant: "text",
-                      },
-                      {
-                        label: "開始",
-                        onClick: () => console.log("開始"),
-                        variant: "filled",
-                      },
-                    ]}
-                  >
-                    <Text>
-                      このサンドボックスでは、様々なUIコンポーネントを試すことができます。
-                      タブを切り替えて、異なるコンポーネントを確認してみましょう。
-                    </Text>
-                  </Card>
+  // TopAppBarコンポーネント
+  const topAppBar = (
+    <TopAppBar
+      variant="small"
+      headline="UI コンポーネントサンドボックス"
+      leadingIcon={
+        <MenuIcon {...iconProps} onPress={() => setShowMenu(!showMenu)} />
+      }
+      trailingIcons={[
+        <Search {...iconProps} key="search" />,
+        <Bell {...iconProps} key="bell" />,
+        <MoreVertical {...iconProps} key="more" />,
+      ]}
+    />
+  );
 
-                  <Card
-                    title="TODOリスト"
-                    actions={[
-                      {
-                        label: "追加",
-                        onClick: addTodo,
-                        variant: "filled",
-                      },
-                    ]}
-                  >
-                    <YStack space="$2">
-                      {todoItems.map((item) => (
-                        <XStack key={item.id} alignItems="center" space="$2">
-                          <Checkbox
-                            checked={item.completed}
-                            onCheckedChange={() => toggleTodo(item.id)}
-                          />
-                          <Text
-                            textDecorationLine={
-                              item.completed ? "line-through" : "none"
-                            }
-                            opacity={item.completed ? 0.6 : 1}
-                          >
-                            {item.text}
-                          </Text>
-                        </XStack>
-                      ))}
-                      <XStack flex={1} space="$2" marginTop="$2">
-                        <TextField
-                          label="新しいタスク"
-                          value={newTodo}
-                          onChange={setNewTodo}
-                          flex={1}
+  // NavigationBarコンポーネント
+  const navigationBar = (
+    <NavigationBar
+      items={navigationItems}
+      defaultValue={activeTab}
+      onValueChange={setActiveTab}
+      variant="standard"
+    />
+  );
+
+  // タブの設定
+  const tabsContent = (
+    <Tabs
+      tabs={[
+        {
+          value: "home",
+          label: "ホーム",
+          icon: (
+            <IconSymbol
+              name="house.fill"
+              size={20}
+              color="var(--color-onSurface)"
+            />
+          ),
+          children: (
+            <ScrollView padding="$4">
+              <YStack space="$4">
+                <Card
+                  title="ようこそ"
+                  actions={[
+                    {
+                      label: "詳細",
+                      onClick: () => console.log("詳細"),
+                      variant: "text",
+                    },
+                    {
+                      label: "開始",
+                      onClick: () => console.log("開始"),
+                      variant: "filled",
+                    },
+                  ]}
+                >
+                  <Text>
+                    このサンドボックスでは、様々なUIコンポーネントを試すことができます。
+                    タブを切り替えて、異なるコンポーネントを確認してみましょう。
+                  </Text>
+                </Card>
+
+                <Card
+                  title="TODOリスト"
+                  actions={[
+                    {
+                      label: "追加",
+                      onClick: addTodo,
+                      variant: "filled",
+                    },
+                  ]}
+                >
+                  <YStack space="$2">
+                    {todoItems.map((item) => (
+                      <XStack key={item.id} alignItems="center" space="$2">
+                        <Checkbox
+                          checked={item.completed}
+                          onCheckedChange={() => toggleTodo(item.id)}
                         />
+                        <Text
+                          textDecorationLine={
+                            item.completed ? "line-through" : "none"
+                          }
+                          opacity={item.completed ? 0.6 : 1}
+                        >
+                          {item.text}
+                        </Text>
                       </XStack>
-                    </YStack>
-                  </Card>
-
-                  <Card title="チップ例">
-                    <XStack flexWrap="wrap" gap="$2">
-                      <Chip>デザイン</Chip>
-                      <Chip>開発</Chip>
-                      <Chip>UI/UX</Chip>
-                      <Chip>React Native</Chip>
-                      <Chip>Tamagui</Chip>
-                      <Chip>Material Design</Chip>
+                    ))}
+                    <XStack flex={1} space="$2" marginTop="$2">
+                      <TextField
+                        label="新しいタスク"
+                        value={newTodo}
+                        onChange={setNewTodo}
+                        flex={1}
+                      />
                     </XStack>
-                  </Card>
-                </YStack>
-              </ScrollView>
-            ),
-          },
-          {
-            value: "profile",
-            label: "プロフィール",
-            icon: <User size={20} color="var(--color-onSurface)" />,
-            children: (
-              <ScrollView padding="$4">
-                <YStack space="$4">
-                  <Card title="プロフィール情報">
-                    <Form>
-                      <YStack space="$4">
-                        <TextField
-                          label="名前"
-                          value={formName}
-                          onChange={setFormName}
-                        />
-                        <TextField
-                          label="メールアドレス"
-                          value={formEmail}
-                          onChange={setFormEmail}
-                        />
-                        <Select
-                          label="アカウントタイプ"
-                          value={formType}
-                          onChange={setFormType}
-                          options={[
-                            { value: "personal", label: "個人" },
-                            { value: "business", label: "ビジネス" },
-                            { value: "developer", label: "開発者" },
-                          ]}
-                        />
-                        <Form.Trigger asChild>
-                          <Button variant="filled">保存</Button>
-                        </Form.Trigger>
-                      </YStack>
-                    </Form>
-                  </Card>
-                </YStack>
-              </ScrollView>
-            ),
-          },
-          {
-            value: "messages",
-            label: "メッセージ",
-            icon: <MessageCircle size={20} color="var(--color-onSurface)" />,
-            children: (
-              <ScrollView padding="$4">
-                <YStack space="$4">
-                  <Card title="メッセージ">
-                    <YStack space="$2">
-                      <XStack space="$2" padding="$2">
-                        <View
-                          width={40}
-                          height={40}
-                          borderRadius={20}
-                          backgroundColor="$primary"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          <Text color="white">A</Text>
-                        </View>
-                        <YStack flex={1}>
-                          <Text fontWeight="bold">Alice</Text>
-                          <Text numberOfLines={1}>
-                            こんにちは、新しいデザインはどうですか？
-                          </Text>
-                        </YStack>
-                        <Text fontSize="$1" opacity={0.6}>
-                          10:30
-                        </Text>
-                      </XStack>
-                      <Divider />
-                      <XStack space="$2" padding="$2">
-                        <View
-                          width={40}
-                          height={40}
-                          borderRadius={20}
-                          backgroundColor="$secondary"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          <Text color="white">B</Text>
-                        </View>
-                        <YStack flex={1}>
-                          <Text fontWeight="bold">Bob</Text>
-                          <Text numberOfLines={1}>
-                            プロジェクトの進捗状況を教えてください
-                          </Text>
-                        </YStack>
-                        <Text fontSize="$1" opacity={0.6}>
-                          昨日
-                        </Text>
-                      </XStack>
-                      <Divider />
-                      <XStack space="$2" padding="$2">
-                        <View
-                          width={40}
-                          height={40}
-                          borderRadius={20}
-                          backgroundColor="$tertiary"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          <Text color="white">C</Text>
-                        </View>
-                        <YStack flex={1}>
-                          <Text fontWeight="bold">Charlie</Text>
-                          <Text numberOfLines={1}>
-                            新しいコンポーネントのレビューをお願いします
-                          </Text>
-                        </YStack>
-                        <Text fontSize="$1" opacity={0.6}>
-                          先週
-                        </Text>
-                      </XStack>
-                    </YStack>
-                  </Card>
-                </YStack>
-              </ScrollView>
-            ),
-          },
-          {
-            value: "settings",
-            label: "設定",
-            icon: <Settings size={20} color="var(--color-onSurface)" />,
-            children: (
-              <ScrollView padding="$4">
-                <YStack space="$4">
-                  <Card title="アプリ設定">
-                    <YStack space="$3">
-                      <XStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Text>ダークモード</Text>
-                        <Checkbox />
-                      </XStack>
-                      <Divider />
-                      <XStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Text>通知</Text>
-                        <Checkbox defaultChecked />
-                      </XStack>
-                      <Divider />
-                      <XStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Text>データの同期</Text>
-                        <Checkbox />
-                      </XStack>
-                    </YStack>
-                  </Card>
+                  </YStack>
+                </Card>
 
-                  <Card title="アカウント設定">
-                    <YStack space="$3">
-                      <Button variant="outlined" icon={<User size={18} />}>
-                        プロフィール編集
-                      </Button>
-                      <Button variant="outlined" icon={<Bell size={18} />}>
-                        通知設定
-                      </Button>
-                      <Button variant="outlined" icon={<Settings size={18} />}>
-                        詳細設定
-                      </Button>
+                <Card title="チップ例">
+                  <XStack flexWrap="wrap" gap="$2">
+                    <Chip>デザイン</Chip>
+                    <Chip>開発</Chip>
+                    <Chip>UI/UX</Chip>
+                    <Chip>React Native</Chip>
+                    <Chip>Tamagui</Chip>
+                    <Chip>Material Design</Chip>
+                  </XStack>
+                </Card>
+              </YStack>
+            </ScrollView>
+          ),
+        },
+        {
+          value: "profile",
+          label: "プロフィール",
+          icon: <User size={20} color="var(--color-onSurface)" />,
+          children: (
+            <ScrollView padding="$4">
+              <YStack space="$4">
+                <Card title="プロフィール情報">
+                  <Form>
+                    <YStack space="$4">
+                      <TextField
+                        label="名前"
+                        value={formName}
+                        onChange={setFormName}
+                      />
+                      <TextField
+                        label="メールアドレス"
+                        value={formEmail}
+                        onChange={setFormEmail}
+                      />
+                      <Select
+                        label="アカウントタイプ"
+                        value={formType}
+                        onChange={setFormType}
+                        options={[
+                          { value: "personal", label: "個人" },
+                          { value: "business", label: "ビジネス" },
+                          { value: "developer", label: "開発者" },
+                        ]}
+                      />
+                      <Form.Trigger asChild>
+                        <Button variant="filled">保存</Button>
+                      </Form.Trigger>
                     </YStack>
-                  </Card>
-                </YStack>
-              </ScrollView>
-            ),
-          },
-        ],
-        defaultValue: activeTab,
-        onValueChange: setActiveTab,
-      }}
-    >
+                  </Form>
+                </Card>
+              </YStack>
+            </ScrollView>
+          ),
+        },
+        {
+          value: "messages",
+          label: "メッセージ",
+          icon: <MessageCircle size={20} color="var(--color-onSurface)" />,
+          children: (
+            <ScrollView padding="$4">
+              <YStack space="$4">
+                <Card title="メッセージ">
+                  <YStack space="$2">
+                    <XStack space="$2" padding="$2">
+                      <View
+                        width={40}
+                        height={40}
+                        borderRadius={20}
+                        backgroundColor="$primary"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Text color="white">A</Text>
+                      </View>
+                      <YStack flex={1}>
+                        <Text fontWeight="bold">Alice</Text>
+                        <Text numberOfLines={1}>
+                          こんにちは、新しいデザインはどうですか？
+                        </Text>
+                      </YStack>
+                      <Text fontSize="$1" opacity={0.6}>
+                        10:30
+                      </Text>
+                    </XStack>
+                    <Divider />
+                    <XStack space="$2" padding="$2">
+                      <View
+                        width={40}
+                        height={40}
+                        borderRadius={20}
+                        backgroundColor="$secondary"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Text color="white">B</Text>
+                      </View>
+                      <YStack flex={1}>
+                        <Text fontWeight="bold">Bob</Text>
+                        <Text numberOfLines={1}>
+                          プロジェクトの進捗状況を教えてください
+                        </Text>
+                      </YStack>
+                      <Text fontSize="$1" opacity={0.6}>
+                        昨日
+                      </Text>
+                    </XStack>
+                    <Divider />
+                    <XStack space="$2" padding="$2">
+                      <View
+                        width={40}
+                        height={40}
+                        borderRadius={20}
+                        backgroundColor="$tertiary"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Text color="white">C</Text>
+                      </View>
+                      <YStack flex={1}>
+                        <Text fontWeight="bold">Charlie</Text>
+                        <Text numberOfLines={1}>
+                          新しいコンポーネントのレビューをお願いします
+                        </Text>
+                      </YStack>
+                      <Text fontSize="$1" opacity={0.6}>
+                        先週
+                      </Text>
+                    </XStack>
+                  </YStack>
+                </Card>
+              </YStack>
+            </ScrollView>
+          ),
+        },
+        {
+          value: "settings",
+          label: "設定",
+          icon: <Settings size={20} color="var(--color-onSurface)" />,
+          children: (
+            <ScrollView padding="$4">
+              <YStack space="$4">
+                <Card title="アプリ設定">
+                  <YStack space="$3">
+                    <XStack justifyContent="space-between" alignItems="center">
+                      <Text>ダークモード</Text>
+                      <Checkbox />
+                    </XStack>
+                    <Divider />
+                    <XStack justifyContent="space-between" alignItems="center">
+                      <Text>通知</Text>
+                      <Checkbox defaultChecked />
+                    </XStack>
+                    <Divider />
+                    <XStack justifyContent="space-between" alignItems="center">
+                      <Text>データの同期</Text>
+                      <Checkbox />
+                    </XStack>
+                  </YStack>
+                </Card>
+
+                <Card title="アカウント設定">
+                  <YStack space="$3">
+                    <Button variant="outlined" icon={<User size={18} />}>
+                      プロフィール編集
+                    </Button>
+                    <Button variant="outlined" icon={<Bell size={18} />}>
+                      通知設定
+                    </Button>
+                    <Button variant="outlined" icon={<Settings size={18} />}>
+                      詳細設定
+                    </Button>
+                  </YStack>
+                </Card>
+              </YStack>
+            </ScrollView>
+          ),
+        },
+      ]}
+      defaultValue={activeTab}
+      onValueChange={setActiveTab}
+    />
+  );
+
+  return (
+    <AppLayout topAppBar={topAppBar} navigationBar={navigationBar}>
       {/* メニュー（表示/非表示） */}
       {showMenu && (
         <YStack
@@ -423,6 +426,7 @@ const SandboxApp = () => {
           <Menu items={menuItems} />
         </YStack>
       )}
+      {tabsContent}
     </AppLayout>
   );
 };
