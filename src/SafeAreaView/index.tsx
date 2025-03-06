@@ -20,7 +20,7 @@ export const SafeAreaView = ({ children }: CustomSafeAreaViewProps) => {
     <View flex={1}>
       {/* 上部のみSafeAreaを適用し、背景色を設定 */}
       <StyledSafeAreaView edges={["top"]} />
-      <RNSafeAreaView edges={["right", "bottom"]} style={{ flex: 1 }}>
+      <RNSafeAreaView edges={["right", "left"]} style={{ flex: 1 }}>
         {children}
       </RNSafeAreaView>
     </View>
