@@ -9,7 +9,7 @@ async function build() {
       bundle: true,
       platform: "node",
       target: "node16",
-      format: "esm",
+      format: "cjs",
       outdir: "dist",
       banner: {
         js: "#!/usr/bin/env node",
