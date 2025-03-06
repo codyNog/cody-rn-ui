@@ -1,14 +1,14 @@
 "use client";
-import { forwardRef, type ReactNode } from "react";
+import { type ReactNode, forwardRef } from "react";
 import {
+  type GetProps,
+  Stack,
+  type StackProps,
   type TamaguiElement,
   Text,
   XStack,
   YStack,
   styled,
-  Stack,
-  type StackProps,
-  type GetProps,
 } from "tamagui";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 

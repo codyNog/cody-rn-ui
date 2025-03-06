@@ -1,16 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect, userEvent, within } from "@storybook/test";
+import { ChevronRight, Home, Mail, Star } from "@tamagui/lucide-icons";
+import { YStack } from "tamagui";
 import { ListItem as Component } from ".";
-import { getCanvas } from "../libs/storybook";
 import { Avatar } from "../Avatar";
 import { Checkbox } from "../Checkbox";
 import { Switch } from "../Switch";
-import { YStack } from "tamagui";
-import { ChevronRight, Home, Mail, Star } from "@tamagui/lucide-icons";
+import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {
   component: Component,
-  title: "UI/ListItem",
   parameters: {
     layout: "centered",
   },
