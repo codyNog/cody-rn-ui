@@ -125,6 +125,33 @@ export const WithMultipleIcons: Story = {
   },
 };
 
+export const LeadingIconOnly: Story = {
+  args: {
+    variant: "center",
+    headline: "Leading Icon Only",
+    leadingIcon: <Menu {...iconProps} />,
+    trailingIcons: [],
+  },
+};
+
+export const TrailingIconOnly: Story = {
+  args: {
+    variant: "center",
+    headline: "Trailing Icon Only",
+    leadingIcon: undefined,
+    trailingIcons: [<MoreVertical {...iconProps} key="more" />],
+  },
+};
+
+export const NoIcons: Story = {
+  args: {
+    variant: "center",
+    headline: "No Icons",
+    leadingIcon: undefined,
+    trailingIcons: [],
+  },
+};
+
 export const Behavior: Story = {
   args: {
     headline: "TopAppBar",

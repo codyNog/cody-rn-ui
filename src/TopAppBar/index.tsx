@@ -80,7 +80,7 @@ const IconContainer = styled(XStack, {
   gap: "$3", // 12dp - アイコン間の間隔を広げて視認性を向上
   height: "$icon", // 24dp
   justifyContent: "center",
-  minWidth: "$icon", // 最小幅を設定して空の場合でもスペースを確保
+  width: 48, // アイコンがある場合とない場合で同じ幅を確保
 });
 
 // アイコンラッパー（個々のアイコン用）
@@ -111,13 +111,15 @@ export const TopAppBar = forwardRef<TamaguiElement, Props>(
       return (
         <XStack width="100%" justifyContent="center">
           <Container ref={ref} variant={variant}>
-            <IconContainer>
+            {/* 左側のアイコンコンテナ - 常に同じ幅を確保 */}
+            <IconContainer justifyContent="flex-start">
               {leadingIcon ? <IconWrapper>{leadingIcon}</IconWrapper> : null}
             </IconContainer>
 
             <Headline variant={variant}>{headline}</Headline>
 
-            <IconContainer>
+            {/* 右側のアイコンコンテナ - 常に同じ幅を確保 */}
+            <IconContainer justifyContent="flex-end">
               {trailingIcons && trailingIcons.length > 0 ? (
                 <IconWrapper>{trailingIcons[0]}</IconWrapper>
               ) : null}
