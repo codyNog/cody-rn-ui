@@ -3,6 +3,7 @@ import { forwardRef, type ReactNode } from "react";
 import type { TamaguiElement } from "tamagui";
 import { Background } from "../Background";
 import { Grid } from "../Grid";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Props = {
   children: ReactNode;
@@ -11,9 +12,11 @@ type Props = {
 export const Content = forwardRef<TamaguiElement, Props>(
   ({ children }, ref) => {
     return (
-      <Background ref={ref}>
-        <Grid.Container>{children}</Grid.Container>
-      </Background>
+      <SafeAreaView>
+        <Background ref={ref}>
+          <Grid.Container>{children}</Grid.Container>
+        </Background>
+      </SafeAreaView>
     );
   },
 );
