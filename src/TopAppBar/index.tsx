@@ -22,6 +22,7 @@ const Container = styled(XStack, {
   alignItems: "center",
   justifyContent: "space-between",
   backgroundColor: "$surfaceContainer",
+  paddingHorizontal: "$4", // 16dp - Material Design 3のガイドラインに基づく水平パディング
   // エレベーション（Material Design 3では0-4dp）
   ...elevationSystem.shadows.level0,
 
@@ -163,10 +164,12 @@ export const TopAppBar = forwardRef<TamaguiElement, Props>(
           )}
         </Container>
 
+        {/* large バリアントの場合、下部にタイトルを表示 */}
         {variant === "large" && (
           <XStack
             width="100%"
             maxWidth={1440}
+            paddingHorizontal="$4" /* 16dp - 水平パディングを追加 */
             paddingBottom="$4"
             backgroundColor="$surfaceContainer"
             justifyContent="flex-start"
