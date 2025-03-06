@@ -23,7 +23,7 @@ const Container = styled(XStack, {
   justifyContent: "space-between",
   backgroundColor: "$surfaceContainer",
   // エレベーション（Material Design 3では0-4dp）
-  ...elevationSystem.shadows.level1,
+  ...elevationSystem.shadows.level0,
 
   variants: {
     variant: {

@@ -3,8 +3,8 @@ import { expect } from "@storybook/test";
 import { Home, MessageCircle, Settings, User } from "@tamagui/lucide-icons";
 import { useState } from "react";
 import { Text, YStack } from "tamagui";
-import type { BadgeVariant } from "../Badge";
 import { Tabs as Component, TabPanel } from ".";
+import type { BadgeVariant } from "../Badge";
 import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Component> = {

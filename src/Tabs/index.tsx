@@ -1,28 +1,28 @@
 "use client";
 import {
-  forwardRef,
-  useState,
-  useRef,
-  useEffect,
   Children,
-  isValidElement,
   cloneElement,
+  forwardRef,
+  isValidElement,
+  useEffect,
+  useRef,
+  useState,
 } from "react";
 import type { ReactNode } from "react";
+import { Animated, View, useWindowDimensions } from "react-native";
 import {
+  ScrollView,
+  Stack,
   type TamaguiElement,
   Text,
   XStack,
   YStack,
-  Stack,
-  styled,
-  ScrollView,
   getTokens,
+  styled,
 } from "tamagui";
-import { Animated, useWindowDimensions, View } from "react-native";
-import { elevationSystem, typographyScale } from "../theme";
 import type { BadgeVariant } from "../Badge";
 import { Badge } from "../Badge";
+import { elevationSystem, typographyScale } from "../theme";
 
 // タブアイテムの型定義
 type TabItem = {
