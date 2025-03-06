@@ -45,15 +45,29 @@ const preview: Preview = {
         showName: true,
       },
     },
+    theme: {
+      name: "Theme",
+      description: "テーマモード（ライト/ダーク）",
+      defaultValue: "light",
+      toolbar: {
+        icon: "circlehollow",
+        items: [
+          { value: "light", title: "Light" },
+          { value: "dark", title: "Dark" },
+        ],
+        showName: true,
+      },
+    },
   },
   // デコレーターを設定（Storyをラップするコンポーネント）
   decorators: [
     (Story, context) => {
-      // コントロールパネルから選択されたキーカラーを取得
+      // コントロールパネルから選択されたキーカラーとテーマを取得
       const keyColor = context.globals.keyColor || "#6750A4";
+      const theme = context.globals.theme || "light";
 
       return (
-        <UIProvider keyColor={keyColor}>
+        <UIProvider keyColor={keyColor} theme={theme}>
           <Background>
             <Story />
           </Background>

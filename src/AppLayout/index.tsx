@@ -1,20 +1,11 @@
 import type { ReactNode } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { styled, View } from "tamagui";
+import { View, styled } from "tamagui";
+import { Background } from "../Background";
 
 const Wrapper = styled(View, {
   flex: 1,
   backgroundColor: "$surfaceContainer",
 });
-
-const Background = styled(View, {
-  backgroundColor: "$background",
-  flexDirection: "column",
-  flex: 1,
-  maxHeight: "100%",
-  height: "100%",
-});
-
 type Props = {
   children: ReactNode;
   navigationBar?: ReactNode;

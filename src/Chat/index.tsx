@@ -1,14 +1,14 @@
 "use client";
 import { Send } from "@tamagui/lucide-icons";
 import {
+  Children,
   type ReactNode,
   type Ref,
+  cloneElement,
   forwardRef,
+  isValidElement,
   useCallback,
   useRef,
-  Children,
-  isValidElement,
-  cloneElement,
 } from "react";
 import type {
   NativeSyntheticEvent,
@@ -25,8 +25,8 @@ import {
   YStack,
   styled,
 } from "tamagui";
-import { Text } from "../Text";
 import { Button } from "../Button";
+import { Text } from "../Text";
 
 type WrapperProps = {
   children: ReactNode;
@@ -196,6 +196,7 @@ const StyledInput = styled(TextArea, {
   borderColor: "$outline",
   borderWidth: 1,
   paddingRight: 40, // 送信ボタン用のスペース
+  color: "$onSurface", // 入力文字のカラーを設定
 });
 
 type InputProps = {
