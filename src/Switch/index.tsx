@@ -100,20 +100,21 @@ export const Switch = forwardRef<TamaguiElement, Props>(
       }
     };
 
-    return (
-      <XStack width={300} alignItems="center" gap="$4">
-        <StyledSwitch
-          id={id}
-          size={size}
-          ref={ref}
-          checked={checked}
-          disabled={disabled}
-          onCheckedChange={onCheckedChange}
-          defaultChecked={defaultChecked}
-        >
-          <StyledThumb animation="quick" checked={checked} />
-        </StyledSwitch>
-        {label && (
+    // ラベルがある場合はXStackでラップ、ない場合は直接StyledSwitchを返す
+    if (label) {
+      return (
+        <XStack width={300} alignItems="center" gap="$4">
+          <StyledSwitch
+            id={id}
+            size={size}
+            ref={ref}
+            checked={checked}
+            disabled={disabled}
+            onCheckedChange={onCheckedChange}
+            defaultChecked={defaultChecked}
+          >
+            <StyledThumb animation="quick" checked={checked} />
+          </StyledSwitch>
           <Label
             size={size}
             htmlFor={id}
@@ -123,8 +124,23 @@ export const Switch = forwardRef<TamaguiElement, Props>(
           >
             {label}
           </Label>
-        )}
-      </XStack>
+        </XStack>
+      );
+    }
+
+    // ラベルがない場合は直接StyledSwitchを返す
+    return (
+      <StyledSwitch
+        id={id}
+        size={size}
+        ref={ref}
+        checked={checked}
+        disabled={disabled}
+        onCheckedChange={onCheckedChange}
+        defaultChecked={defaultChecked}
+      >
+        <StyledThumb animation="quick" checked={checked} />
+      </StyledSwitch>
     );
   },
 );

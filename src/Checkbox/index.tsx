@@ -76,21 +76,22 @@ export const Checkbox = forwardRef<TamaguiElement, Props>(
       onCheckedChange?.(!checked);
     };
 
-    return (
-      <XStack width={300} alignItems="center" gap="$4">
-        <StyledCheckbox
-          checked={checked}
-          id={id}
-          size={size}
-          ref={ref}
-          onCheckedChange={onCheckedChange}
-        >
-          <Cb.Indicator forceMount>
-            {checked === true && <CheckIcon color="$onPrimary" />}
-            {checked === "indeterminate" && <Minus color="$onPrimary" />}
-          </Cb.Indicator>
-        </StyledCheckbox>
-        {label && (
+    // ラベルがある場合はXStackでラップ、ない場合は直接StyledCheckboxを返す
+    if (label) {
+      return (
+        <XStack width={300} alignItems="center" gap="$4">
+          <StyledCheckbox
+            checked={checked}
+            id={id}
+            size={size}
+            ref={ref}
+            onCheckedChange={onCheckedChange}
+          >
+            <Cb.Indicator forceMount>
+              {checked === true && <CheckIcon color="$onPrimary" />}
+              {checked === "indeterminate" && <Minus color="$onPrimary" />}
+            </Cb.Indicator>
+          </StyledCheckbox>
           <Label
             size={size}
             htmlFor={id}
@@ -99,8 +100,24 @@ export const Checkbox = forwardRef<TamaguiElement, Props>(
           >
             {label}
           </Label>
-        )}
-      </XStack>
+        </XStack>
+      );
+    }
+
+    // ラベルがない場合は直接StyledCheckboxを返す
+    return (
+      <StyledCheckbox
+        checked={checked}
+        id={id}
+        size={size}
+        ref={ref}
+        onCheckedChange={onCheckedChange}
+      >
+        <Cb.Indicator forceMount>
+          {checked === true && <CheckIcon color="$onPrimary" />}
+          {checked === "indeterminate" && <Minus color="$onPrimary" />}
+        </Cb.Indicator>
+      </StyledCheckbox>
     );
   },
 );
