@@ -25,9 +25,7 @@ export const AppLayout = ({ children, navigationBar, topAppBar }: Props) => {
   return (
     <Wrapper>
       {topAppBar && topAppBar}
-      <SafeAreaView edges={["top", "left", "right"]} style={{ flex: 1 }}>
-        <Background>{children}</Background>
-      </SafeAreaView>
+      <Background>{children}</Background>
       {navigationBar && navigationBar}
     </Wrapper>
   );
