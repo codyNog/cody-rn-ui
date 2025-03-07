@@ -1,9 +1,21 @@
 "use client";
 import { Text as TamaguiText, styled } from "tamagui";
-import { typographyScale } from "../theme";
+import { typographyScale, type ColorScheme } from "../theme";
+import type { ElementRef, ReactNode } from "react";
+import { forwardRef } from "react";
+
+// ColorSchemeのプロパティの頭に$をつけた型
+type ColorToken = `$${keyof ColorScheme}`;
+
+// 明示的に定義されたプロパティのみを受け付ける型定義
+type Props = {
+  variant: keyof typeof typographyScale;
+  children: ReactNode;
+  color?: ColorToken;
+};
 
 // Material Design 3のタイポグラフィスタイルを適用したテキストコンポーネント
-export const Text = styled(TamaguiText, {
+const StyledText = styled(TamaguiText, {
   color: "$onSurface",
 
   // バリアント定義
@@ -36,3 +48,11 @@ export const Text = styled(TamaguiText, {
     variant: "bodyMedium",
   },
 });
+
+// Propsで定義されたプロパティのみを受け付けるようにエクスポート
+// forwardRefを使用してrefを適切に扱う
+export const Text = forwardRef<ElementRef<typeof TamaguiText>, Props>(
+  (props, ref) => {
+    return <StyledText {...props} ref={ref} />;
+  },
+);
