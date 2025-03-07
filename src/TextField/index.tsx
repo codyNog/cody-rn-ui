@@ -208,7 +208,7 @@ export const TextField = forwardRef<TextInput, Props>(
       onChange,
       variant = "outlined",
       multiline = false,
-      numberOfLines = 1,
+      numberOfLines = 3,
       ...props
     },
     ref,
