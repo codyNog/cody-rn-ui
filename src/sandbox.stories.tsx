@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { ScrollView, Text, View, XStack, YStack } from "tamagui";
 import { AppLayout } from "./AppLayout";
+import { SafeAreaView } from "./SafeAreaView";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Chat } from "./Chat";
@@ -470,9 +471,30 @@ const SandboxApp = () => {
         header={drawerHeader}
         closeOnSelect={true}
       />
-      <AppLayout topAppBar={topAppBar} navigationBar={navigationBar}>
-        {tabsContent}
-      </AppLayout>
+      <View flex={1} height="100vh">
+        <SafeAreaView>
+          <View flex={1} height="100%">
+            <View flex={1}>
+              {topAppBar}
+              <ScrollView flex={1}>
+                {tabsContent}
+                {/* NavigationBarの高さ分の余白を追加 */}
+                <View height={80} />
+              </ScrollView>
+              {/* NavigationBarを画面最下部に固定 */}
+              <View
+                position="absolute"
+                bottom={0}
+                left={0}
+                right={0}
+                backgroundColor="$surfaceContainer"
+              >
+                {navigationBar}
+              </View>
+            </View>
+          </View>
+        </SafeAreaView>
+      </View>
     </>
   );
 };
