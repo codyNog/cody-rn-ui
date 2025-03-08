@@ -1,7 +1,7 @@
 "use client";
-import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
-import { styled, View } from "tamagui";
 import type { ReactNode } from "react";
+import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
+import { View, styled } from "tamagui";
 
 const StyledSafeAreaView = styled(RNSafeAreaView, {
   backgroundColor: "$surfaceContainer",

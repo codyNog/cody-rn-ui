@@ -1,8 +1,8 @@
 "use client";
-import { Text as TamaguiText, styled } from "tamagui";
-import { typographyScale, type ColorScheme } from "../theme";
 import type { ElementRef, ReactNode } from "react";
 import { forwardRef } from "react";
+import { Text as TamaguiText, styled } from "tamagui";
+import { type ColorScheme, typographyScale } from "../theme";
 
 // ColorSchemeのプロパティの頭に$をつけた型
 type ColorToken = `$${keyof ColorScheme}`;

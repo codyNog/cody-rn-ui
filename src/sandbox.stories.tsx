@@ -20,8 +20,8 @@ import { Chip } from "./Chip";
 import { Divider } from "./Divider";
 import { Form } from "./Form";
 import { IconSymbol } from "./IconSymbol";
-import { Menu } from "./Menu";
 import { NavigationBar } from "./NavigationBar";
+import { NavigationDrawer, type NavigationItem } from "./NavigationDrawer";
 import { Select } from "./Select";
 import { Tabs } from "./Tabs";
 import { TextField } from "./TextField";
@@ -34,7 +34,7 @@ const iconProps = { size: 22, color: "$onSurfaceVariant" };
 const SandboxApp = () => {
   // 状態管理
   const [activeTab, setActiveTab] = useState("home");
-  const [showMenu, setShowMenu] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [formName, setFormName] = useState("");
   const [formEmail, setFormEmail] = useState("");
   const [formType, setFormType] = useState("");
@@ -66,32 +66,42 @@ const SandboxApp = () => {
     setNewTodo("");
   };
 
-  // メニュー項目
-  const menuItems = [
+  // ナビゲーションドロワーのアイテム
+  const drawerItems: NavigationItem[] = [
     {
+      key: "home",
+      label: "ホーム",
+      icon: <Home size={24} />,
+      selected: activeTab === "home",
+      onPress: () => setActiveTab("home"),
+    },
+    {
+      key: "profile",
       label: "プロフィール",
-      onPress: () => {
-        setShowMenu(false);
-        setActiveTab("profile");
-      },
-      leadingIcon: <User size={20} />,
+      icon: <User size={24} />,
+      selected: activeTab === "profile",
+      onPress: () => setActiveTab("profile"),
     },
     {
+      key: "messages",
+      label: "メッセージ",
+      icon: <MessageCircle size={24} />,
+      selected: activeTab === "messages",
+      badge: <Text color="$error">3</Text>,
+      onPress: () => setActiveTab("messages"),
+    },
+    {
+      key: "settings",
       label: "設定",
-      onPress: () => {
-        setShowMenu(false);
-        setActiveTab("settings");
-      },
-      leadingIcon: <Settings size={20} />,
+      icon: <Settings size={24} />,
+      selected: activeTab === "settings",
+      onPress: () => setActiveTab("settings"),
     },
     {
+      key: "notifications",
       label: "通知",
-      onPress: () => {
-        setShowMenu(false);
-        console.log("通知が選択されました");
-      },
-      leadingIcon: <Bell size={20} />,
-      trailingText: "3",
+      icon: <Bell size={24} />,
+      onPress: () => console.log("通知が選択されました"),
     },
   ];
 
@@ -134,7 +144,7 @@ const SandboxApp = () => {
       variant="small"
       headline="UI コンポーネントサンドボックス"
       leadingIcon={
-        <MenuIcon {...iconProps} onPress={() => setShowMenu(!showMenu)} />
+        <MenuIcon {...iconProps} onPress={() => setDrawerOpen(true)} />
       }
       trailingIcons={[
         <Search {...iconProps} key="search" />,
@@ -438,22 +448,32 @@ const SandboxApp = () => {
     />
   );
 
+  // カスタムヘッダー
+  const drawerHeader = (
+    <YStack padding="$4" gap="$2">
+      <Text fontSize={22} fontWeight="500" color="$onSurface">
+        UI コンポーネント
+      </Text>
+      <Text fontSize={14} color="$onSurfaceVariant">
+        Material Design 3
+      </Text>
+    </YStack>
+  );
+
   return (
-    <AppLayout topAppBar={topAppBar} navigationBar={navigationBar}>
-      {/* メニュー（表示/非表示） */}
-      {showMenu && (
-        <YStack
-          position="absolute"
-          top={64}
-          left={16}
-          zIndex={1000}
-          onPress={() => setShowMenu(false)}
-        >
-          <Menu items={menuItems} />
-        </YStack>
-      )}
-      {tabsContent}
-    </AppLayout>
+    <>
+      {/* NavigationDrawer - AppLayoutの外部に配置 */}
+      <NavigationDrawer
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+        items={drawerItems}
+        header={drawerHeader}
+        closeOnSelect={true}
+      />
+      <AppLayout topAppBar={topAppBar} navigationBar={navigationBar}>
+        {tabsContent}
+      </AppLayout>
+    </>
   );
 };
 

@@ -1,3 +1,4 @@
+import "react-native-reanimated";
 import type { Preview } from "@storybook/react";
 import React from "react";
 import { Background } from "../src/Background";
