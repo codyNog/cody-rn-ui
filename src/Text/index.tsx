@@ -9,7 +9,7 @@ type ColorToken = `$${keyof ColorScheme}`;
 
 // 明示的に定義されたプロパティのみを受け付ける型定義
 type Props = {
-  variant: keyof typeof typographyScale;
+  variant?: keyof typeof typographyScale;
   children: ReactNode;
   color?: ColorToken;
 };
