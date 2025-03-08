@@ -25,7 +25,7 @@ type Props = {
   icon?: ReactNode;
   headline?: string;
   supportingText?: string;
-  actions: Action[];
+  actions?: Action[];
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children?: ReactNode; // トリガーとして使用
@@ -122,7 +122,7 @@ export const Dialog = forwardRef<TamaguiElement, Props>(
       icon,
       headline,
       supportingText,
-      actions,
+      actions = [],
       open,
       onOpenChange,
       children,
