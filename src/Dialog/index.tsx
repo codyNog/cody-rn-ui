@@ -28,8 +28,8 @@ type Props = {
   actions: Action[];
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  children: ReactNode; // トリガーとして使用
-  content: ReactNode; // ダイアログのコンテンツとして使用
+  children?: ReactNode; // トリガーとして使用
+  content?: ReactNode; // ダイアログのコンテンツとして使用
 };
 
 // スタイル付きのダイアログコンテナ
