@@ -1,14 +1,18 @@
 "use client";
 import { ChevronDown } from "@tamagui/lucide-icons";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
+import type { TextInput } from "react-native";
 import {
   Adapt,
+  Input,
   Sheet,
   Select as TamaguiSelect,
   Text,
+  VisuallyHidden,
   XStack,
   YStack,
   styled,
+  type TamaguiElement,
 } from "tamagui";
 import { elevationSystem, stateLayerOpacity } from "../theme";
 
@@ -202,99 +206,112 @@ type Props = {
   disabled?: boolean;
 };
 
-export const Select = ({
-  label,
-  helperText,
-  error,
-  options,
-  value,
-  onChange,
-  variant = "outlined",
-  disabled,
-}: Props) => {
-  const [open, setOpen] = useState(false);
-  const hasError = !!error;
-  const selectedOption = options.find((option) => option.value === value);
-  const isSelected = !!selectedOption;
+export const Select = forwardRef<TextInput, Props>(
+  (
+    {
+      label,
+      helperText,
+      error,
+      options,
+      value,
+      onChange,
+      variant = "outlined",
+      disabled,
+    },
+    ref,
+  ) => {
+    const [open, setOpen] = useState(false);
+    const hasError = !!error;
+    const selectedOption = options.find((option) => option.value === value);
+    const isSelected = !!selectedOption;
 
-  return (
-    <YStack width="100%">
-      <XStack position="relative" width="100%">
-        <TamaguiSelect
-          id={label}
-          value={value}
-          onValueChange={onChange}
-          open={open}
-          onOpenChange={setOpen}
-          disablePreventBodyScroll
-        >
-          <StyledTrigger
+    return (
+      <YStack width="100%">
+        <XStack position="relative" width="100%">
+          <VisuallyHidden>
+            <Input
+              ref={ref}
+              value={value}
+              onChangeText={onChange}
+              accessibilityLabel={label}
+            />
+          </VisuallyHidden>
+          <TamaguiSelect
+            id={label}
+            value={value}
+            onValueChange={onChange}
+            open={open}
+            onOpenChange={setOpen}
+            disablePreventBodyScroll
+          >
+            <StyledTrigger
+              variant={variant}
+              error={hasError}
+              disabled={disabled}
+              iconAfter={<ChevronDown size={24} color="$onSurfaceVariant" />}
+            >
+              <TamaguiSelect.Value />
+            </StyledTrigger>
+
+            <TamaguiSelect.Adapt platform="touch">
+              <TamaguiSelect.Sheet
+                modal
+                dismissOnSnapToBottom
+                snapPointsMode="fit"
+                animationConfig={{
+                  type: "spring",
+                  damping: 20,
+                  stiffness: 250,
+                }}
+              >
+                <TamaguiSelect.Sheet.Frame>
+                  <TamaguiSelect.Sheet.ScrollView>
+                    <TamaguiSelect.Adapt.Contents />
+                  </TamaguiSelect.Sheet.ScrollView>
+                </TamaguiSelect.Sheet.Frame>
+                <TamaguiSelect.Sheet.Overlay
+                  animation="lazy"
+                  enterStyle={{ opacity: 0 }}
+                  exitStyle={{ opacity: 0 }}
+                />
+              </TamaguiSelect.Sheet>
+            </TamaguiSelect.Adapt>
+            <StyledContent>
+              <TamaguiSelect.ScrollUpButton />
+              <TamaguiSelect.Viewport>
+                <TamaguiSelect.Group>
+                  {options.map((option, index) => (
+                    <StyledItem
+                      key={option.value}
+                      index={index}
+                      value={option.value}
+                    >
+                      <StyledItemText>{option.label}</StyledItemText>
+                    </StyledItem>
+                  ))}
+                </TamaguiSelect.Group>
+              </TamaguiSelect.Viewport>
+              <TamaguiSelect.ScrollDownButton />
+            </StyledContent>
+          </TamaguiSelect>
+
+          <Label
             variant={variant}
+            focused={open}
+            selected={isSelected}
             error={hasError}
             disabled={disabled}
-            iconAfter={<ChevronDown size={24} color="$onSurfaceVariant" />}
+            marginTop={variant === "outlined" && (open || isSelected) ? -10 : 0}
           >
-            <TamaguiSelect.Value />
-          </StyledTrigger>
+            {label}
+          </Label>
+        </XStack>
 
-          <TamaguiSelect.Adapt platform="touch">
-            <TamaguiSelect.Sheet
-              modal
-              dismissOnSnapToBottom
-              snapPointsMode="fit"
-              animationConfig={{
-                type: "spring",
-                damping: 20,
-                stiffness: 250,
-              }}
-            >
-              <TamaguiSelect.Sheet.Frame>
-                <TamaguiSelect.Sheet.ScrollView>
-                  <TamaguiSelect.Adapt.Contents />
-                </TamaguiSelect.Sheet.ScrollView>
-              </TamaguiSelect.Sheet.Frame>
-              <TamaguiSelect.Sheet.Overlay
-                animation="lazy"
-                enterStyle={{ opacity: 0 }}
-                exitStyle={{ opacity: 0 }}
-              />
-            </TamaguiSelect.Sheet>
-          </TamaguiSelect.Adapt>
-          <StyledContent>
-            <TamaguiSelect.ScrollUpButton />
-            <TamaguiSelect.Viewport>
-              <TamaguiSelect.Group>
-                {options.map((option, index) => (
-                  <StyledItem
-                    key={option.value}
-                    index={index}
-                    value={option.value}
-                  >
-                    <StyledItemText>{option.label}</StyledItemText>
-                  </StyledItem>
-                ))}
-              </TamaguiSelect.Group>
-            </TamaguiSelect.Viewport>
-            <TamaguiSelect.ScrollDownButton />
-          </StyledContent>
-        </TamaguiSelect>
-
-        <Label
-          variant={variant}
-          focused={open}
-          selected={isSelected}
-          error={hasError}
-          disabled={disabled}
-          marginTop={variant === "outlined" && (open || isSelected) ? -10 : 0}
-        >
-          {label}
-        </Label>
-      </XStack>
-
-      {/* ヘルパーテキスト */}
-      {(helperText || error) && (
-        <HelperText error={hasError}>{error || helperText}</HelperText>
-      )}
-    </YStack>
-  );
-};
+        {/* ヘルパーテキスト */}
+        {(helperText || error) && (
+          <HelperText error={hasError}>{error || helperText}</HelperText>
+        )}
+      </YStack>
+    );
+  },
+);

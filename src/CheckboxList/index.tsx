@@ -1,6 +1,6 @@
 "use client";
-import { useCallback, useMemo } from "react";
-import { type CheckedState, View, YStack } from "tamagui";
+import { type ForwardedRef, forwardRef, useCallback, useMemo } from "react";
+import { type CheckedState, View, YStack, type TamaguiElement } from "tamagui";
 import { Checkbox } from "../Checkbox";
 
 type Parent = {
@@ -29,65 +29,65 @@ type Props<T> = {
  * CheckboxList component
  * A checkbox list with parent-child relationships
  */
-export const CheckboxList = <T extends string>({
-  parent,
-  checks,
-  checkedIds,
-  onChangeChecks,
-}: Props<T>) => {
-  const onChangeChild = useCallback(
-    (id: T) => {
-      if (checkedIds.includes(id)) {
-        onChangeChecks(checkedIds.filter((checkId) => checkId !== id));
+export const CheckboxList = forwardRef(
+  <T extends string>(
+    { parent, checks, checkedIds, onChangeChecks }: Props<T>,
+    ref: ForwardedRef<TamaguiElement>,
+  ) => {
+    const onChangeChild = useCallback(
+      (id: T) => {
+        if (checkedIds.includes(id)) {
+          onChangeChecks(checkedIds.filter((checkId) => checkId !== id));
+          return;
+        }
+        onChangeChecks(checkedIds.concat(id));
+      },
+      [onChangeChecks, checkedIds],
+    );
+
+    const checked: CheckedState = useMemo(() => {
+      // when all checkboxes are checked, check the parent checkbox
+      if (checks.every((check) => checkedIds.includes(check.id))) return true;
+      // when some checkboxes are checked, make the parent checkbox indeterminate
+      if (checks.some((check) => checkedIds.includes(check.id)))
+        return "indeterminate";
+      // when all checkboxes are unchecked, uncheck the parent checkbox
+      return false;
+    }, [checks, checkedIds]);
+
+    const onChangeParent = useCallback(() => {
+      // when some checkboxes are checked, uncheck all checkboxes
+      if (checked) {
+        onChangeChecks([]);
         return;
       }
-      onChangeChecks(checkedIds.concat(id));
-    },
-    [onChangeChecks, checkedIds],
-  );
+      // when all checkboxes are unchecked, check all checkboxes
+      onChangeChecks(checks.map((check) => check.id));
+    }, [checked, checks, onChangeChecks]);
 
-  const checked: CheckedState = useMemo(() => {
-    // when all checkboxes are checked, check the parent checkbox
-    if (checks.every((check) => checkedIds.includes(check.id))) return true;
-    // when some checkboxes are checked, make the parent checkbox indeterminate
-    if (checks.some((check) => checkedIds.includes(check.id)))
-      return "indeterminate";
-    // when all checkboxes are unchecked, uncheck the parent checkbox
-    return false;
-  }, [checks, checkedIds]);
-
-  const onChangeParent = useCallback(() => {
-    // when some checkboxes are checked, uncheck all checkboxes
-    if (checked) {
-      onChangeChecks([]);
-      return;
-    }
-    // when all checkboxes are unchecked, check all checkboxes
-    onChangeChecks(checks.map((check) => check.id));
-  }, [checked, checks, onChangeChecks]);
-
-  return (
-    <YStack gap="$2">
-      {parent && (
-        <View>
-          <Checkbox
-            id={parent.id}
-            label={parent.label}
-            checked={checked}
-            onCheckedChange={onChangeParent}
-          />
+    return (
+      <YStack ref={ref} gap="$2">
+        {parent && (
+          <View>
+            <Checkbox
+              id={parent.id}
+              label={parent.label}
+              checked={checked}
+              onCheckedChange={onChangeParent}
+            />
+          </View>
+        )}
+        <View marginLeft={"$6"} gap="$2">
+          {checks.map((check) => (
+            <Checkbox
+              key={check.id}
+              {...check}
+              checked={checkedIds.includes(check.id)}
+              onCheckedChange={() => onChangeChild(check.id)}
+            />
+          ))}
         </View>
-      )}
-      <View marginLeft={"$6"} gap="$2">
-        {checks.map((check) => (
-          <Checkbox
-            key={check.id}
-            {...check}
-            checked={checkedIds.includes(check.id)}
-            onCheckedChange={() => onChangeChild(check.id)}
-          />
-        ))}
-      </View>
-    </YStack>
-  );
-};
+      </YStack>
+    );
+  },
+);

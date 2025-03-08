@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useId } from "react";
+import { forwardRef, useCallback, useId } from "react";
 import {
   Label,
   RadioGroup as RG,
@@ -7,6 +7,7 @@ import {
   XStack,
   YStack,
   styled,
+  type TamaguiElement,
 } from "tamagui";
 import { stateLayerOpacity } from "../theme";
 
@@ -163,31 +164,28 @@ type Props = {
   size?: "$2" | "$3" | "$4" | "$5";
 };
 
-export const RadioGroup = ({
-  options,
-  onChange,
-  value,
-  size = "$3",
-}: Props) => {
-  const onPressItem = useCallback(
-    (selectedValue: string) => {
-      onChange(selectedValue);
-    },
-    [onChange],
-  );
+export const RadioGroup = forwardRef<TamaguiElement, Props>(
+  ({ options, onChange, value, size = "$3" }, ref) => {
+    const onPressItem = useCallback(
+      (selectedValue: string) => {
+        onChange(selectedValue);
+      },
+      [onChange],
+    );
 
-  return (
-    <RG value={value} onValueChange={onChange}>
-      <YStack gap="$4" width="100%">
-        {options.map((option) => (
-          <Item
-            {...option}
-            key={option.value}
-            size={size}
-            onPress={onPressItem}
-          />
-        ))}
-      </YStack>
-    </RG>
-  );
-};
+    return (
+      <RG value={value} onValueChange={onChange} ref={ref}>
+        <YStack gap="$4" width="100%">
+          {options.map((option) => (
+            <Item
+              {...option}
+              key={option.value}
+              size={size}
+              onPress={onPressItem}
+            />
+          ))}
+        </YStack>
+      </RG>
+    );
+  },
+);

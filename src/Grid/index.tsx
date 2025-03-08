@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { forwardRef, useMemo } from "react";
 import type { ReactNode, Ref } from "react";
 import { useWindowDimensions } from "react-native";
 import { View, XStack } from "tamagui";
@@ -109,41 +109,47 @@ const Container = ({
 const GRID_GAP = "$2";
 
 // グリッド行コンポーネント
-const Row = ({
-  children,
-  gutter = "$4",
-  wrap = true,
-  justifyContent = "flex-start",
-  alignItems = "stretch",
-  ...props
-}: GridRowProps) => {
-  // ガターの計算
-  const [horizontalGutter, verticalGutter] = Array.isArray(gutter)
-    ? gutter
-    : [gutter, gutter];
+const Row = forwardRef<TamaguiElement, GridRowProps>(
+  (
+    {
+      children,
+      gutter = "$4",
+      wrap = true,
+      justifyContent = "flex-start",
+      alignItems = "stretch",
+      ...props
+    },
+    ref,
+  ) => {
+    // ガターの計算
+    const [horizontalGutter, verticalGutter] = Array.isArray(gutter)
+      ? gutter
+      : [gutter, gutter];
 
-  return (
-    <XStack
-      flexWrap={wrap ? "wrap" : "nowrap"}
-      justifyContent={justifyContent}
-      alignItems={alignItems}
-      marginHorizontal={
-        typeof horizontalGutter === "number"
-          ? -horizontalGutter / 2
-          : horizontalGutter
-      }
-      marginVertical={
-        typeof verticalGutter === "number"
-          ? -verticalGutter / 2
-          : verticalGutter
-      }
-      gap={GRID_GAP} // Material Design 3の規則に従った固定値
-      {...props}
-    >
-      {children}
-    </XStack>
-  );
-};
+    return (
+      <XStack
+        ref={ref}
+        flexWrap={wrap ? "wrap" : "nowrap"}
+        justifyContent={justifyContent}
+        alignItems={alignItems}
+        marginHorizontal={
+          typeof horizontalGutter === "number"
+            ? -horizontalGutter / 2
+            : horizontalGutter
+        }
+        marginVertical={
+          typeof verticalGutter === "number"
+            ? -verticalGutter / 2
+            : verticalGutter
+        }
+        gap={GRID_GAP} // Material Design 3の規則に従った固定値
+        {...props}
+      >
+        {children}
+      </XStack>
+    );
+  },
+);
 
 // グリッド列コンポーネント
 const Column = ({
