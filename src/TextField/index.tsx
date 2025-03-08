@@ -1,6 +1,6 @@
 "use client";
 import { Eye, EyeOff } from "@tamagui/lucide-icons";
-import { forwardRef, useState } from "react";
+import { forwardRef, useState, useRef, useEffect, type RefObject } from "react";
 import type { TextInput } from "react-native";
 import {
   type InputProps,
@@ -61,7 +61,7 @@ const StyledInput = styled(TamaguiInput, {
         paddingHorizontal: 16,
         paddingTop: 16,
         paddingBottom: 12,
-        backgroundColor: "transparent",
+        backgroundColor: "$surface",
 
         // フォーカス状態
         focusStyle: {
@@ -98,15 +98,13 @@ const StyledInput = styled(TamaguiInput, {
   },
 });
 
-// ラベルコンポーネント
-const Label = styled(Text, {
+// ラベルコンテナ
+const LabelContainer = styled(XStack, {
   position: "absolute",
-  left: 16,
+  left: 12,
   top: 16,
-  fontSize: 16,
-  color: "$onSurfaceVariant",
-  transition: "all 0.2s ease",
-  transformOrigin: "left top",
+  paddingHorizontal: 4,
+  zIndex: 1,
 
   // バリアント
   variants: {
@@ -121,15 +119,46 @@ const Label = styled(Text, {
     focused: {
       true: {
         top: 4,
+      },
+    },
+    filled: {
+      true: {
+        top: 4,
+      },
+    },
+  },
+});
+
+// ラベルコンポーネント
+const Label = styled(Text, {
+  fontSize: 16,
+  color: "$onSurfaceVariant",
+  transition: "all 0.2s ease",
+  transformOrigin: "left top",
+  paddingHorizontal: 1,
+
+  // バリアント
+  variants: {
+    variant: {
+      filled: {
+        // filledバリアントのデフォルトスタイル
+      },
+      outlined: {
+        // outlinedバリアントのデフォルトスタイル
+      },
+    },
+    focused: {
+      true: {
         fontSize: 12,
+        lineHeight: 16,
         color: "$primary",
         transform: [{ translateY: 0 }],
       },
     },
     filled: {
       true: {
-        top: 4,
         fontSize: 12,
+        lineHeight: 16,
         transform: [{ translateY: 0 }],
       },
     },
@@ -211,10 +240,20 @@ export const TextField = forwardRef<TextInput, Props>(
       numberOfLines = 3,
       ...props
     },
-    ref,
+    forwardedRef,
   ) => {
     const [focused, setFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const internalRef = useRef<TextInput>(null);
+
+    // 内部refと外部refを連携
+    useEffect(() => {
+      if (typeof forwardedRef === "function") {
+        forwardedRef(internalRef.current);
+      } else if (forwardedRef) {
+        forwardedRef.current = internalRef.current;
+      }
+    }, [forwardedRef]);
 
     const hasError = !!error;
     const isFilled = !!value && value.length > 0;
@@ -224,11 +263,17 @@ export const TextField = forwardRef<TextInput, Props>(
       setShowPassword(!showPassword);
     };
 
+    const handleLabelPress = () => {
+      if (!disabled && internalRef.current) {
+        internalRef.current.focus();
+      }
+    };
+
     return (
       <YStack width="100%">
         <XStack position="relative" width="100%">
           <StyledInput
-            ref={ref}
+            ref={internalRef}
             value={value}
             variant={variant}
             error={hasError}
@@ -247,21 +292,35 @@ export const TextField = forwardRef<TextInput, Props>(
             paddingTop={multiline ? 24 : 16}
             {...props}
           />
-          <Label
-            variant={variant}
-            focused={focused}
+          <LabelContainer
+            focused={focused || isFilled}
             filled={isFilled}
-            error={hasError}
-            disabled={disabled}
-            backgroundColor={
-              variant === "filled" ? "$surfaceContainerHighest" : "$background"
+            variant={variant}
+            marginTop={variant === "outlined" && (focused || isFilled) ? -9 : 0}
+            paddingHorizontal={
+              variant === "outlined" && (focused || isFilled) ? 0 : 2
             }
-            paddingHorizontal={4}
-            zIndex={1}
-            marginTop={variant === "outlined" && (focused || isFilled) ? -8 : 0}
+            onPress={handleLabelPress}
+            cursor="pointer"
+            backgroundColor="transparent"
           >
-            {label}
-          </Label>
+            <Label
+              variant={variant}
+              focused={focused}
+              filled={isFilled}
+              error={hasError}
+              disabled={disabled}
+              backgroundColor={
+                variant === "outlined" && (focused || isFilled)
+                  ? "$surface"
+                  : variant === "filled"
+                    ? "$surfaceContainerHighest"
+                    : "transparent"
+              }
+            >
+              {label}
+            </Label>
+          </LabelContainer>
 
           {showSecureToggle && (
             <XStack
