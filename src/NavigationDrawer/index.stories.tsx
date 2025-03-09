@@ -1,20 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect, userEvent, within } from "@storybook/test";
-import { useState } from "react";
 import {
-  Home,
-  Settings,
-  User,
-  Mail,
   Bell,
   HelpCircle,
+  Home,
   LogOut,
+  Mail,
   Menu,
+  Settings,
+  User,
 } from "@tamagui/lucide-icons";
-import { NavigationDrawer as Component, type NavigationItem } from ".";
-import { getCanvas } from "../libs/storybook";
-import { Button } from "../Button";
+import { useState } from "react";
 import { Text, XStack, YStack } from "tamagui";
+import { NavigationDrawer as Component, type NavigationItem } from ".";
+import { Button } from "../Button";
+import { getCanvas } from "../libs/storybook";
 import { typographyScale } from "../theme";
 
 const meta: Meta<typeof Component> = {

@@ -8,6 +8,9 @@ type Props = {
   variant?: "center" | "small" | "medium" | "large";
   headline?: string;
   leadingIcon?: ReactNode;
+  /**
+   * Material Designのガイドラインに従い、最大3つまでのアイコンをサポート
+   */
   trailingIcons?: ReactNode[];
   children?: ReactNode;
 };
@@ -77,10 +80,10 @@ const Headline = styled(Text, {
 // アイコンコンテナ（Material Design 3のアイコン間隔を調整）
 const IconContainer = styled(XStack, {
   alignItems: "center",
-  gap: "$3", // 12dp - アイコン間の間隔を広げて視認性を向上
-  height: "$icon", // 24dp
+  gap: "$6", // React Nativeでは24dp、Webでは24px - Material Design公式ガイドラインに基づくアイコン間の間隔
+  height: "$icon", // 24dp/px
   justifyContent: "center",
-  width: 48, // アイコンがある場合とない場合で同じ幅を確保
+  // width: 48を削除し、アイコンの数に応じて自動的に幅が調整されるように
 });
 
 // アイコンラッパー（個々のアイコン用）
@@ -100,6 +103,9 @@ const IconWrapper = styled(XStack, {
  * - small: 左配置のタイトル（高さ64dp）
  * - medium: 左配置のタイトル（高さ112dp）
  * - large: 下部配置のタイトル（高さ152dp）
+ *
+ * 注意: Material Designのガイドラインに従い、trailingIconsは最大3つまでサポートしています。
+ * それ以上のアイコンを表示する場合は、メニューやその他の方法を検討してください。
  */
 export const TopAppBar = forwardRef<TamaguiElement, Props>(
   (
@@ -145,7 +151,7 @@ export const TopAppBar = forwardRef<TamaguiElement, Props>(
             <IconContainer>
               {/* 
               アイコンを個別に表示することで、mapとインデックスキーの使用を回避
-              最大5つのアイコンまでサポート
+              Material Designのガイドラインに従い、最大3つまでのアイコンをサポート
             */}
               {Array.isArray(trailingIcons) && trailingIcons[0] && (
                 <IconWrapper key="icon-0">{trailingIcons[0]}</IconWrapper>
@@ -155,12 +161,6 @@ export const TopAppBar = forwardRef<TamaguiElement, Props>(
               )}
               {Array.isArray(trailingIcons) && trailingIcons[2] && (
                 <IconWrapper key="icon-2">{trailingIcons[2]}</IconWrapper>
-              )}
-              {Array.isArray(trailingIcons) && trailingIcons[3] && (
-                <IconWrapper key="icon-3">{trailingIcons[3]}</IconWrapper>
-              )}
-              {Array.isArray(trailingIcons) && trailingIcons[4] && (
-                <IconWrapper key="icon-4">{trailingIcons[4]}</IconWrapper>
               )}
             </IconContainer>
           )}

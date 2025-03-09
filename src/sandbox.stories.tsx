@@ -10,9 +10,8 @@ import {
   User,
 } from "@tamagui/lucide-icons";
 import { useState } from "react";
-import { ScrollView, Text, View, XStack, YStack } from "tamagui";
-import { AppLayout } from "./AppLayout";
-import { SafeAreaView } from "./SafeAreaView";
+import { ScrollView, Text, XStack, YStack } from "tamagui";
+import { ScreenLayout } from "./ScreenLayout";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Chat } from "./Chat";
@@ -143,7 +142,7 @@ const SandboxApp = () => {
   const topAppBar = (
     <TopAppBar
       variant="small"
-      headline="UI コンポーネントサンドボックス"
+      headline="UIサンドボックス"
       leadingIcon={
         <MenuIcon {...iconProps} onPress={() => setDrawerOpen(true)} />
       }
@@ -463,38 +462,21 @@ const SandboxApp = () => {
 
   return (
     <>
-      {/* NavigationDrawer - AppLayoutの外部に配置 */}
-      <NavigationDrawer
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        items={drawerItems}
-        header={drawerHeader}
-        closeOnSelect={true}
-      />
-      <View flex={1} height="100vh">
-        <SafeAreaView>
-          <View flex={1} height="100%">
-            <View flex={1}>
-              {topAppBar}
-              <ScrollView flex={1}>
-                {tabsContent}
-                {/* NavigationBarの高さ分の余白を追加 */}
-                <View height={80} />
-              </ScrollView>
-              {/* NavigationBarを画面最下部に固定 */}
-              <View
-                position="absolute"
-                bottom={0}
-                left={0}
-                right={0}
-                backgroundColor="$surfaceContainer"
-              >
-                {navigationBar}
-              </View>
-            </View>
-          </View>
-        </SafeAreaView>
-      </View>
+      <ScreenLayout
+        navigationDrawer={
+          <NavigationDrawer
+            open={drawerOpen}
+            onOpenChange={setDrawerOpen}
+            items={drawerItems}
+            header={drawerHeader}
+            closeOnSelect={true}
+          />
+        }
+        topAppBar={topAppBar}
+        navigationBar={navigationBar}
+      >
+        <ScrollView flex={1}>{tabsContent}</ScrollView>
+      </ScreenLayout>
     </>
   );
 };

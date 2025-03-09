@@ -1,6 +1,6 @@
 "use client";
 import { Eye, EyeOff } from "@tamagui/lucide-icons";
-import { forwardRef, useState, useRef, useEffect, type RefObject } from "react";
+import { type RefObject, forwardRef, useEffect, useRef, useState } from "react";
 import type { TextInput } from "react-native";
 import {
   type InputProps,
@@ -135,7 +135,7 @@ const Label = styled(Text, {
   color: "$onSurfaceVariant",
   transition: "all 0.2s ease",
   transformOrigin: "left top",
-  paddingHorizontal: 1,
+  paddingHorizontal: 4,
 
   // バリアント
   variants: {
@@ -298,7 +298,7 @@ export const TextField = forwardRef<TextInput, Props>(
             variant={variant}
             marginTop={variant === "outlined" && (focused || isFilled) ? -9 : 0}
             paddingHorizontal={
-              variant === "outlined" && (focused || isFilled) ? 0 : 2
+              variant === "outlined" && (focused || isFilled) ? 0 : 4
             }
             onPress={handleLabelPress}
             cursor="pointer"

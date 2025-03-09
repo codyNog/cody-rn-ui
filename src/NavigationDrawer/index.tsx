@@ -5,15 +5,14 @@ import type { ReactNode } from "react";
 import {
   AnimatePresence,
   Overlay,
-  YStack,
-  XStack,
-  type TamaguiElement,
-  styled,
   Stack,
+  type TamaguiElement,
   Text,
+  XStack,
+  YStack,
+  styled,
 } from "tamagui";
 import { Button } from "../Button";
-import { ListItem } from "../ListItem";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 
 // ナビゲーションアイテムの型定義
@@ -53,8 +52,7 @@ const DrawerContainer = styled(YStack, {
   ...elevationSystem.shadows.level2,
   zIndex: 1000,
 
-  // アニメーション設定
-  animation: "quick",
+  // アニメーション設定は個別に適用
 
   // バリアント
   variants: {
@@ -88,7 +86,74 @@ const HeaderContainer = styled(YStack, {
 const ContentContainer = styled(YStack, {
   flex: 1,
   paddingVertical: "$2",
+  paddingHorizontal: "$4", // 水平方向のパディングを増やす
   overflow: "scroll",
+});
+
+// NavigationDrawer専用のアイテムコンポーネント
+const DrawerItem = styled(XStack, {
+  width: "100%",
+  minHeight: 56,
+  paddingVertical: "$2",
+  paddingHorizontal: "$4",
+  alignItems: "center",
+  gap: "$4",
+  backgroundColor: "transparent",
+  borderRadius: 28, // DrawerContainerと同じ丸み
+  marginBottom: "$1",
+
+  // アニメーション設定
+  animation: "medium",
+
+  // ホバー、プレス状態の設定
+  pressStyle: {
+    backgroundColor: "$surfaceContainer",
+    opacity: 1 - stateLayerOpacity.press,
+  },
+
+  hoverStyle: {
+    backgroundColor: "$surfaceContainer",
+    opacity: 1 - stateLayerOpacity.hover,
+    cursor: "pointer",
+  },
+
+  // バリアント
+  variants: {
+    isSelected: {
+      true: {
+        backgroundColor: "$secondaryContainer",
+      },
+    },
+    isDisabled: {
+      true: {
+        opacity: 0.38,
+        pointerEvents: "none",
+      },
+    },
+  } as const,
+});
+
+// アイコンコンテナ
+const LeadingContainer = styled(Stack, {
+  justifyContent: "center",
+  alignItems: "center",
+  minWidth: 40,
+  minHeight: 40,
+});
+
+// ラベルコンテナ
+const LabelContainer = styled(YStack, {
+  flex: 1,
+  justifyContent: "center",
+});
+
+// バッジコンテナ
+const TrailingContainer = styled(Stack, {
+  justifyContent: "center",
+  alignItems: "center",
+  minWidth: 24,
+  minHeight: 24,
+  marginLeft: "auto",
 });
 
 // フッターコンテナのスタイル
@@ -170,7 +235,11 @@ export const NavigationDrawer = forwardRef<TamaguiElement, Props>(
           {isOpen && (
             <Overlay
               key="overlay"
-              animation="quick"
+              animation={{
+                type: "timing",
+                duration: 300,
+                easing: "easeInOut",
+              }}
               backgroundColor="$scrim"
               opacity={0.3}
               enterStyle={{ opacity: 0 }}
@@ -188,29 +257,49 @@ export const NavigationDrawer = forwardRef<TamaguiElement, Props>(
               side={side}
               width={width}
               key="drawer"
+              animation={{
+                type: "spring",
+                damping: 15,
+                stiffness: 250,
+                mass: 0.8,
+                duration: 500,
+              }}
               enterStyle={{
                 x: side === "left" ? -width : width,
-                opacity: 0.5,
+                opacity: 0,
               }}
               exitStyle={{
                 x: side === "left" ? -width : width,
-                opacity: 0.5,
+                opacity: 0,
               }}
+              x={0}
+              opacity={1}
               zIndex={1001} // オーバーレイよりも高いz-indexを設定
             >
               {header && <HeaderContainer>{header}</HeaderContainer>}
 
               <ContentContainer>
                 {items.map((item) => (
-                  <ListItem
+                  <DrawerItem
                     key={item.key}
-                    headline={item.label}
-                    leading={item.icon}
-                    trailing={item.badge}
-                    selected={item.selected}
-                    disabled={item.disabled}
+                    isSelected={item.selected}
+                    isDisabled={item.disabled}
                     onPress={() => handleItemPress(item)}
-                  />
+                  >
+                    {item.icon && (
+                      <LeadingContainer>{item.icon}</LeadingContainer>
+                    )}
+
+                    <LabelContainer>
+                      <Text {...typographyScale.bodyLarge} color="$onSurface">
+                        {item.label}
+                      </Text>
+                    </LabelContainer>
+
+                    {item.badge && (
+                      <TrailingContainer>{item.badge}</TrailingContainer>
+                    )}
+                  </DrawerItem>
                 ))}
               </ContentContainer>
 

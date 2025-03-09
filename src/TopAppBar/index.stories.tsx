@@ -25,6 +25,8 @@ import { getCanvas } from "../libs/storybook";
  * - medium: 左配置のタイトル（高さ112dp）
  * - large: 下部配置のタイトル（高さ152dp）
  *
+ * 注意: Material Designのガイドラインに従い、trailingIconsは最大3つまでサポートしています。
+ *
  * 参考: https://m3.material.io/components/top-app-bar/overview
  */
 const meta: Meta<typeof Component> = {
@@ -119,8 +121,6 @@ export const WithMultipleIcons: Story = {
       <Search {...iconProps} key="search" />,
       <Bell {...iconProps} key="bell" />,
       <Share {...iconProps} key="share" />,
-      <Heart {...iconProps} key="heart" />,
-      <Bookmark {...iconProps} key="bookmark" />,
     ],
   },
 };

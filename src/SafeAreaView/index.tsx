@@ -17,10 +17,13 @@ type CustomSafeAreaViewProps = {
  */
 export const SafeAreaView = ({ children }: CustomSafeAreaViewProps) => {
   return (
-    <View flex={1}>
+    <View flex={1} height="100vh">
       {/* 上部のみSafeAreaを適用し、背景色を設定 */}
       <StyledSafeAreaView edges={["top"]} />
-      <RNSafeAreaView edges={["right", "left"]} style={{ flex: 1 }}>
+      <RNSafeAreaView
+        edges={["right", "left"]}
+        style={{ flex: 1, backgroundColor: "$background" }}
+      >
         {children}
       </RNSafeAreaView>
     </View>
