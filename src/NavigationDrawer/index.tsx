@@ -317,7 +317,11 @@ export const NavigationDrawer = forwardRef<TamaguiElement, Props>(
             onPress={toggleDrawer}
             side={side}
           >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
+            {isOpen ? (
+              <X size={20} color="$onSurface" />
+            ) : (
+              <Menu size={20} color="$onSurface" />
+            )}
           </ToggleButton>
         )}
       </>

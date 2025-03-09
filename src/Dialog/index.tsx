@@ -172,7 +172,7 @@ export const Dialog = forwardRef<TamaguiElement, Props>(
                     variant="text"
                     onPress={() => handleOpenChange(false)}
                   >
-                    <X size={24} />
+                    <X size={24} color="$onSurfaceVariant" />
                   </Button>
                   {headline && (
                     <Text {...typographyScale.titleLarge} color="$onSurface">
@@ -205,7 +205,7 @@ export const Dialog = forwardRef<TamaguiElement, Props>(
                   right="$3"
                 >
                   <Button variant="text" size="small" aria-label="閉じる">
-                    <X size={18} />
+                    <X size={18} color="$onSurfaceVariant" />
                   </Button>
                 </TamaguiDialog.Close>
 

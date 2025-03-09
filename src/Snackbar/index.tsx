@@ -82,7 +82,7 @@ export const Snackbar = ({
       )}
       {hasCloseButton && (
         <CloseButton variant="text" onPress={onClose} aria-label="閉じる">
-          <X size={18} />
+          <X size={18} color="$onSurfaceVariant" />
         </CloseButton>
       )}
     </XStack>

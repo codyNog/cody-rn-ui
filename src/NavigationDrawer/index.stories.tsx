@@ -33,45 +33,45 @@ const navigationItems: NavigationItem[] = [
   {
     key: "home",
     label: "ホーム",
-    icon: <Home size={24} />,
+    icon: <Home size={24} color="$primary" />,
     selected: true,
     onPress: () => console.log("ホームが選択されました"),
   },
   {
     key: "profile",
     label: "プロフィール",
-    icon: <User size={24} />,
+    icon: <User size={24} color="$onSurfaceVariant" />,
     onPress: () => console.log("プロフィールが選択されました"),
   },
   {
     key: "messages",
     label: "メッセージ",
-    icon: <Mail size={24} />,
+    icon: <Mail size={24} color="$onSurfaceVariant" />,
     badge: <Text color="$error">3</Text>,
     onPress: () => console.log("メッセージが選択されました"),
   },
   {
     key: "notifications",
     label: "通知",
-    icon: <Bell size={24} />,
+    icon: <Bell size={24} color="$onSurfaceVariant" />,
     onPress: () => console.log("通知が選択されました"),
   },
   {
     key: "settings",
     label: "設定",
-    icon: <Settings size={24} />,
+    icon: <Settings size={24} color="$onSurfaceVariant" />,
     onPress: () => console.log("設定が選択されました"),
   },
   {
     key: "help",
     label: "ヘルプ",
-    icon: <HelpCircle size={24} />,
+    icon: <HelpCircle size={24} color="$onSurfaceVariant" />,
     onPress: () => console.log("ヘルプが選択されました"),
   },
   {
     key: "logout",
     label: "ログアウト",
-    icon: <LogOut size={24} />,
+    icon: <LogOut size={24} color="$onSurfaceVariant" />,
     onPress: () => console.log("ログアウトが選択されました"),
   },
 ];
@@ -105,7 +105,7 @@ const ControlledDrawer = (props: Story["args"] = {}) => {
       <Button
         onPress={() => setOpen(true)}
         style={{ margin: 16 }}
-        icon={<Menu size={20} />}
+        icon={<Menu size={20} color="$onSurfaceVariant" />}
       >
         メニューを開く
       </Button>

@@ -330,7 +330,11 @@ export const TextField = forwardRef<TextInput, Props>(
               onPress={togglePasswordVisibility}
               cursor="pointer"
             >
-              {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
+              {showPassword ? (
+                <EyeOff size={24} color="$onSurfaceVariant" />
+              ) : (
+                <Eye size={24} color="$onSurfaceVariant" />
+              )}
             </XStack>
           )}
         </XStack>
