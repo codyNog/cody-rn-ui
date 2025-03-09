@@ -14,6 +14,7 @@ import {
 } from "tamagui";
 import { Button } from "../Button";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // ナビゲーションアイテムの型定義
 export type NavigationItem = {
@@ -202,7 +203,7 @@ export const NavigationDrawer = forwardRef<TamaguiElement, Props>(
   ) => {
     // 内部の開閉状態
     const [isOpen, setIsOpen] = useState(open || false);
-
+    const { top } = useSafeAreaInsets();
     // 外部からのopen状態の制御と内部状態の同期
     useEffect(() => {
       if (open !== undefined) {
@@ -275,6 +276,7 @@ export const NavigationDrawer = forwardRef<TamaguiElement, Props>(
               x={0}
               opacity={1}
               zIndex={1001} // オーバーレイよりも高いz-indexを設定
+              paddingTop={top}
             >
               {header && <HeaderContainer>{header}</HeaderContainer>}
 
