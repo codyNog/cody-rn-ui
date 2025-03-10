@@ -2,6 +2,7 @@
 import { Menu, X } from "@tamagui/lucide-icons";
 import { forwardRef, useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   AnimatePresence,
   Overlay,
@@ -14,7 +15,6 @@ import {
 } from "tamagui";
 import { Button } from "../Button";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // ナビゲーションアイテムの型定義
 export type NavigationItem = {
