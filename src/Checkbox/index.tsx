@@ -28,6 +28,7 @@ const StyledCheckbox = styled(Cb, {
         hoverStyle: {
           backgroundColor: "$primary",
           opacity: 1 - stateLayerOpacity.hover,
+          cursor: "pointer",
         },
         // チェック状態のプレス
         pressStyle: {
@@ -41,6 +42,7 @@ const StyledCheckbox = styled(Cb, {
         // 未チェック状態のホバー
         hoverStyle: {
           backgroundColor: `$onSurface, ${stateLayerOpacity.hover})`,
+          cursor: "pointer",
         },
         // 未チェック状態のプレス
         pressStyle: {
@@ -54,6 +56,7 @@ const StyledCheckbox = styled(Cb, {
         hoverStyle: {
           backgroundColor: "$primary",
           opacity: 1 - stateLayerOpacity.hover,
+          cursor: "pointer",
         },
         // 不確定状態のプレス
         pressStyle: {

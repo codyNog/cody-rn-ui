@@ -300,6 +300,7 @@ const TabsList = ({ tabs, activeValue, onChange, variant }: TabsListProps) => {
                     const { width, x } = e.nativeEvent.layout;
                     updateTabLayout(tab.value, width, x);
                   }}
+                  hoverStyle={{ cursor: "pointer" }}
                 >
                   {tab.icon && (
                     <Stack position="relative">

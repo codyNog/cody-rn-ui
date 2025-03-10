@@ -24,6 +24,9 @@ const StyledRadioItem = styled(RG.Item, {
   alignItems: "center",
   // アニメーション設定
   animation: "quick",
+  hoverStyle: {
+    cursor: "pointer",
+  },
 
   // バリアント
   variants: {
@@ -34,6 +37,7 @@ const StyledRadioItem = styled(RG.Item, {
         hoverStyle: {
           backgroundColor: "$primaryContainer",
           opacity: 1 - stateLayerOpacity.hover,
+          cursor: "pointer",
         },
         // チェック状態のプレス
         pressStyle: {
@@ -48,6 +52,7 @@ const StyledRadioItem = styled(RG.Item, {
         hoverStyle: {
           backgroundColor: "$surfaceVariant",
           opacity: 1 - stateLayerOpacity.hover,
+          cursor: "pointer",
         },
         // 未チェック状態のプレス
         pressStyle: {

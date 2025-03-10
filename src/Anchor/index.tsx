@@ -17,6 +17,7 @@ const StyledAnchor = styled(A, {
   // インタラクション状態
   hoverStyle: {
     opacity: 0.8,
+    cursor: "pointer",
   },
   pressStyle: {
     opacity: 0.6,
@@ -49,6 +50,7 @@ const ButtonAnchor = styled(A, {
   hoverStyle: {
     backgroundColor: "$primary",
     color: "$onPrimary",
+    cursor: "pointer",
   },
   pressStyle: {
     opacity: 0.6,

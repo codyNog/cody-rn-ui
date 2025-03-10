@@ -111,6 +111,7 @@ const StyledTrigger = styled(TamaguiSelect.Trigger, {
   // ホバー状態
   hoverStyle: {
     backgroundColor: `$onSurface${stateLayerOpacity.hover}`,
+    cursor: "pointer",
   },
 
   // バリアント

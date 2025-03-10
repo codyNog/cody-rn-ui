@@ -164,6 +164,7 @@ export const SegmentedButtons = forwardRef(
                 ? "$secondaryContainer"
                 : "$surfaceVariant",
               opacity: 1 - stateLayerOpacity.hover,
+              cursor: "pointer",
             }}
             pressStyle={{
               backgroundColor: isSelected
@@ -239,6 +240,7 @@ export const SegmentedButtons = forwardRef(
                   ? "$secondaryContainer"
                   : "$surfaceVariant",
                 opacity: 1 - stateLayerOpacity.hover,
+                cursor: "pointer",
               }}
               pressStyle={{
                 backgroundColor: isSelected

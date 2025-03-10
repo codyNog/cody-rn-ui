@@ -139,6 +139,7 @@ export const NavigationBar = forwardRef<TamaguiElement, Props>(
                 hoverStyle={{
                   backgroundColor: "$surfaceContainerHigh",
                   opacity: 0.8,
+                  cursor: "pointer",
                 }}
               >
                 <Stack position="relative">
