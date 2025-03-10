@@ -82,8 +82,7 @@ type TabPanelProps = {
 
 // タブリストコンテナのスタイル
 const TabsListContainer = styled(XStack, {
-  width: "100%",
-  maxWidth: 1440, // Material Design 3の最大幅
+  width: "100%", // 親要素に合わせて幅を調整
   backgroundColor: "$surfaceContainer",
   ...elevationSystem.shadows.level1,
 
@@ -200,6 +199,8 @@ const IconContainer = styled(Stack, {
  */
 const TabsList = ({ tabs, activeValue, onChange, variant }: TabsListProps) => {
   const scrollViewRef = useRef<ScrollView | null>(null);
+  // React Native の View コンポーネントの参照を保持
+  // biome-ignore lint/suspicious/noExplicitAny: React Native の measureLayout メソッドを使用するために必要
   const itemRefs = useRef<{ [key: string]: any }>({});
   const indicatorAnim = useRef(new Animated.Value(0)).current;
   const [indicatorWidth, setIndicatorWidth] = useState(0);
