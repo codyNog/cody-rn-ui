@@ -10,8 +10,9 @@ import {
   User,
 } from "@tamagui/lucide-icons";
 import { useState } from "react";
-import { ScrollView, Text, XStack, YStack } from "tamagui";
+import { ScrollView, Text, View, XStack, YStack } from "tamagui";
 import { ScreenLayout } from "./ScreenLayout";
+import { Grid } from "./Grid";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Chat } from "./Chat";
@@ -180,77 +181,79 @@ const SandboxApp = () => {
           ),
           children: (
             <ScrollView padding="$4">
-              <YStack space="$4">
-                <Card
-                  title="ようこそ"
-                  actions={[
-                    {
-                      label: "詳細",
-                      onClick: () => console.log("詳細"),
-                      variant: "text",
-                    },
-                    {
-                      label: "開始",
-                      onClick: () => console.log("開始"),
-                      variant: "filled",
-                    },
-                  ]}
-                >
-                  <Text>
-                    このサンドボックスでは、様々なUIコンポーネントを試すことができます。
-                    タブを切り替えて、異なるコンポーネントを確認してみましょう。
-                  </Text>
-                </Card>
+              <Grid.Container>
+                <YStack space="$4">
+                  <Card
+                    title="ようこそ"
+                    actions={[
+                      {
+                        label: "詳細",
+                        onClick: () => console.log("詳細"),
+                        variant: "text",
+                      },
+                      {
+                        label: "開始",
+                        onClick: () => console.log("開始"),
+                        variant: "filled",
+                      },
+                    ]}
+                  >
+                    <Text>
+                      このサンドボックスでは、様々なUIコンポーネントを試すことができます。
+                      タブを切り替えて、異なるコンポーネントを確認してみましょう。
+                    </Text>
+                  </Card>
 
-                <Card
-                  title="TODOリスト"
-                  actions={[
-                    {
-                      label: "追加",
-                      onClick: addTodo,
-                      variant: "filled",
-                    },
-                  ]}
-                >
-                  <YStack space="$2">
-                    {todoItems.map((item) => (
-                      <XStack key={item.id} alignItems="center" space="$2">
-                        <Checkbox
-                          checked={item.completed}
-                          onCheckedChange={() => toggleTodo(item.id)}
+                  <Card
+                    title="TODOリスト"
+                    actions={[
+                      {
+                        label: "追加",
+                        onClick: addTodo,
+                        variant: "filled",
+                      },
+                    ]}
+                  >
+                    <YStack space="$2">
+                      {todoItems.map((item) => (
+                        <XStack key={item.id} alignItems="center" space="$2">
+                          <Checkbox
+                            checked={item.completed}
+                            onCheckedChange={() => toggleTodo(item.id)}
+                          />
+                          <Text
+                            textDecorationLine={
+                              item.completed ? "line-through" : "none"
+                            }
+                            opacity={item.completed ? 0.6 : 1}
+                          >
+                            {item.text}
+                          </Text>
+                        </XStack>
+                      ))}
+                      <XStack flex={1} space="$2" marginTop="$2">
+                        <TextField
+                          label="新しいタスク"
+                          value={newTodo}
+                          onChange={setNewTodo}
+                          flex={1}
                         />
-                        <Text
-                          textDecorationLine={
-                            item.completed ? "line-through" : "none"
-                          }
-                          opacity={item.completed ? 0.6 : 1}
-                        >
-                          {item.text}
-                        </Text>
                       </XStack>
-                    ))}
-                    <XStack flex={1} space="$2" marginTop="$2">
-                      <TextField
-                        label="新しいタスク"
-                        value={newTodo}
-                        onChange={setNewTodo}
-                        flex={1}
-                      />
-                    </XStack>
-                  </YStack>
-                </Card>
+                    </YStack>
+                  </Card>
 
-                <Card title="チップ例">
-                  <XStack flexWrap="wrap" gap="$2">
-                    <Chip>デザイン</Chip>
-                    <Chip>開発</Chip>
-                    <Chip>UI/UX</Chip>
-                    <Chip>React Native</Chip>
-                    <Chip>Tamagui</Chip>
-                    <Chip>Material Design</Chip>
-                  </XStack>
-                </Card>
-              </YStack>
+                  <Card title="チップ例">
+                    <XStack flexWrap="wrap" gap="$2">
+                      <Chip>デザイン</Chip>
+                      <Chip>開発</Chip>
+                      <Chip>UI/UX</Chip>
+                      <Chip>React Native</Chip>
+                      <Chip>Tamagui</Chip>
+                      <Chip>Material Design</Chip>
+                    </XStack>
+                  </Card>
+                </YStack>
+              </Grid.Container>
             </ScrollView>
           ),
         },
@@ -260,37 +263,39 @@ const SandboxApp = () => {
           icon: <User size={20} color="var(--color-onSurface)" />,
           children: (
             <ScrollView padding="$4">
-              <YStack space="$4">
-                <Card title="プロフィール情報">
-                  <Form>
-                    <YStack space="$4">
-                      <TextField
-                        label="名前"
-                        value={formName}
-                        onChange={setFormName}
-                      />
-                      <TextField
-                        label="メールアドレス"
-                        value={formEmail}
-                        onChange={setFormEmail}
-                      />
-                      <Select
-                        label="アカウントタイプ"
-                        value={formType}
-                        onChange={setFormType}
-                        options={[
-                          { value: "personal", label: "個人" },
-                          { value: "business", label: "ビジネス" },
-                          { value: "developer", label: "開発者" },
-                        ]}
-                      />
-                      <Form.Trigger asChild>
-                        <Button variant="filled">保存</Button>
-                      </Form.Trigger>
-                    </YStack>
-                  </Form>
-                </Card>
-              </YStack>
+              <Grid.Container>
+                <YStack space="$4">
+                  <Card title="プロフィール情報">
+                    <Form>
+                      <YStack space="$4">
+                        <TextField
+                          label="名前"
+                          value={formName}
+                          onChange={setFormName}
+                        />
+                        <TextField
+                          label="メールアドレス"
+                          value={formEmail}
+                          onChange={setFormEmail}
+                        />
+                        <Select
+                          label="アカウントタイプ"
+                          value={formType}
+                          onChange={setFormType}
+                          options={[
+                            { value: "personal", label: "個人" },
+                            { value: "business", label: "ビジネス" },
+                            { value: "developer", label: "開発者" },
+                          ]}
+                        />
+                        <Form.Trigger asChild>
+                          <Button variant="filled">保存</Button>
+                        </Form.Trigger>
+                      </YStack>
+                    </Form>
+                  </Card>
+                </YStack>
+              </Grid.Container>
             </ScrollView>
           ),
         },
@@ -361,41 +366,43 @@ const SandboxApp = () => {
             };
 
             return (
-              <Chat.Wrapper>
-                <Chat.Content>
-                  {messages.map((msg) => (
-                    <YStack key={msg.id} space="$1">
-                      {msg.type === "received" && (
-                        <Text fontSize="$1" paddingLeft="$3" opacity={0.7}>
-                          {msg.sender}
-                        </Text>
-                      )}
-                      <Chat.Message type={msg.type as "sent" | "received"}>
-                        {msg.text}
-                      </Chat.Message>
-                    </YStack>
-                  ))}
-                  <Chat.Actions
-                    actions={[
-                      {
-                        label: "添付",
-                        onPress: () => console.log("添付ファイル"),
-                        children: "添付",
-                      },
-                      {
-                        label: "カメラ",
-                        onPress: () => console.log("カメラ"),
-                        children: "カメラ",
-                      },
-                    ]}
+              <Grid.Container>
+                <Chat.Wrapper>
+                  <Chat.Content>
+                    {messages.map((msg) => (
+                      <YStack key={msg.id} space="$1">
+                        {msg.type === "received" && (
+                          <Text fontSize="$1" paddingLeft="$3" opacity={0.7}>
+                            {msg.sender}
+                          </Text>
+                        )}
+                        <Chat.Message type={msg.type as "sent" | "received"}>
+                          {msg.text}
+                        </Chat.Message>
+                      </YStack>
+                    ))}
+                    <Chat.Actions
+                      actions={[
+                        {
+                          label: "添付",
+                          onPress: () => console.log("添付ファイル"),
+                          children: "添付",
+                        },
+                        {
+                          label: "カメラ",
+                          onPress: () => console.log("カメラ"),
+                          children: "カメラ",
+                        },
+                      ]}
+                    />
+                  </Chat.Content>
+                  <Chat.Input
+                    value={inputValue}
+                    onChange={setInputValue}
+                    onSubmit={handleSubmit}
                   />
-                </Chat.Content>
-                <Chat.Input
-                  value={inputValue}
-                  onChange={setInputValue}
-                  onSubmit={handleSubmit}
-                />
-              </Chat.Wrapper>
+                </Chat.Wrapper>
+              </Grid.Container>
             );
           })(),
         },
@@ -405,40 +412,51 @@ const SandboxApp = () => {
           icon: <Settings size={20} color="var(--color-onSurface)" />,
           children: (
             <ScrollView padding="$4">
-              <YStack space="$4">
-                <Card title="アプリ設定">
-                  <YStack space="$3">
-                    <XStack justifyContent="space-between" alignItems="center">
-                      <Text>ダークモード</Text>
-                      <Checkbox />
-                    </XStack>
-                    <Divider />
-                    <XStack justifyContent="space-between" alignItems="center">
-                      <Text>通知</Text>
-                      <Checkbox defaultChecked />
-                    </XStack>
-                    <Divider />
-                    <XStack justifyContent="space-between" alignItems="center">
-                      <Text>データの同期</Text>
-                      <Checkbox />
-                    </XStack>
-                  </YStack>
-                </Card>
+              <Grid.Container>
+                <YStack space="$4">
+                  <Card title="アプリ設定">
+                    <YStack space="$3">
+                      <XStack
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Text>ダークモード</Text>
+                        <Checkbox />
+                      </XStack>
+                      <Divider />
+                      <XStack
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Text>通知</Text>
+                        <Checkbox defaultChecked />
+                      </XStack>
+                      <Divider />
+                      <XStack
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Text>データの同期</Text>
+                        <Checkbox />
+                      </XStack>
+                    </YStack>
+                  </Card>
 
-                <Card title="アカウント設定">
-                  <YStack space="$3">
-                    <Button variant="outlined" icon={<User size={18} />}>
-                      プロフィール編集
-                    </Button>
-                    <Button variant="outlined" icon={<Bell size={18} />}>
-                      通知設定
-                    </Button>
-                    <Button variant="outlined" icon={<Settings size={18} />}>
-                      詳細設定
-                    </Button>
-                  </YStack>
-                </Card>
-              </YStack>
+                  <Card title="アカウント設定">
+                    <YStack space="$3">
+                      <Button variant="outlined" icon={<User size={18} />}>
+                        プロフィール編集
+                      </Button>
+                      <Button variant="outlined" icon={<Bell size={18} />}>
+                        通知設定
+                      </Button>
+                      <Button variant="outlined" icon={<Settings size={18} />}>
+                        詳細設定
+                      </Button>
+                    </YStack>
+                  </Card>
+                </YStack>
+              </Grid.Container>
             </ScrollView>
           ),
         },
@@ -497,4 +515,91 @@ type Story = StoryObj;
 // サンドボックスアプリケーションのストーリー
 export const SandboxApplication: Story = {
   render: () => <SandboxApp />,
+};
+
+// Gridレイアウトのテストストーリー
+export const GridLayoutTest: Story = {
+  render: () => (
+    <YStack gap="$4" padding="$4">
+      <Text fontSize="$6" fontWeight="bold">
+        Gridレイアウトテスト
+      </Text>
+      <Text>
+        Containerが画面中央に表示されるようになりました。
+        ブラウザのサイズを変更して、様々な画面幅でのレイアウトを確認してください。
+      </Text>
+
+      {/* 基本的なグリッドレイアウト */}
+      <Text fontSize="$5" fontWeight="bold">
+        基本レイアウト
+      </Text>
+      <Grid.Container backgroundColor="$surfaceVariant" padding="$4">
+        <Grid.Row>
+          <Grid.Column span={6}>
+            <View backgroundColor="$primary" padding="$4">
+              <Text color="$onPrimary">Column 1 (span=6)</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={6}>
+            <View backgroundColor="$secondary" padding="$4">
+              <Text color="$onSecondary">Column 2 (span=6)</Text>
+            </View>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Container>
+
+      {/* 3カラムレイアウト */}
+      <Text fontSize="$5" fontWeight="bold">
+        3カラムレイアウト
+      </Text>
+      <Grid.Container backgroundColor="$surfaceVariant" padding="$4">
+        <Grid.Row>
+          <Grid.Column span={4}>
+            <View backgroundColor="$primary" padding="$4">
+              <Text color="$onPrimary">Column 1 (span=4)</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={4}>
+            <View backgroundColor="$secondary" padding="$4">
+              <Text color="$onSecondary">Column 2 (span=4)</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={4}>
+            <View backgroundColor="$tertiary" padding="$4">
+              <Text color="$onTertiary">Column 3 (span=4)</Text>
+            </View>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Container>
+
+      {/* レスポンシブレイアウト */}
+      <Text fontSize="$5" fontWeight="bold">
+        レスポンシブレイアウト
+      </Text>
+      <Grid.Container backgroundColor="$surfaceVariant" padding="$4">
+        <Grid.Row>
+          <Grid.Column span={12} sm={6} md={4} lg={3}>
+            <View backgroundColor="$primary" padding="$4">
+              <Text color="$onPrimary">レスポンシブカラム</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={12} sm={6} md={4} lg={3}>
+            <View backgroundColor="$secondary" padding="$4">
+              <Text color="$onSecondary">レスポンシブカラム</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={12} sm={6} md={4} lg={3}>
+            <View backgroundColor="$tertiary" padding="$4">
+              <Text color="$onTertiary">レスポンシブカラム</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={12} sm={6} md={12} lg={3}>
+            <View backgroundColor="$error" padding="$4">
+              <Text color="$onError">レスポンシブカラム</Text>
+            </View>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Container>
+    </YStack>
+  ),
 };

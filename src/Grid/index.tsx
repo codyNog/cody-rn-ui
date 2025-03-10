@@ -96,6 +96,7 @@ const Container = ({
       maxWidth={maxWidth}
       marginHorizontal="auto"
       paddingHorizontal={padding}
+      alignSelf="center"
       {...props}
     >
       {children}
