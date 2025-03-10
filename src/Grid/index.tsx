@@ -130,6 +130,9 @@ const Row = forwardRef<TamaguiElement, GridRowProps>(
     // 子要素の数を確認
     const childCount = Children.count(children);
 
+    // 子要素が1つしかない場合はガターを適用しない
+    const shouldApplyGutter = childCount > 1;
+
     // 現在の画面幅を取得
     const { width } = useWindowDimensions();
 
@@ -188,17 +191,21 @@ const Row = forwardRef<TamaguiElement, GridRowProps>(
         justifyContent={justifyContent}
         alignItems={alignItems}
         marginHorizontal={
-          typeof horizontalGutter === "number"
-            ? -horizontalGutter / 2
-            : horizontalGutter
+          shouldApplyGutter
+            ? typeof horizontalGutter === "number"
+              ? -horizontalGutter / 2
+              : `calc(${horizontalGutter} * -0.5)` // トークンを使った計算
+            : undefined
         }
         marginVertical={
-          typeof verticalGutter === "number"
-            ? -verticalGutter / 2
-            : verticalGutter
+          shouldApplyGutter
+            ? typeof verticalGutter === "number"
+              ? -verticalGutter / 2
+              : `calc(${verticalGutter} * -0.5)` // トークンを使った計算
+            : undefined
         }
         // 子要素が1つしかない場合はgapを適用しない
-        gap={childCount > 1 ? GRID_GAP : undefined}
+        gap={shouldApplyGutter ? GRID_GAP : undefined}
         {...props}
       >
         {childrenWithValidation}

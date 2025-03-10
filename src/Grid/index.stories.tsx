@@ -238,3 +238,42 @@ export const ExcessiveSpan: Story = {
     </YStack>
   ),
 };
+
+export const SingleColumnWithTokenGutter: Story = {
+  render: () => (
+    <YStack gap="$4">
+      <Text>1つのカラムのみの例（トークンgutter "$4"）</Text>
+      <Grid.Container>
+        <Grid.Row gutter="$4">
+          <Grid.Column span={12}>
+            <View backgroundColor="$primary" padding="$4">
+              <Text color="$onPrimary">単一カラム (span=12, gutter="$4")</Text>
+            </View>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Container>
+    </YStack>
+  ),
+};
+
+export const MultipleColumnsWithTokenGutter: Story = {
+  render: () => (
+    <YStack gap="$4">
+      <Text>複数カラムの例（トークンgutter "$4"）</Text>
+      <Grid.Container>
+        <Grid.Row gutter="$4">
+          <Grid.Column span={6}>
+            <View backgroundColor="$primary" padding="$4">
+              <Text color="$onPrimary">Column 1 (span=6)</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={6}>
+            <View backgroundColor="$secondary" padding="$4">
+              <Text color="$onSecondary">Column 2 (span=6)</Text>
+            </View>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Container>
+    </YStack>
+  ),
+};
