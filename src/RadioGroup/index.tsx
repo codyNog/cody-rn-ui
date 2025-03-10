@@ -80,9 +80,25 @@ const StyledRadioItem = styled(RG.Item, {
         height: 28,
       },
     },
+    // 無効状態
+    disabled: {
+      true: {
+        opacity: 0.38,
+        pointerEvents: "none",
+        borderColor: "$outlineVariant",
+        hoverStyle: {
+          backgroundColor: "transparent",
+          cursor: "default",
+        },
+        pressStyle: {
+          backgroundColor: "transparent",
+        },
+      },
+    },
   } as const,
   defaultVariants: {
     size: "$3",
+    disabled: false,
   },
 });
 
@@ -134,9 +150,10 @@ type Option = {
 type ItemProps = Option & {
   size: "$2" | "$3" | "$4" | "$5";
   onPress: (value: string) => void;
+  disabled?: boolean;
 };
 
-const Item = ({ size, value, label, onPress }: ItemProps) => {
+const Item = ({ size, value, label, onPress, disabled }: ItemProps) => {
   const id = useId();
   return (
     <XStack width="100%" alignItems="center" gap="$4">
@@ -144,6 +161,7 @@ const Item = ({ size, value, label, onPress }: ItemProps) => {
         value={value}
         id={id}
         size={size}
+        disabled={disabled}
         onPress={() => onPress(value)}
       >
         <StyledRadioIndicator size={size} />
@@ -151,9 +169,10 @@ const Item = ({ size, value, label, onPress }: ItemProps) => {
       <Label
         size={size}
         htmlFor={id}
-        cursor="pointer"
-        onPress={() => onPress(value)}
+        cursor={disabled ? "default" : "pointer"}
+        onPress={disabled ? undefined : () => onPress(value)}
         color="$onSurface"
+        opacity={disabled ? 0.38 : 1}
         flex={1}
       >
         {label}
@@ -167,10 +186,11 @@ type Props = {
   onChange: (value: string) => void;
   value?: string;
   size?: "$2" | "$3" | "$4" | "$5";
+  disabled?: boolean;
 };
 
 export const RadioGroup = forwardRef<TamaguiElement, Props>(
-  ({ options, onChange, value, size = "$3" }, ref) => {
+  ({ options, onChange, value, size = "$3", disabled }, ref) => {
     const onPressItem = useCallback(
       (selectedValue: string) => {
         onChange(selectedValue);
@@ -186,6 +206,7 @@ export const RadioGroup = forwardRef<TamaguiElement, Props>(
               {...option}
               key={option.value}
               size={size}
+              disabled={disabled}
               onPress={onPressItem}
             />
           ))}

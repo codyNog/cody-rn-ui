@@ -32,6 +32,13 @@ const meta: Meta<typeof Component> = {
       control: "text",
       description: "選択されている値",
     },
+    disabled: {
+      control: "boolean",
+      description: "無効状態",
+      table: {
+        defaultValue: { summary: "false" },
+      },
+    },
   },
 };
 
@@ -87,5 +94,17 @@ export const Behavior: Story = {
   play: async ({ canvasElement }) => {
     const canvas = getCanvas(canvasElement);
     expect(canvas).toBeTruthy();
+  },
+};
+
+// 無効状態
+export const Disabled: Story = {
+  args: {
+    ...args,
+    disabled: true,
+    value: "option1",
+  },
+  render: (args) => {
+    return <Component {...args} onChange={() => {}} />;
   },
 };
