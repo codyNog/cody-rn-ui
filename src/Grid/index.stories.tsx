@@ -175,3 +175,20 @@ export const Behavior: Story = {
     expect(canvas).toBeTruthy();
   },
 };
+
+export const SingleColumn: Story = {
+  render: () => (
+    <YStack gap="$4">
+      <Text>1つのカラムのみの例（gapが適用されない）</Text>
+      <Grid.Container>
+        <Grid.Row>
+          <Grid.Column span={12}>
+            <View backgroundColor="$primary" padding="$4">
+              <Text color="$onPrimary">単一カラム (span=12)</Text>
+            </View>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Container>
+    </YStack>
+  ),
+};

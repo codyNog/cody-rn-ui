@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useMemo } from "react";
+import { Children, forwardRef, useMemo } from "react";
 import type { ReactNode, Ref } from "react";
 import { useWindowDimensions } from "react-native";
 import { View, XStack } from "tamagui";
@@ -126,6 +126,9 @@ const Row = forwardRef<TamaguiElement, GridRowProps>(
       ? gutter
       : [gutter, gutter];
 
+    // 子要素の数を確認
+    const childCount = Children.count(children);
+
     return (
       <XStack
         ref={ref}
@@ -142,7 +145,8 @@ const Row = forwardRef<TamaguiElement, GridRowProps>(
             ? -verticalGutter / 2
             : verticalGutter
         }
-        gap={GRID_GAP} // Material Design 3の規則に従った固定値
+        // 子要素が1つしかない場合はgapを適用しない
+        gap={childCount > 1 ? GRID_GAP : undefined}
         {...props}
       >
         {children}
