@@ -36,7 +36,6 @@ type Props = {
 // コンテナスタイル
 const Container = styled(XStack, {
   width: "100%",
-  maxWidth: 1440, // Material Design 3の最大幅
   height: 80, // 標準的な高さ
   alignItems: "center",
   justifyContent: "space-around",
