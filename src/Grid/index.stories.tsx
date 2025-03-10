@@ -192,3 +192,49 @@ export const SingleColumn: Story = {
     </YStack>
   ),
 };
+
+export const OverflowColumns: Story = {
+  render: () => (
+    <YStack gap="$4">
+      <Text>カラム数が行のカラム数を超える例（自動折り返し）</Text>
+      <Grid.Container>
+        <Grid.Row>
+          <Grid.Column span={6}>
+            <View backgroundColor="$primary" padding="$4">
+              <Text color="$onPrimary">Column 1 (span=6)</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={6}>
+            <View backgroundColor="$secondary" padding="$4">
+              <Text color="$onSecondary">Column 2 (span=6)</Text>
+            </View>
+          </Grid.Column>
+          <Grid.Column span={6}>
+            <View backgroundColor="$tertiary" padding="$4">
+              <Text color="$onTertiary">Column 3 (span=6)</Text>
+            </View>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Container>
+    </YStack>
+  ),
+};
+
+export const ExcessiveSpan: Story = {
+  render: () => (
+    <YStack gap="$4">
+      <Text>カラムのspanが総カラム数を超える例（自動制限）</Text>
+      <Grid.Container>
+        <Grid.Row>
+          <Grid.Column span={16}>
+            <View backgroundColor="$primary" padding="$4">
+              <Text color="$onPrimary">
+                Column with span=16 (自動的に制限されます)
+              </Text>
+            </View>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Container>
+    </YStack>
+  ),
+};

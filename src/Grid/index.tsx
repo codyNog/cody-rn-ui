@@ -1,6 +1,6 @@
 "use client";
 import { Children, forwardRef, useMemo } from "react";
-import type { ReactNode, Ref } from "react";
+import type { ReactElement, ReactNode, Ref } from "react";
 import { useWindowDimensions } from "react-native";
 import { View, XStack } from "tamagui";
 import type { GetProps, TamaguiElement } from "tamagui";
@@ -129,6 +129,57 @@ const Row = forwardRef<TamaguiElement, GridRowProps>(
     // 子要素の数を確認
     const childCount = Children.count(children);
 
+    // 現在の画面幅を取得
+    const { width } = useWindowDimensions();
+
+    // 現在の画面サイズに基づいてカラム数を取得
+    const totalColumns = useMemo(() => getColumnsForWidth(width), [width]);
+
+    // 子要素のspanの合計を計算し、必要に応じて警告を表示
+    const childrenWithValidation = useMemo(() => {
+      if (!children) return null;
+
+      let totalSpan = 0;
+      const rowChildren: ReactNode[] = [];
+
+      Children.forEach(children, (child) => {
+        if (!child) return;
+
+        // Grid.Columnコンポーネントからspanプロパティを取得
+        const columnProps = (child as ReactElement<GridColumnProps>)?.props;
+        const span = columnProps?.span || 12;
+
+        // 現在のブレークポイントに基づいてレスポンシブなspanを取得
+        const breakpoint = getBreakpoint(width);
+        let responsiveSpan = span;
+
+        if (breakpoint === "xs" && columnProps?.sm !== undefined) {
+          responsiveSpan = columnProps.sm;
+        } else if (breakpoint === "sm" && columnProps?.md !== undefined) {
+          responsiveSpan = columnProps.md;
+        } else if (breakpoint === "md" && columnProps?.lg !== undefined) {
+          responsiveSpan = columnProps.lg;
+        } else if (
+          (breakpoint === "lg" || breakpoint === "xl") &&
+          columnProps?.xl !== undefined
+        ) {
+          responsiveSpan = columnProps.xl;
+        }
+
+        totalSpan += responsiveSpan;
+        rowChildren.push(child);
+
+        // 開発環境での警告（totalColumnsを超える場合）
+        if (process.env.NODE_ENV !== "production" && totalSpan > totalColumns) {
+          console.warn(
+            `Grid.Row: 子要素のspanの合計(${totalSpan})がtotalColumns(${totalColumns})を超えています。自動的に折り返されます。`,
+          );
+        }
+      });
+
+      return rowChildren;
+    }, [children, width, totalColumns]);
+
     return (
       <XStack
         ref={ref}
@@ -149,7 +200,7 @@ const Row = forwardRef<TamaguiElement, GridRowProps>(
         gap={childCount > 1 ? GRID_GAP : undefined}
         {...props}
       >
-        {children}
+        {childrenWithValidation}
       </XStack>
     );
   },
@@ -186,11 +237,16 @@ const Column = ({
     return span;
   }, [breakpoint, sm, md, lg, xl, span]);
 
+  // spanが総カラム数を超えないように制限
+  const clampedSpan = useMemo(() => {
+    return Math.min(responsiveSpan, totalColumns);
+  }, [responsiveSpan, totalColumns]);
+
   // レスポンシブな幅の計算
   // Material Design 3のグリッドシステムに準拠した幅計算
   const columnWidth = useMemo(() => {
     // 各カラムの基本幅（gapを考慮しない場合）
-    const baseWidth = responsiveSpan / totalColumns;
+    const baseWidth = clampedSpan / totalColumns;
 
     // カラム間のgapの合計幅（カラム数 - 1）* gap
     // 8pxはGRID_GAPの$2に相当する値と仮定
@@ -199,7 +255,7 @@ const Column = ({
     // 実際の幅計算
     // 各カラムの幅 = (基本幅 * 100%) - (gap調整)
     return `calc(${baseWidth * 100}% - ${gapWidth * (1 - baseWidth)}px)`;
-  }, [responsiveSpan, totalColumns]);
+  }, [clampedSpan, totalColumns]);
 
   // オフセットの計算
   const marginLeft = useMemo(() => {
