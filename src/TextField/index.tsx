@@ -1,6 +1,6 @@
 "use client";
 import { Eye, EyeOff } from "@tamagui/lucide-icons";
-import { type RefObject, forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import type { TextInput } from "react-native";
 import {
   type InputProps,

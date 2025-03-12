@@ -3,7 +3,6 @@ import { forwardRef, useCallback, useId } from "react";
 import {
   Label,
   RadioGroup as RG,
-  type SizeTokens,
   type TamaguiElement,
   XStack,
   YStack,

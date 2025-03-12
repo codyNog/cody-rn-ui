@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import { type ComponentProps, useCallback, useState } from "react";
+import { type ComponentProps, useState } from "react";
 import { CheckboxList as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 

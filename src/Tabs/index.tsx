@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import type { ReactNode } from "react";
-import { Animated, View, useWindowDimensions } from "react-native";
+import { Animated, useWindowDimensions } from "react-native";
 import {
   ScrollView,
   Stack,
@@ -17,7 +17,6 @@ import {
   Text,
   XStack,
   YStack,
-  getTokens,
   styled,
 } from "tamagui";
 import type { BadgeVariant } from "../Badge";

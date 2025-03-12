@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { expect, userEvent, within } from "@storybook/test";
+import { expect, userEvent } from "@storybook/test";
 import {
   Bell,
   HelpCircle,
@@ -11,7 +11,7 @@ import {
   User,
 } from "@tamagui/lucide-icons";
 import { useState } from "react";
-import { Text, XStack, YStack } from "tamagui";
+import { Text, YStack } from "tamagui";
 import { NavigationDrawer as Component, type NavigationItem } from ".";
 import { Button } from "../Button";
 import { getCanvas } from "../libs/storybook";

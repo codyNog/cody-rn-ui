@@ -1,9 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-
-import { expect } from "@storybook/test";
+import type { Meta } from "@storybook/react";
 import { XStack, YStack } from ".";
 import { Text } from "../Text";
-import { getCanvas } from "../libs/storybook";
 
 const meta: Meta = {
   component: YStack,

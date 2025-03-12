@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { expect, userEvent, within } from "@storybook/test";
+import { expect, userEvent } from "@storybook/test";
 import { ChevronRight, Home, Mail, Star } from "@tamagui/lucide-icons";
 import { YStack } from "tamagui";
 import { ListItem as Component } from ".";

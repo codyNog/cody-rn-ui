@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import { Home, Plus, Settings, Star } from "@tamagui/lucide-icons";
 import { YStack } from "tamagui";
-import { Fab, FabButton, FabContainer } from ".";
+import { FabButton, FabContainer } from ".";
 import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof FabButton> = {

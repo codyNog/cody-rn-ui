@@ -2,7 +2,6 @@
 import { forwardRef } from "react";
 import type { ReactNode } from "react";
 import { type TamaguiElement, Text, YStack } from "tamagui";
-import { elevationSystem, typographyScale } from "../theme";
 
 export type BadgeVariant = "standard" | "small" | "large" | "dot";
 export type BadgeDirection =

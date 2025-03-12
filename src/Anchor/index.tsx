@@ -1,4 +1,3 @@
-import { type Href, Link } from "expo-router";
 import { Anchor as A, type AnchorProps, styled } from "tamagui";
 
 // Material Design 3のリンクスタイルを適用したAnchorコンポーネント

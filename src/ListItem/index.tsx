@@ -3,7 +3,6 @@ import { type ReactNode, forwardRef } from "react";
 import {
   type GetProps,
   Stack,
-  type StackProps,
   type TamaguiElement,
   Text,
   XStack,

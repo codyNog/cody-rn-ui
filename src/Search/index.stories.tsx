@@ -1,12 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import {
-  ArrowRight,
-  Filter,
-  Mic,
-  Search as SearchIcon,
-  X,
-} from "@tamagui/lucide-icons";
+import { ArrowRight, Filter, Mic } from "@tamagui/lucide-icons";
 import { useState } from "react";
 import { YStack } from "tamagui";
 import { Search as Component } from ".";

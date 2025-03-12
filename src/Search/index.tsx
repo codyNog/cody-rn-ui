@@ -1,6 +1,6 @@
 "use client";
 import { Search as SearchIcon, X } from "@tamagui/lucide-icons";
-import { type ReactNode, type Ref, forwardRef, useState } from "react";
+import { type ReactNode, forwardRef, useState } from "react";
 import {
   type NativeSyntheticEvent,
   type TextInput,

@@ -1,5 +1,6 @@
 import "react-native-reanimated";
 import type { Preview } from "@storybook/react";
+// biome-ignore lint: for UMD global
 import React from "react";
 import { Background } from "../src/Background";
 import { UIProvider } from "../src/Provider";

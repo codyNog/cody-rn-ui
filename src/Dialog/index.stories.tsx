@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import { Info } from "@tamagui/lucide-icons";
 import { useState } from "react";
-import { Button, YStack } from "tamagui";
+import { Button } from "tamagui";
 import { Dialog as Component } from ".";
 import { Text } from "../Text";
 import { getCanvas } from "../libs/storybook";

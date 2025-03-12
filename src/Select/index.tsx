@@ -3,10 +3,7 @@ import { ChevronDown } from "@tamagui/lucide-icons";
 import { forwardRef, useState } from "react";
 import type { TextInput } from "react-native";
 import {
-  Adapt,
   Input,
-  Sheet,
-  type TamaguiElement,
   Select as TamaguiSelect,
   Text,
   VisuallyHidden,

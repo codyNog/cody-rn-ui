@@ -1,15 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import {
-  Bell,
-  ChevronRight,
-  Home,
-  LogOut,
-  Settings,
-  User,
-} from "@tamagui/lucide-icons";
+import { Bell, Home, LogOut, Settings, User } from "@tamagui/lucide-icons";
 import { useEffect, useRef, useState } from "react";
-import { Button, Text, XStack, YStack } from "tamagui";
+import { Button, YStack } from "tamagui";
 import { Menu as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 

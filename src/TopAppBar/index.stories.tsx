@@ -3,9 +3,7 @@ import { expect } from "@storybook/test";
 import {
   ArrowLeft,
   Bell,
-  Bookmark,
   ChevronLeft,
-  Heart,
   Menu,
   MoreVertical,
   Search,
