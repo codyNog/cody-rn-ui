@@ -313,3 +313,6 @@ export const Select = forwardRef<TextInput, Props>(
     );
   },
 );
+
+// displayNameを設定
+Select.displayName = "Select";
