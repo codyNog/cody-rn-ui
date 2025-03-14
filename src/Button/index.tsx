@@ -49,7 +49,6 @@ const BaseButton = styled(TamaguiButton, {
   // ホバー、プレス状態の設定
   pressStyle: {
     opacity: 0.9,
-    scale: 0.98,
   },
 
   hoverStyle: {

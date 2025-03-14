@@ -41,7 +41,7 @@ const StyledChip = styled(XStack, {
 
   // ホバー、プレス状態の設定
   pressStyle: {
-    scale: 0.98,
+    // 伸縮アニメーションを無効化
   },
 
   // バリアント
