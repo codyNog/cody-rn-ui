@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
-import { YStack, XStack } from "tamagui";
+import { XStack, YStack } from "tamagui";
 import { IconButton as Component } from ".";
+import { Heart, Home, Menu, Settings } from "../icons";
 import { getCanvas } from "../libs/storybook";
-import { Home, Settings, Menu, Heart } from "../icons";
 
 const meta: Meta<typeof Component> = {
   component: Component,

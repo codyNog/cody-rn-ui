@@ -14,9 +14,9 @@ import {
   useTheme,
 } from "tamagui";
 import { Button } from "../Button";
-import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 import { Ripple } from "../Ripple";
 import { hexToRgba } from "../libs/color";
+import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 
 /**
  * Material Design 3のスタイルを適用したカードコンポーネント

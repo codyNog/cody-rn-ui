@@ -10,9 +10,9 @@ import {
   styled,
   useTheme,
 } from "tamagui";
-import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 import { Ripple } from "../Ripple";
 import { hexToRgba } from "../libs/color";
+import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 
 // ListItemのベースコンポーネント
 const StyledListItem = styled(XStack, {

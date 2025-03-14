@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import type { FC, ReactNode } from "react";
-import { StyleSheet, View, Pressable, Animated } from "react-native";
+import { Animated, Pressable, StyleSheet, View } from "react-native";
 import type { GestureResponderEvent, ViewStyle } from "react-native";
 
 export interface RippleProps {

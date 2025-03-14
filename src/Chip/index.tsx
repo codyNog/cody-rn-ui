@@ -9,9 +9,9 @@ import {
   styled,
   useTheme,
 } from "tamagui";
-import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 import { Ripple } from "../Ripple";
 import { hexToRgba } from "../libs/color";
+import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 
 export type ChipVariant = "assist" | "filter" | "input" | "suggestion";
 

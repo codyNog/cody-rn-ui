@@ -1,9 +1,9 @@
+import type { ComponentProps, FC } from "react";
 import { styled, useTheme } from "tamagui";
 import { Button as TamaguiButton } from "tamagui";
-import { elevationSystem, stateLayerOpacity } from "../theme";
 import { Ripple } from "../Ripple";
 import { hexToRgba } from "../libs/color";
-import type { ComponentProps, FC } from "react";
+import { elevationSystem, stateLayerOpacity } from "../theme";
 
 export type ButtonVariant =
   | "filled"

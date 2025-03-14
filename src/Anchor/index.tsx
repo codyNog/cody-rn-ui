@@ -1,7 +1,7 @@
+import { useCallback } from "react";
 import { Anchor as A, type AnchorProps, styled, useTheme } from "tamagui";
 import { Ripple } from "../Ripple";
 import { hexToRgba } from "../libs/color";
-import { useCallback } from "react";
 import { stateLayerOpacity } from "../theme";
 
 // Material Design 3のリンクスタイルを適用したAnchorコンポーネント
