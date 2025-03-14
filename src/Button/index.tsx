@@ -1,6 +1,8 @@
 import { styled } from "tamagui";
 import { Button as TamaguiButton } from "tamagui";
 import { elevationSystem, stateLayerOpacity } from "../theme";
+import { Ripple } from "../Ripple";
+import type { ComponentProps, FC } from "react";
 
 export type ButtonVariant =
   | "filled"
@@ -25,7 +27,7 @@ export type ButtonVariant =
  * - medium: 中サイズ（デフォルト）
  * - large: 大サイズ
  */
-export const Button = styled(TamaguiButton, {
+const BaseButton = styled(TamaguiButton, {
   // MD3の標準的なボタンの角丸は8dp (borderRadius: 100)
   borderRadius: 100,
 
@@ -142,3 +144,39 @@ export const Button = styled(TamaguiButton, {
     disabled: false,
   },
 });
+
+export type ButtonProps = ComponentProps<typeof BaseButton>;
+/**
+ * Material Design 3のRippleエフェクトを適用したボタンコンポーネント
+ *
+ * タッチ時に波紋エフェクトが表示され、より良い視覚的フィードバックを提供します。
+ */
+export const Button: FC<ButtonProps> = (props) => {
+  // バリアントに基づいてRippleの色を決定
+  const getRippleColor = () => {
+    switch (props.variant) {
+      case "filled":
+        return "rgba(255, 255, 255, 0.24)"; // 白色のリップル（暗い背景用）
+      case "outlined":
+      case "text":
+        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+      case "tonal":
+        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+      case "elevated":
+        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+      default:
+        return "rgba(33, 33, 33, 0.12)"; // デフォルト
+    }
+  };
+
+  return (
+    <Ripple
+      color={getRippleColor()}
+      disabled={props.disabled}
+      centerRipple={true} // 常に中央からRippleを開始
+      style={{ borderRadius: 100 }} // ボタンと同じ角丸を適用
+    >
+      <BaseButton {...props} />
+    </Ripple>
+  );
+};

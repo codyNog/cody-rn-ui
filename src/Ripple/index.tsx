@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import type { FC, ReactNode } from "react";
 import { StyleSheet, View, Pressable, Animated } from "react-native";
-import type { ViewStyle } from "react-native";
+import type { GestureResponderEvent, ViewStyle } from "react-native";
 
 export interface RippleProps {
   /**
@@ -36,6 +36,11 @@ export interface RippleProps {
    * @default 2
    */
   maxScale?: number;
+  /**
+   * Rippleを常に中央から開始するかどうか
+   * @default false
+   */
+  centerRipple?: boolean;
 }
 
 /**
@@ -61,6 +66,7 @@ export const Ripple: FC<RippleProps> = ({
   style,
   onPress,
   maxScale = 3, // より大きなスケール
+  centerRipple = false, // 中央からRippleを開始するかどうか
 }) => {
   // タッチ位置の状態
   const [ripplePosition, setRipplePosition] = useState({ x: 0, y: 0 });
@@ -90,13 +96,23 @@ export const Ripple: FC<RippleProps> = ({
 
   // プレス時の処理
   const handlePress = useCallback(
-    (event: { nativeEvent: { locationX?: number; locationY?: number } }) => {
+    (event: GestureResponderEvent) => {
       if (disabled) return;
 
       // タッチ位置を取得（相対座標）
-      // 注意: nativeEventのlocationXとlocationYはコンポーネント内の相対座標
-      const touchX = event.nativeEvent.locationX || componentSize.width / 2;
-      const touchY = event.nativeEvent.locationY || componentSize.height / 2;
+      let touchX: number;
+      let touchY: number;
+
+      if (centerRipple) {
+        // 中央からRippleを開始する場合
+        touchX = componentSize.width / 2;
+        touchY = componentSize.height / 2;
+      } else {
+        // タッチ位置からRippleを開始する場合
+        // 注意: nativeEventのlocationXとlocationYはコンポーネント内の相対座標
+        touchX = event.nativeEvent.locationX || componentSize.width / 2;
+        touchY = event.nativeEvent.locationY || componentSize.height / 2;
+      }
 
       // タッチ位置を設定
       setRipplePosition({ x: touchX, y: touchY });
@@ -127,6 +143,7 @@ export const Ripple: FC<RippleProps> = ({
     },
     [
       disabled,
+      centerRipple,
       maxScale,
       duration,
       onPress,
@@ -168,8 +185,6 @@ const styles = StyleSheet.create({
   container: {
     position: "relative",
     overflow: "hidden",
-    minHeight: 60, // 最小の高さを設定
-    minWidth: 100, // 最小の幅を設定
   },
   rippleContainer: {
     position: "absolute",

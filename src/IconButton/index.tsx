@@ -1,7 +1,8 @@
 "use client";
 import { styled } from "tamagui";
-import { Button as TamaguiButton, XStack } from "tamagui";
+import { Button as TamaguiButton, XStack, View } from "tamagui";
 import { stateLayerOpacity } from "../theme";
+import { Ripple } from "../Ripple";
 import type { ReactNode } from "react";
 
 export type IconButtonVariant = "standard" | "outlined" | "filled" | "tonal";
@@ -170,16 +171,65 @@ export const IconButton = ({
     }
   };
 
+  // バリアントに基づいてRippleの色を決定
+  const getRippleColor = () => {
+    switch (variant) {
+      case "filled":
+        return "rgba(255, 255, 255, 0.24)"; // 白色のリップル（暗い背景用）
+      case "outlined":
+        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+      case "standard":
+        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+      case "tonal":
+        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+      default:
+        return "rgba(33, 33, 33, 0.12)"; // デフォルト
+    }
+  };
+
+  // onPressハンドラをラップして型の不一致を解決
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    }
+  };
+
+  const selectedStyle = getSelectedStyle();
+
   return (
-    <IconButtonBase
-      variant={variant}
-      disabled={disabled}
-      isSelected={isSelected}
-      onPress={onPress}
-      {...props}
-      {...getSelectedStyle()}
+    <View
+      style={{
+        width: 48,
+        height: 48,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
-      <IconWrapper>{icon}</IconWrapper>
-    </IconButtonBase>
+      <Ripple
+        color={getRippleColor()}
+        disabled={disabled}
+        onPress={handlePress}
+        centerRipple={true} // 常に中央からRippleを開始
+        style={{
+          borderRadius: 1000, // アイコンボタンと同じ角丸を適用
+          width: 48,
+          height: 48,
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
+      >
+        <IconButtonBase
+          variant={variant}
+          disabled={disabled}
+          isSelected={isSelected}
+          {...props}
+          {...selectedStyle}
+          onPress={undefined} // onPressはRippleに移動
+        >
+          <IconWrapper>{icon}</IconWrapper>
+        </IconButtonBase>
+      </Ripple>
+    </View>
   );
 };
