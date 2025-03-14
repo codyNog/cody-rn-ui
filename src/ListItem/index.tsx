@@ -1,5 +1,5 @@
 "use client";
-import { type ReactNode, forwardRef } from "react";
+import { type ReactNode, forwardRef, useCallback } from "react";
 import {
   type GetProps,
   Stack,
@@ -8,8 +8,11 @@ import {
   XStack,
   YStack,
   styled,
+  useTheme,
 } from "tamagui";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
+import { Ripple } from "../Ripple";
+import { hexToRgba } from "../libs/color";
 
 // ListItemのベースコンポーネント
 const StyledListItem = styled(XStack, {
@@ -137,13 +140,41 @@ export const ListItem = forwardRef<TamaguiElement, ListItemBaseProps>(
     },
     ref,
   ) => {
-    return (
+    const theme = useTheme();
+
+    // バリアントと選択状態に基づいてRippleの色を決定
+    const getRippleColor = useCallback(() => {
+      // 選択状態の場合
+      if (selected) {
+        return hexToRgba(
+          theme.onSecondaryContainer?.val,
+          stateLayerOpacity.press,
+        );
+      }
+
+      // 非選択状態の場合はバリアントに基づく
+      if (variant === "filled" || variant === "elevated") {
+        return hexToRgba(theme.onSurfaceVariant?.val, stateLayerOpacity.press);
+      }
+
+      // standard または他のバリアント
+      return hexToRgba(theme.onSurface?.val, stateLayerOpacity.press);
+    }, [variant, selected, theme]);
+
+    // onPressハンドラをラップして型の不一致を解決
+    const handlePress = useCallback(() => {
+      if (onPress) {
+        onPress();
+      }
+    }, [onPress]);
+
+    const listItemContent = (
       <StyledListItem
         ref={ref}
         variant={variant}
         selected={selected}
         disabled={disabled}
-        onPress={onPress}
+        onPress={undefined} // onPressはRippleに移動
         {...props}
       >
         {leading && <LeadingContainer>{leading}</LeadingContainer>}
@@ -156,5 +187,27 @@ export const ListItem = forwardRef<TamaguiElement, ListItemBaseProps>(
         {trailing && <TrailingContainer>{trailing}</TrailingContainer>}
       </StyledListItem>
     );
+
+    // クリック可能な場合のみRippleを適用
+    if (onPress && !disabled) {
+      return (
+        <Ripple
+          color={getRippleColor()}
+          disabled={disabled}
+          onPress={handlePress}
+          style={{
+            borderRadius: 8, // ListItemと同じ角丸を適用
+            overflow: "hidden",
+            width: "100%", // 幅を100%に設定
+            minHeight: 56, // ListItemと同じ最小高さを設定
+          }}
+        >
+          {listItemContent}
+        </Ripple>
+      );
+    }
+
+    // クリック不可の場合はRippleなしで返す
+    return listItemContent;
   },
 );

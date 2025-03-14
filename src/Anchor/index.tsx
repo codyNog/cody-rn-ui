@@ -1,4 +1,8 @@
-import { Anchor as A, type AnchorProps, styled } from "tamagui";
+import { Anchor as A, type AnchorProps, styled, useTheme } from "tamagui";
+import { Ripple } from "../Ripple";
+import { hexToRgba } from "../libs/color";
+import { useCallback } from "react";
+import { stateLayerOpacity } from "../theme";
 
 // Material Design 3のリンクスタイルを適用したAnchorコンポーネント
 const StyledAnchor = styled(A, {
@@ -68,11 +72,48 @@ type Props = AnchorProps & {
   variant?: "text" | "button";
 };
 
+/**
+ * Material Design 3のRippleエフェクトを適用したアンカーコンポーネント
+ *
+ * タッチ時に波紋エフェクトが表示され、より良い視覚的フィードバックを提供します。
+ */
 export const Anchor = ({ variant = "text", ...props }: Props) => {
-  // variantに基づいて適切なコンポーネントを返す
-  if (variant === "button") {
-    return <ButtonAnchor {...props} />;
-  }
+  const theme = useTheme();
 
-  return <StyledAnchor {...props} />;
+  // バリアントに基づいてRippleの色を決定
+  const getRippleColor = useCallback(() => {
+    return hexToRgba(theme.primary?.val, stateLayerOpacity.press);
+  }, [theme]);
+
+  // onPressハンドラをラップして型の不一致を解決
+  const handlePress = useCallback(() => {
+    if (props.onPress && typeof props.onPress === "function") {
+      // @ts-ignore - Rippleコンポーネントとの型の不一致を無視
+      props.onPress();
+    }
+  }, [props.onPress]);
+
+  // アンカーコンテンツ
+  const anchorContent =
+    variant === "button" ? (
+      <ButtonAnchor {...props} onPress={undefined} />
+    ) : (
+      <StyledAnchor {...props} onPress={undefined} />
+    );
+
+  // Rippleを親要素として、その中にアンカーコンテンツを配置
+  return (
+    <Ripple
+      color={getRippleColor()}
+      disabled={props.disabled}
+      onPress={props.onPress ? handlePress : undefined}
+      style={{
+        borderRadius: variant === "button" ? 4 : 0, // ボタンスタイルの場合は角丸を適用
+        overflow: "hidden",
+        alignSelf: "flex-start", // テキストの幅に合わせる
+      }}
+    >
+      {anchorContent}
+    </Ripple>
+  );
 };

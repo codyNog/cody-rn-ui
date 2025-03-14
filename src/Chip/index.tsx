@@ -1,8 +1,17 @@
 "use client";
 import type { ReactNode } from "react";
-import { forwardRef } from "react";
-import { type TamaguiElement, Text, XStack, YStack, styled } from "tamagui";
+import { forwardRef, useCallback } from "react";
+import {
+  type TamaguiElement,
+  Text,
+  XStack,
+  YStack,
+  styled,
+  useTheme,
+} from "tamagui";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
+import { Ripple } from "../Ripple";
+import { hexToRgba } from "../libs/color";
 
 export type ChipVariant = "assist" | "filter" | "input" | "suggestion";
 
@@ -169,6 +178,8 @@ const IconContainer = styled(YStack, {
  * - filter: フィルターチップ
  * - input: 入力チップ
  * - suggestion: 提案チップ
+ *
+ * タッチ時に波紋エフェクトが表示され、より良い視覚的フィードバックを提供します。
  */
 export const Chip = forwardRef<TamaguiElement, Omit<ChipProps, "ref">>(
   (
@@ -182,21 +193,75 @@ export const Chip = forwardRef<TamaguiElement, Omit<ChipProps, "ref">>(
       children,
     },
     ref,
-  ) => (
-    <StyledChip
-      ref={ref}
-      variant={variant}
-      selected={selected}
-      disabled={disabled}
-      onPress={onClick}
-    >
-      {leadingIcon && <IconContainer>{leadingIcon}</IconContainer>}
+  ) => {
+    const theme = useTheme();
 
-      <ChipText selected={selected} disabled={disabled}>
-        {children}
-      </ChipText>
+    // バリアントと選択状態に基づいてRippleの色を決定
+    const getRippleColor = useCallback(() => {
+      // 選択状態の場合
+      if (selected) {
+        return hexToRgba(
+          theme.onSecondaryContainer?.val,
+          stateLayerOpacity.press,
+        );
+      }
 
-      {trailingIcon && <IconContainer>{trailingIcon}</IconContainer>}
-    </StyledChip>
-  ),
+      // 非選択状態の場合はバリアントに基づく
+      if (
+        variant === "assist" ||
+        variant === "filter" ||
+        variant === "suggestion"
+      ) {
+        return hexToRgba(theme.onSurfaceVariant?.val, stateLayerOpacity.press);
+      }
+
+      // input バリアント
+      return hexToRgba(theme.onSurface?.val, stateLayerOpacity.press);
+    }, [variant, selected, theme]);
+
+    // onClickハンドラをラップして型の不一致を解決
+    const handlePress = useCallback(() => {
+      if (onClick) {
+        onClick();
+      }
+    }, [onClick]);
+
+    const chipContent = (
+      <StyledChip
+        ref={ref}
+        variant={variant}
+        selected={selected}
+        disabled={disabled}
+        onPress={undefined} // onPressはRippleに移動
+      >
+        {leadingIcon && <IconContainer>{leadingIcon}</IconContainer>}
+
+        <ChipText selected={selected} disabled={disabled}>
+          {children}
+        </ChipText>
+
+        {trailingIcon && <IconContainer>{trailingIcon}</IconContainer>}
+      </StyledChip>
+    );
+
+    // onClickがある場合のみRippleを適用
+    if (onClick && !disabled) {
+      return (
+        <Ripple
+          color={getRippleColor()}
+          disabled={disabled}
+          onPress={handlePress}
+          style={{
+            borderRadius: 8, // チップと同じ角丸を適用
+            overflow: "hidden",
+          }}
+        >
+          {chipContent}
+        </Ripple>
+      );
+    }
+
+    // クリック不可の場合はRippleなしで返す
+    return chipContent;
+  },
 );

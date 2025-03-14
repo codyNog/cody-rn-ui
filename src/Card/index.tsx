@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef } from "react";
+import { forwardRef, useCallback } from "react";
 import type { ReactNode } from "react";
 import {
   Image,
@@ -11,9 +11,12 @@ import {
   XStack,
   YStack,
   styled,
+  useTheme,
 } from "tamagui";
 import { Button } from "../Button";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
+import { Ripple } from "../Ripple";
+import { hexToRgba } from "../libs/color";
 
 /**
  * Material Design 3のスタイルを適用したカードコンポーネント
@@ -151,8 +154,15 @@ type Props = {
     variant?: "filled" | "outlined" | "tonal" | "elevated" | "text";
   }[];
   variant?: "elevated" | "filled" | "outlined"; // カードのバリアント
+  onPress?: () => void; // カード全体のクリックハンドラ
+  disabled?: boolean; // 無効状態
 };
 
+/**
+ * Material Design 3のRippleエフェクトを適用したカードコンポーネント
+ *
+ * タッチ時に波紋エフェクトが表示され、より良い視覚的フィードバックを提供します。
+ */
 export const Card = forwardRef<TamaguiElement, Props>(
   (
     {
@@ -163,37 +173,78 @@ export const Card = forwardRef<TamaguiElement, Props>(
       children,
       actions,
       variant = "elevated",
+      onPress,
+      disabled = false,
     },
     ref,
   ) => {
+    const theme = useTheme();
+
+    // バリアントに基づいてRippleの色を決定
+    const getRippleColor = useCallback(() => {
+      if (variant === "filled") {
+        return hexToRgba(theme.onSurfaceVariant?.val, stateLayerOpacity.press);
+      }
+
+      if (variant === "outlined") {
+        return hexToRgba(theme.primary?.val, stateLayerOpacity.press);
+      }
+
+      // elevated または他のバリアント
+      return hexToRgba(theme.onSurface?.val, stateLayerOpacity.press);
+    }, [variant, theme]);
+
+    // onPressハンドラをラップして型の不一致を解決
+    const handlePress = useCallback(() => {
+      if (onPress) {
+        onPress();
+      }
+    }, [onPress]);
+
+    // Rippleを親要素として、その中にカードコンテンツを配置
     return (
-      <StyledCard ref={ref} variant={variant}>
-        {media && (
-          <CardMedia source={media.source} alt={media.alt || "Card media"} />
-        )}
+      <Ripple
+        color={getRippleColor()}
+        disabled={disabled}
+        onPress={onPress ? handlePress : undefined}
+        style={{
+          borderRadius: 12, // カードと同じ角丸を適用
+          overflow: "hidden",
+          width: "100%", // 幅を100%に設定
+        }}
+      >
+        <StyledCard
+          ref={ref}
+          variant={variant}
+          onPress={undefined} // onPressはRippleに移動
+        >
+          {media && (
+            <CardMedia source={media.source} alt={media.alt || "Card media"} />
+          )}
 
-        {(title || subtitle) && (
-          <CardHeader>
-            {title && <CardTitle>{title}</CardTitle>}
-            {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
-          </CardHeader>
-        )}
+          {(title || subtitle) && (
+            <CardHeader>
+              {title && <CardTitle>{title}</CardTitle>}
+              {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
+            </CardHeader>
+          )}
 
-        <CardContent>
-          {description && <CardDescription>{description}</CardDescription>}
-          {children}
-        </CardContent>
+          <CardContent>
+            {description && <CardDescription>{description}</CardDescription>}
+            {children}
+          </CardContent>
 
-        {actions && actions.length > 0 && (
-          <CardFooter>
-            {actions.map(({ onClick, label, variant = "text" }) => (
-              <Button key={label} onPress={onClick} variant={variant}>
-                {label}
-              </Button>
-            ))}
-          </CardFooter>
-        )}
-      </StyledCard>
+          {actions && actions.length > 0 && (
+            <CardFooter>
+              {actions.map(({ onClick, label, variant = "text" }) => (
+                <Button key={label} onPress={onClick} variant={variant}>
+                  {label}
+                </Button>
+              ))}
+            </CardFooter>
+          )}
+        </StyledCard>
+      </Ripple>
     );
   },
 );
