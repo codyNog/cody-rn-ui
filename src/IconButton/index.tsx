@@ -1,8 +1,9 @@
 "use client";
-import { styled } from "tamagui";
+import { styled, useTheme } from "tamagui";
 import { Button as TamaguiButton, XStack, View } from "tamagui";
 import { stateLayerOpacity } from "../theme";
 import { Ripple } from "../Ripple";
+import { hexToRgba } from "../libs/color";
 import type { ReactNode } from "react";
 
 export type IconButtonVariant = "standard" | "outlined" | "filled" | "tonal";
@@ -133,6 +134,7 @@ const IconWrapper = styled(XStack, {
  * 選択状態:
  * - isSelected: 選択状態を表すプロパティ（トグル機能）
  */
+
 export const IconButton = ({
   icon,
   variant = "standard",
@@ -171,19 +173,29 @@ export const IconButton = ({
     }
   };
 
-  // バリアントに基づいてRippleの色を決定
+  const theme = useTheme();
+
+  // バリアントに基づいてRippleの色を決定（各バリアントの前景色に基づく）
   const getRippleColor = () => {
     switch (variant) {
       case "filled":
-        return "rgba(255, 255, 255, 0.24)"; // 白色のリップル（暗い背景用）
+        // Filledアイコンボタンの前景色（アイコン色）はonPrimary
+        return hexToRgba(theme.onPrimary?.val, stateLayerOpacity.press);
       case "outlined":
-        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+        // Outlinedアイコンボタンの前景色（アイコン色）はprimary
+        return hexToRgba(theme.primary?.val, stateLayerOpacity.press);
       case "standard":
-        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+        // Standardアイコンボタンの前景色（アイコン色）はonSurfaceVariant
+        return hexToRgba(theme.onSurfaceVariant?.val, stateLayerOpacity.press);
       case "tonal":
-        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+        // Tonalアイコンボタンの前景色（アイコン色）はonSecondaryContainer
+        return hexToRgba(
+          theme.onSecondaryContainer?.val,
+          stateLayerOpacity.press,
+        );
       default:
-        return "rgba(33, 33, 33, 0.12)"; // デフォルト
+        // デフォルトの前景色はonSurface
+        return hexToRgba(theme.onSurface?.val, stateLayerOpacity.press);
     }
   };
 

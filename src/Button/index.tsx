@@ -1,7 +1,8 @@
-import { styled } from "tamagui";
+import { styled, useTheme } from "tamagui";
 import { Button as TamaguiButton } from "tamagui";
 import { elevationSystem, stateLayerOpacity } from "../theme";
 import { Ripple } from "../Ripple";
+import { hexToRgba } from "../libs/color";
 import type { ComponentProps, FC } from "react";
 
 export type ButtonVariant =
@@ -151,21 +152,32 @@ export type ButtonProps = ComponentProps<typeof BaseButton>;
  *
  * タッチ時に波紋エフェクトが表示され、より良い視覚的フィードバックを提供します。
  */
+
 export const Button: FC<ButtonProps> = (props) => {
-  // バリアントに基づいてRippleの色を決定
+  const theme = useTheme();
+
+  // バリアントに基づいてRippleの色を決定（各バリアントの前景色に基づく）
   const getRippleColor = () => {
     switch (props.variant) {
       case "filled":
-        return "rgba(255, 255, 255, 0.24)"; // 白色のリップル（暗い背景用）
+        // Filledボタンの前景色（テキスト色）はonPrimary
+        return hexToRgba(theme.onPrimary?.val, stateLayerOpacity.press);
       case "outlined":
       case "text":
-        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+        // OutlinedボタンとTextボタンの前景色（テキスト色）はprimary
+        return hexToRgba(theme.primary?.val, stateLayerOpacity.press);
       case "tonal":
-        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+        // Tonalボタンの前景色（テキスト色）はonSecondaryContainer
+        return hexToRgba(
+          theme.onSecondaryContainer?.val,
+          stateLayerOpacity.press,
+        );
       case "elevated":
-        return "rgba(33, 33, 33, 0.12)"; // 黒色のリップル（明るい背景用）
+        // Elevatedボタンの前景色（テキスト色）はprimary
+        return hexToRgba(theme.primary?.val, stateLayerOpacity.press);
       default:
-        return "rgba(33, 33, 33, 0.12)"; // デフォルト
+        // デフォルトの前景色はonSurface
+        return hexToRgba(theme.onSurface?.val, stateLayerOpacity.press);
     }
   };
 
