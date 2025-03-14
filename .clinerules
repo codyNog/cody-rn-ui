@@ -27,6 +27,8 @@ Reply in Language used in the question.
 - TypeScript による実装
 - Arrow Function の使用を推奨
 - Biome による Lint と Format の適用
+- anyを極力使用しない
+- import は named import を使用
 
 ### テスト
 - Storybook の Play Function を利用して、コンポーネントの動作を確認
