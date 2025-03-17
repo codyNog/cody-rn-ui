@@ -221,7 +221,10 @@ export const Select = forwardRef<TextInput, Props>(
     const [open, setOpen] = useState(false);
     const hasError = !!error;
     const selectedOption = options.find((option) => option.value === value);
-    const isSelected = !!selectedOption;
+    // 空文字の値を持つオプションが選択されている場合も考慮
+    const isSelected =
+      !!selectedOption ||
+      (value !== undefined && value !== null && value === "");
 
     return (
       <YStack width="100%">
