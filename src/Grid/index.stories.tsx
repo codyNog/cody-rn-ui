@@ -5,7 +5,6 @@ import { Grid } from ".";
 import { getCanvas } from "../libs/storybook";
 
 const meta: Meta<typeof Grid> = {
-  title: "Layout/Grid",
   component: Grid.Container,
 };
 

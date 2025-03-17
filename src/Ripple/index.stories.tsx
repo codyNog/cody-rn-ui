@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { Ripple } from "./index";
 
 const meta = {
-  title: "UI/Ripple",
   component: Ripple,
   parameters: {
     layout: "centered",

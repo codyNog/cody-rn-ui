@@ -19,7 +19,6 @@ import { Chip } from "./Chip";
 import { Divider } from "./Divider";
 import { Form } from "./Form";
 import { Grid } from "./Grid";
-import { IconSymbol } from "./IconSymbol";
 import { NavigationBar } from "./NavigationBar";
 import { NavigationDrawer, type NavigationItem } from "./NavigationDrawer";
 import { ScreenLayout } from "./ScreenLayout";
@@ -172,13 +171,7 @@ const SandboxApp = () => {
         {
           value: "home",
           label: "ホーム",
-          icon: (
-            <IconSymbol
-              name="house.fill"
-              size={20}
-              color="var(--color-onSurface)"
-            />
-          ),
+          icon: <Home size={20} color="var(--color-onSurface)" />,
           children: (
             <ScrollView padding="$4">
               <Grid.Container>
@@ -504,8 +497,8 @@ const meta: Meta = {
   title: "Sandbox/FullscreenApp",
   parameters: {
     layout: "fullscreen",
-    docs: { disable: true },
   },
+  tags: ["!autodocs"],
 };
 
 export default meta;
