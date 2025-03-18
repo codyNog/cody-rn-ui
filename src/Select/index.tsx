@@ -107,7 +107,6 @@ const StyledTrigger = styled(TamaguiSelect.Trigger, {
 
   // ホバー状態
   hoverStyle: {
-    backgroundColor: `$onSurface${stateLayerOpacity.hover}`,
     cursor: "pointer",
   },
 
@@ -122,6 +121,11 @@ const StyledTrigger = styled(TamaguiSelect.Trigger, {
         borderBottomRightRadius: 0,
         backgroundColor: "$surfaceContainerHighest",
 
+        // ホバー状態
+        hoverStyle: {
+          backgroundColor: `$onSurface${stateLayerOpacity.hover}`,
+        },
+
         // フォーカス状態
         focusStyle: {
           borderWidth: 0,
@@ -133,7 +137,12 @@ const StyledTrigger = styled(TamaguiSelect.Trigger, {
       outlined: {
         borderWidth: 1,
         borderColor: "$outline",
-        backgroundColor: "transparent",
+        backgroundColor: "$surface",
+
+        // ホバー状態
+        hoverStyle: {
+          backgroundColor: `$onSurface${stateLayerOpacity.hover}`,
+        },
 
         // フォーカス状態
         focusStyle: {
@@ -303,6 +312,13 @@ export const Select = forwardRef<TextInput, Props>(
             error={hasError}
             disabled={disabled}
             marginTop={variant === "outlined" && (open || isSelected) ? -10 : 0}
+            backgroundColor={
+              variant === "outlined" && (open || isSelected)
+                ? "$surface"
+                : variant === "filled"
+                  ? "$surfaceContainerHighest"
+                  : "transparent"
+            }
           >
             {label}
           </Label>
