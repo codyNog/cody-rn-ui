@@ -27,6 +27,9 @@ const meta: Meta<typeof Component> = {
       control: "boolean",
       description: "無効状態",
     },
+    leadingMedia: {
+      description: "先頭に表示するメディア（画像またはビデオサムネイル）",
+    },
   },
 };
 
@@ -57,6 +60,35 @@ export const WithAvatar: Story = {
     headline: "アバター付きリストアイテム",
     supportingText: "アバターが先頭に表示されます",
     leading: <Avatar src="" fallbackInitials="US" size="medium" />,
+  },
+};
+
+// 画像付きListItem
+export const WithImage: Story = {
+  args: {
+    headline: "画像付きリストアイテム",
+    supportingText: "画像が先頭に表示されます",
+    leadingMedia: {
+      type: "image",
+      source: {
+        uri: "https://picsum.photos/200/300",
+      },
+    },
+  },
+};
+
+// ビデオサムネイル付きListItem
+export const WithVideoThumbnail: Story = {
+  args: {
+    headline: "ビデオサムネイル付きリストアイテム",
+    supportingText: "ビデオのサムネイルが先頭に表示されます",
+    leadingMedia: {
+      type: "video",
+      source: {
+        uri: "https://example.com/video.mp4",
+      },
+      thumbnailUri: "https://picsum.photos/200/300",
+    },
   },
 };
 

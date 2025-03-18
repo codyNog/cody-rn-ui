@@ -2,6 +2,7 @@
 import { type ReactNode, forwardRef, useCallback } from "react";
 import {
   type GetProps,
+  Image,
   Stack,
   type TamaguiElement,
   Text,
@@ -17,7 +18,7 @@ import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
 // ListItemのベースコンポーネント
 const StyledListItem = styled(XStack, {
   width: "100%",
-  minHeight: 56,
+  minHeight: 72,
   paddingVertical: "$2",
   paddingHorizontal: "$4",
   alignItems: "center",
@@ -115,12 +116,22 @@ const TrailingContainer = styled(Stack, {
   alignSelf: "center", // 縦方向の中央揃え
 });
 
+// メディア表示用の型定義
+type LeadingMediaProps = {
+  type: "image" | "video";
+  source: {
+    uri: string;
+  };
+  thumbnailUri?: string; // ビデオ用のサムネイルURI（オプション）
+};
+
 // ListItemのプロパティ型定義
 type ListItemVariants = GetProps<typeof StyledListItem>;
 type ListItemBaseProps = {
   headline: string;
   supportingText?: string;
   leading?: ReactNode;
+  leadingMedia?: LeadingMediaProps;
   trailing?: ReactNode;
   onPress?: () => void;
 } & ListItemVariants;
@@ -131,6 +142,7 @@ export const ListItem = forwardRef<TamaguiElement, ListItemBaseProps>(
       headline,
       supportingText,
       leading,
+      leadingMedia,
       trailing,
       onPress,
       variant = "standard",
@@ -177,7 +189,31 @@ export const ListItem = forwardRef<TamaguiElement, ListItemBaseProps>(
         onPress={undefined} // onPressはRippleに移動
         {...props}
       >
-        {leading && <LeadingContainer>{leading}</LeadingContainer>}
+        {leadingMedia ? (
+          // leadingMediaがある場合は左のパディングなしでメディアを表示
+          <LeadingContainer style={{ marginLeft: -16 }}>
+            {leadingMedia.type === "video" && leadingMedia.thumbnailUri ? (
+              // ビデオでサムネイルURIが提供されている場合
+              <Image
+                source={{ uri: leadingMedia.thumbnailUri }}
+                width={56}
+                height={56}
+                borderRadius={0}
+              />
+            ) : (
+              // 画像または単純なビデオの場合
+              <Image
+                source={leadingMedia.source}
+                width={56}
+                height={56}
+                borderRadius={0}
+              />
+            )}
+          </LeadingContainer>
+        ) : leading ? (
+          // 通常のleadingの場合は標準のパディングでコンテンツを表示
+          <LeadingContainer>{leading}</LeadingContainer>
+        ) : null}
 
         <ContentContainer>
           <Headline>{headline}</Headline>
@@ -199,7 +235,7 @@ export const ListItem = forwardRef<TamaguiElement, ListItemBaseProps>(
             borderRadius: 8, // ListItemと同じ角丸を適用
             overflow: "hidden",
             width: "100%", // 幅を100%に設定
-            minHeight: 56, // ListItemと同じ最小高さを設定
+            minHeight: 72, // ListItemと同じ最小高さを設定
           }}
         >
           {listItemContent}
