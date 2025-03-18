@@ -28,6 +28,7 @@ type NavigationItem = {
 
 type Props = {
   items: NavigationItem[];
+  value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   variant?: "standard" | "labeled" | "unlabeled";
@@ -113,17 +114,20 @@ const Label = styled(Text, {
  * - unlabeled: ラベルなしナビゲーションバー（アイコンのみ）
  */
 export const NavigationBar = forwardRef<TamaguiElement, Props>(
-  ({ items, defaultValue, onValueChange, variant = "standard" }, ref) => {
-    const initialValue = defaultValue || items[0]?.value || "";
+  (
+    { items, value, defaultValue, onValueChange, variant = "standard" },
+    ref,
+  ) => {
+    const initialValue = value || defaultValue || items[0]?.value || "";
     const [activeValue, setActiveValue] = useState(initialValue);
+    const isActive = (v: string) => v === value || v === activeValue;
 
     return (
       <XStack width="100%" justifyContent="center">
         <Container ref={ref} variant={variant} position="relative">
           {/* ナビゲーションアイテム */}
           {items.map((item) => {
-            const isActive = item.value === activeValue;
-            const showLabel = variant !== "unlabeled" || isActive;
+            const showLabel = variant !== "unlabeled" || isActive(item.value);
 
             return (
               <ItemContainer
@@ -143,8 +147,13 @@ export const NavigationBar = forwardRef<TamaguiElement, Props>(
                 }}
               >
                 <Stack position="relative">
-                  <IconContainer scale={isActive ? 1.05 : 1} animation="quick">
-                    {isActive && item.activeIcon ? item.activeIcon : item.icon}
+                  <IconContainer
+                    scale={isActive(item.value) ? 1.05 : 1}
+                    animation="quick"
+                  >
+                    {isActive(item.value) && item.activeIcon
+                      ? item.activeIcon
+                      : item.icon}
                   </IconContainer>
 
                   {item.badge && (
@@ -161,8 +170,8 @@ export const NavigationBar = forwardRef<TamaguiElement, Props>(
 
                 {showLabel && (
                   <Label
-                    active={isActive}
-                    scale={isActive ? 1.05 : 1}
+                    active={isActive(item.value)}
+                    scale={isActive(item.value) ? 1.05 : 1}
                     animation="quick"
                   >
                     {item.label}
