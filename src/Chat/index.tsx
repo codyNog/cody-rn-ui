@@ -131,7 +131,6 @@ const MessageStyled = styled(Text, {
   shadowOffset: { width: 0, height: 1 },
   shadowOpacity: 0.18,
   shadowRadius: 1,
-  elevation: 1,
   variants: {
     type: {
       sent: {
