@@ -88,12 +88,16 @@
   "bin": {
     "cody-rn-ui": "./dist/index.js"
   },
+  "optionalDependencies": {
+    "@codynog/ai-rules": "^2025.3.1"
+  },
   "scripts": {
     "extract": "echo 'Extract functionality removed as per user request'",
     "build": "tsc --project tsconfig.build.json && mv dist/cli.js dist/index.js",
     "type-check": "tsc --noEmit",
     "format": "biome check --write .",
     "postplop": "npm run format",
+    "postinstall": "node -e \"try { require('@codynog/ai-rules'); } catch (e) { console.log('Optional dependency @codynog/ai-rules not available, skipping...'); }\"",
     "plop": "plop",
     "storybook:web": "storybook dev -p 6006",
     "build-storybook": "storybook build",

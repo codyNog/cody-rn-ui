@@ -176,3 +176,9 @@ dist
 
 # storybook
 storybook-static/
+
+# ai-rules
+ai-docs/**
+.cursorrules
+.clinerules
+ai-rules-version.json
