@@ -83,26 +83,32 @@ const getColumnsForWidth = (width: number) => {
 };
 
 // グリッドコンテナコンポーネント
-const Container = ({
-  children,
-  fluid = false,
-  maxWidth = fluid ? "100%" : breakpoints.lg,
-  padding = "$4",
-  ...props
-}: GridContainerProps) => {
-  return (
-    <View
-      width="100%"
-      maxWidth={maxWidth}
-      marginHorizontal="auto"
-      paddingHorizontal={padding}
-      alignSelf="center"
-      {...props}
-    >
-      {children}
-    </View>
-  );
-};
+const Container = forwardRef<TamaguiElement, GridContainerProps>(
+  (
+    {
+      children,
+      fluid = false,
+      maxWidth = fluid ? "100%" : breakpoints.lg,
+      padding = "$4",
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <View
+        ref={ref}
+        width="100%"
+        maxWidth={maxWidth}
+        marginHorizontal="auto"
+        paddingHorizontal={padding}
+        alignSelf="center"
+        {...props}
+      >
+        {children}
+      </View>
+    );
+  },
+);
 
 // Material Design 3のグリッドシステムの定数
 // カラム間のgap（Material Design 3の規則に従った固定値）
@@ -215,73 +221,69 @@ const Row = forwardRef<TamaguiElement, GridRowProps>(
 );
 
 // グリッド列コンポーネント
-const Column = ({
-  children,
-  span = 12,
-  offset = 0,
-  sm,
-  md,
-  lg,
-  xl,
-  padding,
-  ...props
-}: GridColumnProps) => {
-  // 現在の画面幅を取得
-  const { width } = useWindowDimensions();
+const Column = forwardRef<TamaguiElement, GridColumnProps>(
+  (
+    { children, span = 12, offset = 0, sm, md, lg, xl, padding, ...props },
+    ref,
+  ) => {
+    // 現在の画面幅を取得
+    const { width } = useWindowDimensions();
 
-  // 現在の画面サイズに基づいてカラム数を取得
-  const totalColumns = useMemo(() => getColumnsForWidth(width), [width]);
+    // 現在の画面サイズに基づいてカラム数を取得
+    const totalColumns = useMemo(() => getColumnsForWidth(width), [width]);
 
-  // 現在のブレークポイントを取得
-  const breakpoint = useMemo(() => getBreakpoint(width), [width]);
+    // 現在のブレークポイントを取得
+    const breakpoint = useMemo(() => getBreakpoint(width), [width]);
 
-  // 実際に使用するspan
-  const responsiveSpan = useMemo(() => {
-    if (breakpoint === "xs" && sm !== undefined) return sm;
-    if (breakpoint === "sm" && md !== undefined) return md;
-    if (breakpoint === "md" && lg !== undefined) return lg;
-    if ((breakpoint === "lg" || breakpoint === "xl") && xl !== undefined)
-      return xl;
-    return span;
-  }, [breakpoint, sm, md, lg, xl, span]);
+    // 実際に使用するspan
+    const responsiveSpan = useMemo(() => {
+      if (breakpoint === "xs" && sm !== undefined) return sm;
+      if (breakpoint === "sm" && md !== undefined) return md;
+      if (breakpoint === "md" && lg !== undefined) return lg;
+      if ((breakpoint === "lg" || breakpoint === "xl") && xl !== undefined)
+        return xl;
+      return span;
+    }, [breakpoint, sm, md, lg, xl, span]);
 
-  // spanが総カラム数を超えないように制限
-  const clampedSpan = useMemo(() => {
-    return Math.min(responsiveSpan, totalColumns);
-  }, [responsiveSpan, totalColumns]);
+    // spanが総カラム数を超えないように制限
+    const clampedSpan = useMemo(() => {
+      return Math.min(responsiveSpan, totalColumns);
+    }, [responsiveSpan, totalColumns]);
 
-  // レスポンシブな幅の計算
-  // Material Design 3のグリッドシステムに準拠した幅計算
-  const columnWidth = useMemo(() => {
-    // 各カラムの基本幅（gapを考慮しない場合）
-    const baseWidth = clampedSpan / totalColumns;
+    // レスポンシブな幅の計算
+    // Material Design 3のグリッドシステムに準拠した幅計算
+    const columnWidth = useMemo(() => {
+      // 各カラムの基本幅（gapを考慮しない場合）
+      const baseWidth = clampedSpan / totalColumns;
 
-    // カラム間のgapの合計幅（カラム数 - 1）* gap
-    // 8pxはGRID_GAPの$2に相当する値と仮定
-    const gapWidth = 8; // pxで指定
+      // カラム間のgapの合計幅（カラム数 - 1）* gap
+      // 8pxはGRID_GAPの$2に相当する値と仮定
+      const gapWidth = 8; // pxで指定
 
-    // 実際の幅計算
-    // 各カラムの幅 = (基本幅 * 100%) - (gap調整)
-    return `calc(${baseWidth * 100}% - ${gapWidth * (1 - baseWidth)}px)`;
-  }, [clampedSpan, totalColumns]);
+      // 実際の幅計算
+      // 各カラムの幅 = (基本幅 * 100%) - (gap調整)
+      return `calc(${baseWidth * 100}% - ${gapWidth * (1 - baseWidth)}px)`;
+    }, [clampedSpan, totalColumns]);
 
-  // オフセットの計算
-  const marginLeft = useMemo(() => {
-    if (offset === 0) return 0;
-    return `${(offset / totalColumns) * 100}%`;
-  }, [offset, totalColumns]);
+    // オフセットの計算
+    const marginLeft = useMemo(() => {
+      if (offset === 0) return 0;
+      return `${(offset / totalColumns) * 100}%`;
+    }, [offset, totalColumns]);
 
-  return (
-    <View
-      width={columnWidth}
-      marginLeft={marginLeft}
-      padding={padding}
-      {...props}
-    >
-      {children}
-    </View>
-  );
-};
+    return (
+      <View
+        ref={ref}
+        width={columnWidth}
+        marginLeft={marginLeft}
+        padding={padding}
+        {...props}
+      >
+        {children}
+      </View>
+    );
+  },
+);
 
 export const Grid = {
   Container,
