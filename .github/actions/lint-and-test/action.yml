@@ -1,7 +1,0 @@
-name: lint-and-test
-description: lint-and-test
-runs:
-  using: 'composite'
-  steps:
-    - run: bun lint
-      shell: bash

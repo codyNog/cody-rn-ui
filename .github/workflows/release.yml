@@ -17,23 +17,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Bun
-        uses: ./.github/actions/setup
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@codynog'
 
       - name: Setup npm authentication
         run: |
           echo "codynog:registry=https://npm.pkg.github.com" > ~/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
 
-      - name: Setup bun authentication
-        run: |
-          echo '[install]' > ~/.bunfig.toml
-          echo 'registry = "https://npm.pkg.github.com"' >> ~/.bunfig.toml
-          echo 'scopes = { codynog = { registry = "https://npm.pkg.github.com" } }' >> ~/.bunfig.toml
-          echo 'authToken = "${{ secrets.GITHUB_TOKEN }}"' >> ~/.bunfig.toml
 
       - name: Build package
-        run: bun run build
+        run: npm run build
 
       - name: Generate CalVer
         id: calver
