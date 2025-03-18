@@ -2,6 +2,7 @@
 import { X } from "@tamagui/lucide-icons";
 import { forwardRef, useState } from "react";
 import type { ReactNode } from "react";
+import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 import {
   Dialog as TamaguiDialog,
   type TamaguiElement,
@@ -167,26 +168,28 @@ export const Dialog = forwardRef<TamaguiElement, Props>(
           >
             {variant === "fullScreen" ? (
               <>
-                <FullScreenHeader>
-                  <Button
-                    variant="text"
-                    onPress={() => handleOpenChange(false)}
-                  >
-                    <X size={24} color="$onSurfaceVariant" />
-                  </Button>
-                  {headline && (
-                    <Text {...typographyScale.titleLarge} color="$onSurface">
-                      {headline}
-                    </Text>
-                  )}
-                  <Button
-                    variant="text"
-                    onPress={actions[0]?.onClick}
-                    disabled={!actions[0]}
-                  >
-                    {actions[0]?.label || ""}
-                  </Button>
-                </FullScreenHeader>
+                <RNSafeAreaView edges={["top"]}>
+                  <FullScreenHeader>
+                    <Button
+                      variant="text"
+                      onPress={() => handleOpenChange(false)}
+                    >
+                      <X size={24} color="$onSurfaceVariant" />
+                    </Button>
+                    {headline && (
+                      <Text {...typographyScale.titleLarge} color="$onSurface">
+                        {headline}
+                      </Text>
+                    )}
+                    <Button
+                      variant="text"
+                      onPress={actions[0]?.onClick}
+                      disabled={!actions[0]}
+                    >
+                      {actions[0]?.label || ""}
+                    </Button>
+                  </FullScreenHeader>
+                </RNSafeAreaView>
                 <FullScreenContainer>
                   {content}
                   {supportingText && (
