@@ -13,7 +13,7 @@ const CONFIG = {
   repo: "cody-rn-ui",
   path: "src",
   branch: "main",
-  versionFile: ".version.json",
+  versionFile: ".ui-version.json",
 } as const;
 
 interface VersionInfo {
@@ -73,16 +73,17 @@ const GitHubFileExtractor = (token: string) => {
 
       const oldDependencies = { ...localPackageJson.dependencies };
 
+      // 明示的にdependenciesのみを取り出し、devDependenciesは含まないようにする
+      const repoDependencies = { ...repoPackageJson.dependencies };
+
       localPackageJson.dependencies = {
         ...(localPackageJson.dependencies || {}),
-        ...repoPackageJson.dependencies,
+        ...repoDependencies,
       };
 
       const added: string[] = [];
       const updated: string[] = [];
-      for (const [pkg, version] of Object.entries(
-        repoPackageJson.dependencies,
-      )) {
+      for (const [pkg, version] of Object.entries(repoDependencies)) {
         if (!oldDependencies?.[pkg]) {
           added.push(`${pkg}@${version}`);
         } else if (oldDependencies[pkg] !== version) {
