@@ -4,7 +4,6 @@ import { Skeleton as Component } from ".";
 
 const meta: Meta<typeof Component> = {
   component: Component,
-  title: "Components/Skeleton", // Storybookでの表示名を設定
   tags: ["autodocs"], // ドキュメント自動生成用
   argTypes: {
     // Propsのコントロールを設定
