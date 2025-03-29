@@ -2,7 +2,7 @@
 import { forwardRef, useState } from "react";
 import type { ReactNode } from "react";
 import type { View } from "react-native";
-import { Sheet, YStack, XStack, styled } from "tamagui";
+import { Sheet, XStack, YStack, styled } from "tamagui";
 import { elevationSystem } from "../theme";
 
 type Props = {

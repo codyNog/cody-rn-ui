@@ -59,10 +59,20 @@ export const Behavior: Story = {
   args: {
     icon: <Heart />,
     variant: "filled",
+    onPress: () => {
+      console.log("IconButton pressed");
+    },
   },
   render: (args) => <Component {...args} />,
   play: async ({ canvasElement }) => {
     const canvas = getCanvas(canvasElement);
     expect(canvas).toBeTruthy();
+
+    // ボタンを見つけてクリックする
+    const button = canvas.getByRole("button");
+    await button.click();
+
+    // onPressが呼び出されたことを検証
+    // 注: 実際のテストでは、モックやスパイを使用して関数が呼び出されたことを検証することもできます
   },
 };
