@@ -21,6 +21,7 @@ const StyledInput = styled(TamaguiInput, {
   color: "$onSurface",
   outlineWidth: 0,
   outlineStyle: "none",
+  pointerEvents: "auto", // pointer-eventsを明示的に設定
 
   // 共通のフォーカス状態のスタイル
   focusStyle: {

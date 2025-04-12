@@ -1,6 +1,7 @@
-import type { ComponentProps, FC } from "react";
+import type { ComponentProps } from "react";
+import { forwardRef } from "react";
 import { styled, useTheme } from "tamagui";
-import { Button as TamaguiButton } from "tamagui";
+import { Button as TamaguiButton, type TamaguiElement } from "tamagui";
 import { Ripple } from "../Ripple";
 import { hexToRgba } from "../libs/color";
 import { elevationSystem, stateLayerOpacity } from "../theme";
@@ -152,7 +153,7 @@ export type ButtonProps = ComponentProps<typeof BaseButton>;
  * タッチ時に波紋エフェクトが表示され、より良い視覚的フィードバックを提供します。
  */
 
-export const Button: FC<ButtonProps> = (props) => {
+export const Button = forwardRef<TamaguiElement, ButtonProps>((props, ref) => {
   const theme = useTheme();
 
   // バリアントに基づいてRippleの色を決定（各バリアントの前景色に基づく）
@@ -187,7 +188,7 @@ export const Button: FC<ButtonProps> = (props) => {
       centerRipple={true} // 常に中央からRippleを開始
       style={{ borderRadius: 100 }} // ボタンと同じ角丸を適用
     >
-      <BaseButton {...props} />
+      <BaseButton {...props} ref={ref} />
     </Ripple>
   );
-};
+});

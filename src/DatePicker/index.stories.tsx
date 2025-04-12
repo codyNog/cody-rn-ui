@@ -100,25 +100,45 @@ export const Controlled: Story = {
 };
 
 export const Behavior: Story = {
-  args,
-  render: (args) => <Component {...args} />,
+  render: () => {
+    const [date, setDate] = useState<Date | null>(new Date(2025, 3, 10)); // 2025年4月10日
+
+    return (
+      <Component
+        label="日付"
+        value={date}
+        onChange={setDate}
+        helperText="YYYY/MM/DD形式で入力してください"
+      />
+    );
+  },
   play: async ({ canvasElement }) => {
     const canvas = getCanvas(canvasElement);
     const datePicker = canvas.getByRole("textbox");
 
-    // 日付ピッカーをクリック
+    // 初期値を確認
+    expect(datePicker).toHaveValue("2025/04/10");
+
+    // カレンダーダイアログを使用した日付選択
+    // 日付ピッカーをクリックしてカレンダーダイアログを開く
     await userEvent.click(datePicker);
 
-    // 日付を選択（実際のDOM構造に依存するため、テスト環境によっては調整が必要）
-    // 注: このテストはStorybook環境で実行されるため、実際のSheetコンポーネントが
-    // 表示されるかどうかはプラットフォームに依存します
+    // 日付を選択（20日を選択）
+    try {
+      // 日付の数字をテキストで検索して直接クリック
+      await userEvent.click(canvas.getByText("20"));
+    } catch {
+      console.log("日付要素が見つかりませんでした");
+    }
 
-    // 直接入力をテスト
-    await userEvent.clear(datePicker);
-    await userEvent.type(datePicker, "2025/03/15");
-    await userEvent.tab(); // フォーカスを外す
+    // OKボタンをクリック
+    try {
+      await userEvent.click(canvas.getByText("OK"));
+    } catch {
+      console.log("OKボタンが見つかりませんでした");
+    }
 
-    // 入力値が正しく設定されていることを確認
-    expect(datePicker).toHaveValue("2025/03/15");
+    // 選択した日付が入力フィールドに反映されていることを確認
+    expect(datePicker).toHaveValue("2025/04/20");
   },
 };
