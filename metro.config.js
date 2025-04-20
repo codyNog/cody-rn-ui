@@ -26,6 +26,7 @@ config.watchFolders = [...(config.watchFolders || []), "./.storybook"];
 config.resolver.extraNodeModules = {
   "@storybook/core": path.resolve(__dirname, "./empty-module.js"),
   "@storybook/core/manager-api": path.resolve(__dirname, "./empty-module.js"),
+  "react-native-reanimated": path.resolve(__dirname, "./empty-module.js"),
 };
 
 export default config;

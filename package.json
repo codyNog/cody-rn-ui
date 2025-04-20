@@ -58,6 +58,9 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
+  "optionalDependencies": {
+    "@codynog/ai-rules": "latest"
+  },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.1.1",
     "@material/material-color-utilities": "^0.3.0",
@@ -67,6 +70,8 @@
     "@react-native-community/slider": "4.5.5",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/elements": "^2.2.5",
+    "@tamagui/animations-css": "^1.125.22",
+    "@tamagui/animations-moti": "^1.125.34",
     "@tamagui/font-inter": "^1.125.22",
     "@tamagui/lucide-icons": "^1.125.22",
     "@tamagui/shorthands": "^1.125.22",
@@ -94,14 +99,12 @@
   "bin": {
     "cody-rn-ui": "./dist/index.js"
   },
-  "optionalDependencies": {
-    "@codynog/ai-rules": "^2025.3.1"
-  },
   "scripts": {
     "extract": "echo 'Extract functionality removed as per user request'",
     "build": "tsc --project tsconfig.build.json && mv dist/cli.js dist/index.js",
     "type-check": "tsc --noEmit",
     "format": "biome check --write .",
+    "preinstall": "npx only-allow npm",
     "postplop": "npm run format",
     "postinstall": "node -e \"try { require('@codynog/ai-rules'); } catch (e) { console.log('Optional dependency @codynog/ai-rules not available, skipping...'); }\"",
     "plop": "plop",

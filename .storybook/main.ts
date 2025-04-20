@@ -31,6 +31,8 @@ const main: StorybookConfig = {
             __dirname,
             "node_modules/react-native-web",
           ),
+          // tamagui.config.tsを読み込む
+          "tamagui.config": path.resolve(__dirname, "../tamagui.config.ts"),
           // Add any custom aliases here
         },
       },
