@@ -182,3 +182,6 @@ storybook-static/
 .clinerules
 .ai-rules-version.json
 .github/copilot-instructions.md
+.roo/rules
+.cursor/rules
+.roomodes

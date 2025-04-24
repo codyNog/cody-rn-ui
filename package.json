@@ -59,7 +59,7 @@
     "typescript": "^5.0.0"
   },
   "optionalDependencies": {
-    "@codynog/ai-rules": "latest"
+    "@codynog/ai-rules": "^2025.4.8"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.1.1",
