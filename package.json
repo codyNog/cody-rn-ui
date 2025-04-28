@@ -59,7 +59,7 @@
     "typescript": "^5.0.0"
   },
   "optionalDependencies": {
-    "@codynog/ai-rules": "^2025.4.8"
+    "@codynog/ai-rules": "^2025.4.13"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.1.1",
@@ -71,7 +71,7 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/elements": "^2.2.5",
     "@tamagui/animations-css": "^1.125.22",
-    "@tamagui/animations-moti": "^1.125.34",
+    "@tamagui/animations-moti": "^1.125.22",
     "@tamagui/font-inter": "^1.125.22",
     "@tamagui/lucide-icons": "^1.125.22",
     "@tamagui/shorthands": "^1.125.22",

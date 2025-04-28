@@ -185,3 +185,4 @@ storybook-static/
 .roo/rules
 .cursor/rules
 .roomodes
+.roo/rules-*
