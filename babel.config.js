@@ -3,7 +3,18 @@ module.exports = (api) => {
   return {
     presets: ["babel-preset-expo"],
     plugins: [
-      ["babel-plugin-react-docgen-typescript", { exclude: "node_modules" }],
+      [
+        "@tamagui/babel-plugin",
+        {
+          components: ["tamagui"],
+          config: "./tamagui.config.ts",
+          logTimings: true,
+          disableExtraction: process.env.NODE_ENV === "development",
+        },
+      ],
+
+      // NOTE: this is only necessary if you are using reanimated for animations
+      // Make sure 'react-native-reanimated/plugin' is the last plugin.
       "react-native-reanimated/plugin",
     ],
   };

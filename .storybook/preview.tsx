@@ -1,9 +1,9 @@
+// react-native-gesture-handler must be imported at the very top
+import "react-native-gesture-handler";
 // Storybookのプレビュー設定
 import type { Preview } from "@storybook/react";
 // biome-ignore lint: for UMD global
 import React from "react";
-// react-native-reanimatedのpolyfillを読み込む
-import "../src/libs/reanimated-polyfill";
 // tamagui.config.tsを読み込む（グローバルなuseAnimatedNumberモックを有効にするため）
 import "../tamagui.config";
 import { Background } from "../src/Background";
