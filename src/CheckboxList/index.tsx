@@ -1,7 +1,19 @@
 "use client";
 import { type ForwardedRef, forwardRef, useCallback, useMemo } from "react";
-import { type CheckedState, type TamaguiElement, View, YStack } from "tamagui";
+import { FlatList } from "react-native"; // FlatList をインポート
+import { type CheckedState, styled, type TamaguiElement, View } from "tamagui";
 import { Checkbox } from "../Checkbox";
+
+const Boxes = styled(View, {
+  variants: {
+    hasParent: {
+      true: {
+        marginTop: "$6",
+        marginLeft: "$6",
+      },
+    },
+  },
+});
 
 type Parent = {
   id: string;
@@ -65,29 +77,41 @@ export const CheckboxList = forwardRef(
       onChangeChecks(checks.map((check) => check.id));
     }, [checked, checks, onChangeChecks]);
 
+    const renderCheckboxItem = useCallback(
+      ({ item }: { item: Check<T> }) => (
+        <Checkbox
+          {...item}
+          checked={checkedIds.includes(item.id)}
+          onCheckedChange={() => onChangeChild(item.id)}
+        />
+      ),
+      [checkedIds, onChangeChild],
+    );
+
+    const keyExtractor = useCallback((item: Check<T>) => item.id, []);
+
     return (
-      <YStack ref={ref} gap="$2">
+      <View ref={ref}>
         {parent && (
-          <View>
-            <Checkbox
-              id={parent.id}
-              label={parent.label}
-              checked={checked}
-              onCheckedChange={onChangeParent}
-            />
-          </View>
+          <Checkbox
+            id={parent.id}
+            label={parent.label}
+            checked={checked}
+            onCheckedChange={onChangeParent}
+          />
         )}
-        <View marginLeft={"$6"} gap="$2">
-          {checks.map((check) => (
-            <Checkbox
-              key={check.id}
-              {...check}
-              checked={checkedIds.includes(check.id)}
-              onCheckedChange={() => onChangeChild(check.id)}
-            />
-          ))}
-        </View>
-      </YStack>
+        <Boxes hasParent={!!parent}>
+          <FlatList
+            data={checks}
+            renderItem={renderCheckboxItem}
+            keyExtractor={keyExtractor}
+            // ItemSeparatorComponent の height をトークンに変更
+            ItemSeparatorComponent={() => <View height="$2" />} // 子要素の間は 8dp
+            // 親が ScrollView の場合、FlatList のスクロールを無効にする
+            scrollEnabled={false}
+          />
+        </Boxes>
+      </View>
     );
   },
 );

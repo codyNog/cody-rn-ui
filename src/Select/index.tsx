@@ -1,7 +1,7 @@
 "use client";
 import { ChevronDown } from "@tamagui/lucide-icons";
-import { forwardRef, useState } from "react";
-import type { TextInput } from "react-native";
+import { forwardRef as reactForwardRef, useState } from "react";
+import type { View } from "react-native";
 import {
   Input,
   Select as TamaguiSelect,
@@ -213,7 +213,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export const Select = forwardRef<TextInput, Props>(
+export const Select = reactForwardRef<View, Props>(
   (
     {
       label,
@@ -240,7 +240,6 @@ export const Select = forwardRef<TextInput, Props>(
         <XStack position="relative" width="100%">
           <VisuallyHidden>
             <Input
-              ref={ref}
               value={value}
               onChangeText={onChange}
               accessibilityLabel={label}
@@ -255,6 +254,7 @@ export const Select = forwardRef<TextInput, Props>(
             disablePreventBodyScroll
           >
             <StyledTrigger
+              ref={ref}
               variant={variant}
               error={hasError}
               disabled={disabled}

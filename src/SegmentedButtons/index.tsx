@@ -137,7 +137,7 @@ export const SegmentedButtons = forwardRef(
       }
     };
 
-    const sizeProps = getSizeProps(size);
+    const { iconSize, ...buttonSizeProps } = getSizeProps(size);
 
     // オプションが1つの場合の位置
     if (options.length === 1) {
@@ -155,7 +155,7 @@ export const SegmentedButtons = forwardRef(
             color={isSelected ? "$onSecondaryContainer" : "$onSurface"}
             borderColor={isSelected ? "$secondaryContainer" : "$outline"}
             borderWidth={1}
-            {...sizeProps}
+            {...buttonSizeProps}
             disabled={disabled}
             opacity={disabled ? 0.38 : 1}
             onPress={() => handlePress(option.value)}
@@ -174,12 +174,11 @@ export const SegmentedButtons = forwardRef(
             }}
           >
             <XStack alignItems="center" gap="$1">
-              {isSelected && (
-                <Check
-                  size={sizeProps.iconSize}
-                  color={isSelected ? "$onSecondaryContainer" : "$onSurface"}
-                />
-              )}
+              <Check
+                size={iconSize}
+                color={isSelected ? "$onSecondaryContainer" : "$onSurface"}
+                opacity={isSelected ? 1 : 0}
+              />
               <Text color={isSelected ? "$onSecondaryContainer" : "$onSurface"}>
                 {option.label}
               </Text>
@@ -231,7 +230,9 @@ export const SegmentedButtons = forwardRef(
               borderColor={isSelected ? "$secondaryContainer" : "$outline"}
               borderWidth={1}
               {...borderRadiusStyle}
-              {...sizeProps}
+              {...buttonSizeProps}
+              marginLeft={isFirst ? 0 : -1}
+              zIndex={isSelected ? 1 : 0}
               disabled={disabled}
               opacity={disabled ? 0.38 : 1}
               onPress={() => handlePress(option.value)}
@@ -250,12 +251,11 @@ export const SegmentedButtons = forwardRef(
               }}
             >
               <XStack alignItems="center" gap="$1">
-                {isSelected && (
-                  <Check
-                    size={sizeProps.iconSize}
-                    color={isSelected ? "$onSecondaryContainer" : "$onSurface"}
-                  />
-                )}
+                <Check
+                  size={iconSize}
+                  color={isSelected ? "$onSecondaryContainer" : "$onSurface"}
+                  opacity={isSelected ? 1 : 0}
+                />
                 <Text
                   color={isSelected ? "$onSecondaryContainer" : "$onSurface"}
                 >

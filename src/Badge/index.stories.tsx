@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import type React from "react";
-import { XStack, YStack } from "tamagui";
+import { Text, XStack, YStack } from "tamagui";
 import { Badge as Component } from ".";
 import { View } from "../View";
 import { getCanvas } from "../libs/storybook";
@@ -52,28 +52,28 @@ export const Variants: Story = {
         <BadgeContainer>
           <Component variant="standard" content={1} />
         </BadgeContainer>
-        <View>標準</View>
+        <Text>標準</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component variant="small" content={1} />
         </BadgeContainer>
-        <View>小</View>
+        <Text>小</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component variant="large" content={1} />
         </BadgeContainer>
-        <View>大</View>
+        <Text>大</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component variant="dot" />
         </BadgeContainer>
-        <View>ドット</View>
+        <Text>ドット</Text>
       </YStack>
     </XStack>
   ),
@@ -86,28 +86,28 @@ export const Directions: Story = {
         <BadgeContainer>
           <Component direction="topRight" content={1} />
         </BadgeContainer>
-        <View>右上</View>
+        <Text>右上</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component direction="topLeft" content={1} />
         </BadgeContainer>
-        <View>左上</View>
+        <Text>左上</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component direction="bottomRight" content={1} />
         </BadgeContainer>
-        <View>右下</View>
+        <Text>右下</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component direction="bottomLeft" content={1} />
         </BadgeContainer>
-        <View>左下</View>
+        <Text>左下</Text>
       </YStack>
     </XStack>
   ),
@@ -120,7 +120,7 @@ export const ErrorBadge: Story = {
         <BadgeContainer>
           <Component content={1} />
         </BadgeContainer>
-        <View>エラーバッジ</View>
+        <Text>エラーバッジ</Text>
       </YStack>
     </XStack>
   ),
@@ -133,28 +133,28 @@ export const ContentTypes: Story = {
         <BadgeContainer>
           <Component content={1} />
         </BadgeContainer>
-        <View>数値</View>
+        <Text>数値</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component content={100} max={99} />
         </BadgeContainer>
-        <View>最大値超過</View>
+        <Text>最大値超過</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component content="!" />
         </BadgeContainer>
-        <View>テキスト</View>
+        <Text>テキスト</Text>
       </YStack>
 
       <YStack space="$4" alignItems="center">
         <BadgeContainer>
           <Component content={0} showZero />
         </BadgeContainer>
-        <View>ゼロ表示</View>
+        <Text>ゼロ表示</Text>
       </YStack>
     </XStack>
   ),

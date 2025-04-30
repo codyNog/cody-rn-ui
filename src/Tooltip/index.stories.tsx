@@ -104,7 +104,7 @@ export const VariantComparison: Story = {
             <Component
               variant="plain"
               content={
-                <Text>
+                <Text color="$inverseOnSurface">
                   プレーンツールチップは軽量で、シンプルな情報を表示します。
                 </Text>
               }

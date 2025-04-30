@@ -3,6 +3,7 @@ import { Anchor as A, type AnchorProps, styled, useTheme } from "tamagui";
 import { Ripple } from "../Ripple";
 import { hexToRgba } from "../libs/color";
 import { stateLayerOpacity } from "../theme";
+import { Button } from "../Button";
 
 // Material Design 3のリンクスタイルを適用したAnchorコンポーネント
 const StyledAnchor = styled(A, {
@@ -32,36 +33,9 @@ const StyledAnchor = styled(A, {
 });
 
 // ボタンスタイルのリンク
-const ButtonAnchor = styled(A, {
+const UnstyledAnchor = styled(A, {
   name: "ButtonAnchor",
-  color: "$primary",
   textDecorationLine: "none",
-  paddingVertical: "$2",
-  paddingHorizontal: "$3",
-  borderRadius: "$small",
-  backgroundColor: "transparent",
-  borderWidth: 1,
-  borderColor: "$primary",
-
-  // フォントスタイル
-  fontSize: 16,
-  lineHeight: 24,
-  letterSpacing: 0.5,
-  fontWeight: "400",
-
-  // インタラクション状態
-  hoverStyle: {
-    backgroundColor: "$primary",
-    color: "$onPrimary",
-    cursor: "pointer",
-  },
-  pressStyle: {
-    opacity: 0.6,
-  },
-  focusStyle: {
-    borderWidth: 2,
-    borderColor: "$primary",
-  },
 });
 
 type Props = AnchorProps & {
@@ -93,12 +67,11 @@ export const Anchor = ({ variant = "text", ...props }: Props) => {
     }
   }, [props.onPress]);
 
-  // アンカーコンテンツ
-  const anchorContent =
-    variant === "button" ? (
-      <ButtonAnchor {...props} onPress={undefined} />
-    ) : (
-      <StyledAnchor {...props} onPress={undefined} />
+  if (variant === "button")
+    return (
+      <UnstyledAnchor {...props} onPress={undefined} unstyled>
+        <Button> {props.children}</Button>
+      </UnstyledAnchor>
     );
 
   // Rippleを親要素として、その中にアンカーコンテンツを配置
@@ -108,12 +81,12 @@ export const Anchor = ({ variant = "text", ...props }: Props) => {
       disabled={props.disabled}
       onPress={props.onPress ? handlePress : undefined}
       style={{
-        borderRadius: variant === "button" ? 4 : 0, // ボタンスタイルの場合は角丸を適用
+        // ボタンスタイルの場合は角丸を適用
         overflow: "hidden",
         alignSelf: "flex-start", // テキストの幅に合わせる
       }}
     >
-      {anchorContent}
+      <StyledAnchor {...props} onPress={undefined} />
     </Ripple>
   );
 };

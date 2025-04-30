@@ -9,16 +9,18 @@ import {
   Settings,
   User,
 } from "@tamagui/lucide-icons";
-import { useState } from "react";
-import { ScrollView, Text, View, XStack, YStack } from "tamagui";
+import { useState, useCallback } from "react"; // useCallback を追加
+import { ScrollView, Text, XStack, YStack } from "tamagui"; // View を削除
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { Chat } from "./Chat";
-import { Checkbox } from "./Checkbox";
+import { Checkbox } from "./Checkbox"; // Checkbox を元の場所からインポート
+import { CheckboxList } from "./CheckboxList"; // CheckboxList をインポート
 import { Chip } from "./Chip";
-import { Divider } from "./Divider";
+import { Divider } from "./Divider"; // Divider を再インポート
 import { Form } from "./Form";
 import { Grid } from "./Grid";
+import { ListItem } from "./ListItem"; // ListItem をローカルからインポート
 import { NavigationBar } from "./NavigationBar";
 import { NavigationDrawer, type NavigationItem } from "./NavigationDrawer";
 import { ScreenLayout } from "./ScreenLayout";
@@ -45,15 +47,22 @@ const SandboxApp = () => {
     { id: 4, text: "コンポーネントライブラリを拡張する", completed: false },
   ]);
   const [newTodo, setNewTodo] = useState("");
+  const [darkMode, setDarkMode] = useState(false); // ダークモードの状態を追加
+  const [notifications, setNotifications] = useState(true); // 通知の状態を追加 (デフォルトtrue)
+  const [dataSync, setDataSync] = useState(false); // データ同期の状態を追加
 
   // TODOの切り替え処理
-  const toggleTodo = (id: number) => {
-    setTodoItems(
-      todoItems.map((item) =>
-        item.id === id ? { ...item, completed: !item.completed } : item,
-      ),
-    );
-  };
+  const handleCheckboxListChange = useCallback(
+    (newCheckedIds: string[]) => {
+      setTodoItems(
+        todoItems.map((item) => ({
+          ...item,
+          completed: newCheckedIds.includes(String(item.id)),
+        })),
+      );
+    },
+    [todoItems],
+  ); // todoItems を依存配列に追加
 
   // 新しいTODOの追加
   const addTodo = () => {
@@ -190,12 +199,7 @@ const SandboxApp = () => {
                         variant: "filled",
                       },
                     ]}
-                  >
-                    <Text>
-                      このサンドボックスでは、様々なUIコンポーネントを試すことができます。
-                      タブを切り替えて、異なるコンポーネントを確認してみましょう。
-                    </Text>
-                  </Card>
+                  />
 
                   <Card
                     title="TODOリスト"
@@ -208,22 +212,18 @@ const SandboxApp = () => {
                     ]}
                   >
                     <YStack space="$2">
-                      {todoItems.map((item) => (
-                        <XStack key={item.id} alignItems="center" space="$2">
-                          <Checkbox
-                            checked={item.completed}
-                            onCheckedChange={() => toggleTodo(item.id)}
-                          />
-                          <Text
-                            textDecorationLine={
-                              item.completed ? "line-through" : "none"
-                            }
-                            opacity={item.completed ? 0.6 : 1}
-                          >
-                            {item.text}
-                          </Text>
-                        </XStack>
-                      ))}
+                      {/* TODOリストをCheckboxListに変更 */}
+                      <CheckboxList
+                        checks={todoItems.map((item) => ({
+                          id: String(item.id),
+                          label: item.text,
+                        }))}
+                        // checkedIds は todoItems から計算して渡す
+                        checkedIds={todoItems
+                          .filter((item) => item.completed)
+                          .map((item) => String(item.id))}
+                        onChangeChecks={handleCheckboxListChange}
+                      />
                       <XStack flex={1} space="$2" marginTop="$2">
                         <TextField
                           label="新しいタスク"
@@ -408,30 +408,45 @@ const SandboxApp = () => {
               <Grid.Container>
                 <YStack space="$4">
                   <Card title="アプリ設定">
-                    <YStack space="$3">
-                      <XStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Text>ダークモード</Text>
-                        <Checkbox />
-                      </XStack>
+                    <YStack space="$0">
+                      <ListItem
+                        headline="ダークモード"
+                        trailing={
+                          <Checkbox
+                            checked={darkMode}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === "boolean")
+                                setDarkMode(checked);
+                            }}
+                          />
+                        }
+                      />
                       <Divider />
-                      <XStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Text>通知</Text>
-                        <Checkbox defaultChecked />
-                      </XStack>
+                      <ListItem
+                        headline="通知"
+                        trailing={
+                          <Checkbox
+                            checked={notifications}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === "boolean")
+                                setNotifications(checked);
+                            }}
+                          />
+                        }
+                      />
                       <Divider />
-                      <XStack
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Text>データの同期</Text>
-                        <Checkbox />
-                      </XStack>
+                      <ListItem
+                        headline="データの同期"
+                        trailing={
+                          <Checkbox
+                            checked={dataSync}
+                            onCheckedChange={(checked) => {
+                              if (typeof checked === "boolean")
+                                setDataSync(checked);
+                            }}
+                          />
+                        }
+                      />
                     </YStack>
                   </Card>
 
@@ -508,91 +523,4 @@ type Story = StoryObj;
 // サンドボックスアプリケーションのストーリー
 export const SandboxApplication: Story = {
   render: () => <SandboxApp />,
-};
-
-// Gridレイアウトのテストストーリー
-export const GridLayoutTest: Story = {
-  render: () => (
-    <YStack gap="$4" padding="$4">
-      <Text fontSize="$6" fontWeight="bold">
-        Gridレイアウトテスト
-      </Text>
-      <Text>
-        Containerが画面中央に表示されるようになりました。
-        ブラウザのサイズを変更して、様々な画面幅でのレイアウトを確認してください。
-      </Text>
-
-      {/* 基本的なグリッドレイアウト */}
-      <Text fontSize="$5" fontWeight="bold">
-        基本レイアウト
-      </Text>
-      <Grid.Container backgroundColor="$surfaceVariant" padding="$4">
-        <Grid.Row>
-          <Grid.Column span={6}>
-            <View backgroundColor="$primary" padding="$4">
-              <Text color="$onPrimary">Column 1 (span=6)</Text>
-            </View>
-          </Grid.Column>
-          <Grid.Column span={6}>
-            <View backgroundColor="$secondary" padding="$4">
-              <Text color="$onSecondary">Column 2 (span=6)</Text>
-            </View>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid.Container>
-
-      {/* 3カラムレイアウト */}
-      <Text fontSize="$5" fontWeight="bold">
-        3カラムレイアウト
-      </Text>
-      <Grid.Container backgroundColor="$surfaceVariant" padding="$4">
-        <Grid.Row>
-          <Grid.Column span={4}>
-            <View backgroundColor="$primary" padding="$4">
-              <Text color="$onPrimary">Column 1 (span=4)</Text>
-            </View>
-          </Grid.Column>
-          <Grid.Column span={4}>
-            <View backgroundColor="$secondary" padding="$4">
-              <Text color="$onSecondary">Column 2 (span=4)</Text>
-            </View>
-          </Grid.Column>
-          <Grid.Column span={4}>
-            <View backgroundColor="$tertiary" padding="$4">
-              <Text color="$onTertiary">Column 3 (span=4)</Text>
-            </View>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid.Container>
-
-      {/* レスポンシブレイアウト */}
-      <Text fontSize="$5" fontWeight="bold">
-        レスポンシブレイアウト
-      </Text>
-      <Grid.Container backgroundColor="$surfaceVariant" padding="$4">
-        <Grid.Row>
-          <Grid.Column span={12} sm={6} md={4} lg={3}>
-            <View backgroundColor="$primary" padding="$4">
-              <Text color="$onPrimary">レスポンシブカラム</Text>
-            </View>
-          </Grid.Column>
-          <Grid.Column span={12} sm={6} md={4} lg={3}>
-            <View backgroundColor="$secondary" padding="$4">
-              <Text color="$onSecondary">レスポンシブカラム</Text>
-            </View>
-          </Grid.Column>
-          <Grid.Column span={12} sm={6} md={4} lg={3}>
-            <View backgroundColor="$tertiary" padding="$4">
-              <Text color="$onTertiary">レスポンシブカラム</Text>
-            </View>
-          </Grid.Column>
-          <Grid.Column span={12} sm={6} md={12} lg={3}>
-            <View backgroundColor="$error" padding="$4">
-              <Text color="$onError">レスポンシブカラム</Text>
-            </View>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid.Container>
-    </YStack>
-  ),
 };

@@ -201,50 +201,63 @@ export const Card = forwardRef<TamaguiElement, Props>(
       }
     }, [onPress]);
 
-    // Rippleを親要素として、その中にカードコンテンツを配置
-    return (
-      <Ripple
-        color={getRippleColor()}
-        disabled={disabled}
-        onPress={onPress ? handlePress : undefined}
-        style={{
-          borderRadius: 12, // カードと同じ角丸を適用
-          overflow: "hidden",
-          width: "100%", // 幅を100%に設定
-        }}
+    // カードのコンテンツ部分を定義
+    const cardContent = (
+      <StyledCard
+        ref={ref}
+        variant={variant}
+        // onPress がない場合は pressStyle を上書きして scale を 1 にする
+        pressStyle={!onPress ? { scale: 1 } : undefined}
+        // StyledCard 自体の onPress は不要なので削除
+        // onPress={onPress ? handlePress : undefined}
       >
-        <StyledCard
-          ref={ref}
-          variant={variant}
-          onPress={undefined} // onPressはRippleに移動
-        >
-          {media && (
-            <CardMedia source={media.source} alt={media.alt || "Card media"} />
-          )}
+        {media && (
+          <CardMedia source={media.source} alt={media.alt || "Card media"} />
+        )}
 
-          {(title || subtitle) && (
-            <CardHeader>
-              {title && <CardTitle>{title}</CardTitle>}
-              {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
-            </CardHeader>
-          )}
+        {(title || subtitle) && (
+          <CardHeader>
+            {title && <CardTitle>{title}</CardTitle>}
+            {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
+          </CardHeader>
+        )}
 
-          <CardContent>
-            {description && <CardDescription>{description}</CardDescription>}
-            {children}
-          </CardContent>
+        <CardContent>
+          {description && <CardDescription>{description}</CardDescription>}
+          {children}
+        </CardContent>
 
-          {actions && actions.length > 0 && (
-            <CardFooter>
-              {actions.map(({ onClick, label, variant = "text" }) => (
-                <Button key={label} onPress={onClick} variant={variant}>
-                  {label}
-                </Button>
-              ))}
-            </CardFooter>
-          )}
-        </StyledCard>
-      </Ripple>
+        {actions && actions.length > 0 && (
+          <CardFooter>
+            {actions.map(({ onClick, label, variant = "text" }) => (
+              <Button key={label} onPress={onClick} variant={variant}>
+                {label}
+              </Button>
+            ))}
+          </CardFooter>
+        )}
+      </StyledCard>
     );
+
+    // onPress が指定されている場合のみ Ripple でラップ
+    if (onPress) {
+      return (
+        <Ripple
+          color={getRippleColor()}
+          disabled={disabled}
+          onPress={handlePress} // ここは handlePress を渡す
+          style={{
+            borderRadius: 12, // カードと同じ角丸を適用
+            overflow: "hidden",
+            width: "100%", // 幅を100%に設定
+          }}
+        >
+          {cardContent}
+        </Ripple>
+      );
+    }
+
+    // onPress がない場合は StyledCard を直接返す
+    return cardContent;
   },
 );

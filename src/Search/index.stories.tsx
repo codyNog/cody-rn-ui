@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import { ArrowRight, Filter, Mic } from "@tamagui/lucide-icons";
 import { useState } from "react";
-import { YStack } from "tamagui";
+import { YStack, Text } from "tamagui";
 import { Search as Component } from ".";
 import { getCanvas } from "../libs/storybook";
 
@@ -149,7 +149,7 @@ export const WithSearchAction: Story = {
           trailingIcon={<ArrowRight size={24} color="$primary" />}
           onClickTrailingIcon={() => handleSearch(value)}
         />
-        {searchResult && <YStack padding="$2">{searchResult}</YStack>}
+        {searchResult ? <Text padding="$2">{searchResult}</Text> : null}
       </YStack>
     );
   },

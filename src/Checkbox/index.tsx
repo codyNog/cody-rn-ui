@@ -1,5 +1,6 @@
 import { Check as CheckIcon, Minus } from "@tamagui/lucide-icons";
 import { forwardRef, useId } from "react";
+import { Ripple } from "../Ripple"; // Import Ripple
 import {
   Checkbox as Cb,
   type CheckboxProps,
@@ -68,59 +69,62 @@ const StyledCheckbox = styled(Cb, {
   } as const,
 });
 
+const StyledLabel = styled(Label, {
+  // MD3のラベルのスタイル (label large)
+  fontSize: 14,
+  lineHeight: 20,
+  letterSpacing: 0.1,
+  fontWeight: "500",
+  color: "$onSurface", // Add onSurface color
+});
+
 type Props = Omit<CheckboxProps, "AnimatedNode" | "inset"> & {
   label?: string;
 };
 
 export const Checkbox = forwardRef<TamaguiElement, Props>(
   ({ size, label, id = useId(), checked, onCheckedChange }, ref) => {
-    // ラベルクリック時のハンドラー
-    const handleLabelClick = () => {
-      onCheckedChange?.(!checked);
-    };
-
     // ラベルがある場合はXStackでラップ、ない場合は直接StyledCheckboxを返す
     if (label) {
       return (
         <XStack width={300} alignItems="center" gap="$4">
-          <StyledCheckbox
-            checked={checked}
-            id={id}
-            size={size}
-            ref={ref}
-            onCheckedChange={onCheckedChange}
-          >
-            <Cb.Indicator forceMount>
-              {checked === true && <CheckIcon color="$onPrimary" />}
-              {checked === "indeterminate" && <Minus color="$onPrimary" />}
-            </Cb.Indicator>
-          </StyledCheckbox>
-          <Label
-            size={size}
-            htmlFor={id}
-            onPress={handleLabelClick}
-            cursor="pointer"
-          >
+          <Ripple>
+            <StyledCheckbox
+              checked={checked}
+              id={id}
+              size={size}
+              ref={ref}
+              onCheckedChange={onCheckedChange}
+            >
+              <Cb.Indicator forceMount>
+                {checked === true && <CheckIcon color="$onPrimary" />}
+                {checked === "indeterminate" && <Minus color="$onPrimary" />}
+              </Cb.Indicator>
+            </StyledCheckbox>
+          </Ripple>
+          <StyledLabel size={size} htmlFor={id} cursor="pointer">
             {label}
-          </Label>
+          </StyledLabel>
         </XStack>
       );
     }
 
     // ラベルがない場合は直接StyledCheckboxを返す
     return (
-      <StyledCheckbox
-        checked={checked}
-        id={id}
-        size={size}
-        ref={ref}
-        onCheckedChange={onCheckedChange}
-      >
-        <Cb.Indicator forceMount>
-          {checked === true && <CheckIcon color="$onPrimary" />}
-          {checked === "indeterminate" && <Minus color="$onPrimary" />}
-        </Cb.Indicator>
-      </StyledCheckbox>
+      <Ripple>
+        <StyledCheckbox
+          checked={checked}
+          id={id}
+          size={size}
+          ref={ref}
+          onCheckedChange={onCheckedChange}
+        >
+          <Cb.Indicator forceMount>
+            {checked === true && <CheckIcon color="$onPrimary" />}
+            {checked === "indeterminate" && <Minus color="$onPrimary" />}
+          </Cb.Indicator>
+        </StyledCheckbox>
+      </Ripple>
     );
   },
 );

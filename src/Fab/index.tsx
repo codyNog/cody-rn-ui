@@ -6,6 +6,7 @@ import {
   Button as TamaguiButton,
   XStack,
   YStack,
+  Text,
 } from "tamagui";
 import { elevationSystem, stateLayerOpacity } from "../theme";
 
@@ -206,8 +207,16 @@ export const FabButton = ({
     <Fab size={actualSize} color={color} disabled={disabled} {...props}>
       <XStack alignItems="center" gap="$2">
         {icon}
-        {children}
-        {label && <XStack marginLeft={icon ? "$2" : 0}>{label}</XStack>}
+        {typeof children === "string" || typeof children === "number" ? (
+          <Text>{children}</Text>
+        ) : (
+          children
+        )}
+        {label && (
+          <XStack marginLeft={icon ? "$2" : 0}>
+            <Text>{label}</Text>
+          </XStack>
+        )}
       </XStack>
     </Fab>
   );

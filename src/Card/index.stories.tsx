@@ -139,7 +139,7 @@ export const WithChildren: Story = {
   },
   render: (args) => (
     <Component {...args}>
-      <Text>
+      <Text color="$onSurfaceVariant">
         カードには任意のReactコンポーネントを子要素として追加することができます。
         これにより、カスタムコンテンツを柔軟に配置できます。
       </Text>

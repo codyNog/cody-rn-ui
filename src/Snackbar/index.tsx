@@ -31,14 +31,6 @@ const SnackbarContainer = styled(XStack, {
   ...elevationSystem.shadows.level3,
 });
 
-const ActionButton = styled(Button, {
-  backgroundColor: "transparent",
-  color: "$primary",
-  fontWeight: "500",
-  paddingHorizontal: "$2",
-  height: 36,
-});
-
 const CloseButton = styled(Button, {
   backgroundColor: "transparent",
   color: "$onSurfaceVariant",
@@ -76,9 +68,9 @@ export const Snackbar = ({
     </Text>
     <XStack space="$2" alignItems="center">
       {action && (
-        <ActionButton variant="text" onPress={action.onPress}>
+        <Button variant="text" onPress={action.onPress}>
           {action.label}
-        </ActionButton>
+        </Button>
       )}
       {hasCloseButton && (
         <CloseButton variant="text" onPress={onClose} aria-label="閉じる">

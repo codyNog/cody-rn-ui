@@ -173,18 +173,20 @@ export const Search = forwardRef<TextInput, Props>(
               />
             )}
           </LeadingIconContainer>
-
-          {trailingIcon ? (
+          {/* Whitespace removal */}
+          {trailingIcon && (
             <TrailingIconContainer>
               <TouchableOpacity onPress={onClickTrailingIcon}>
                 {trailingIcon}
               </TouchableOpacity>
             </TrailingIconContainer>
-          ) : isFilled ? (
+          )}
+          {/* Whitespace removal */}
+          {!trailingIcon && isFilled && (
             <ClearButton onPress={handleClear}>
               <X size={20} color="$onSurfaceVariant" />
             </ClearButton>
-          ) : null}
+          )}
         </XStack>
       </YStack>
     );

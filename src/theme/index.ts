@@ -6,7 +6,7 @@ import {
 } from "@material/material-color-utilities";
 import { createInterFont } from "@tamagui/font-inter";
 import { shorthands } from "@tamagui/shorthands";
-import { tokens as tamaguiTokens, themes } from "@tamagui/themes";
+import { themes, tokens as tamaguiTokens } from "@tamagui/themes"; // tamaguiTokens を再度インポート
 import type { GenericFont } from "tamagui";
 import { createTamagui, createTokens } from "tamagui";
 
@@ -297,7 +297,8 @@ export function createMaterialTokens(keyColor: string) {
       $1: 4,
       $2: 8,
       $3: 12,
-      $4: 16,
+      $4: 16, // デフォルトスペーシング
+      $true: 16, // Tamagui が期待するデフォルトスペーシングキー
       $5: 24,
       $6: 32,
       $7: 48,
@@ -310,7 +311,8 @@ export function createMaterialTokens(keyColor: string) {
       $1: 4,
       $2: 8,
       $3: 12,
-      $4: 16,
+      $4: 16, // デフォルトサイズ
+      $true: 16, // Tamagui が期待するデフォルトサイズキー
       $5: 24,
       $6: 32,
       $7: 48,
@@ -376,7 +378,9 @@ export const useTheme = ({
   bodyFont,
   headingFont,
 }: { keyColor: string; bodyFont: GenericFont; headingFont: GenericFont }) => {
-  const { colorScheme } = createMaterialTokens(keyColor);
+  // キーカラーからMaterial Design 3のトークンとカラースキームを生成
+  const { tokens: materialTokens, colorScheme } =
+    createMaterialTokens(keyColor); // tokens も受け取る
   const sourceColor = argbFromHex(keyColor);
 
   // Material Color Utilitiesを使用してテーマを生成
@@ -391,7 +395,11 @@ export const useTheme = ({
       // @ts-ignore
       custom_dark: colorScheme.dark,
     },
-    tokens: tamaguiTokens,
+    tokens: {
+      // 標準トークンとM3カラートークンをマージ
+      ...tamaguiTokens,
+      color: materialTokens.color,
+    },
     shorthands,
     fonts: {
       body: bodyFont,

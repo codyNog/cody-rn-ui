@@ -119,12 +119,11 @@ type MessageProps = {
   metadata?: ReactNode; // その他のメタデータを柔軟に表示するためのプロパティ
 };
 
-const MessageStyled = styled(Text, {
+const MessageStyled = styled(View, {
   padding: "$3",
   width: "fit-content",
   maxWidth: "80%",
   borderWidth: 1,
-  borderColor: "$outline",
   borderRadius: 12, // Material Design 3のカードと同じ角丸を適用
   // Material Design 3のエレベーションを適用
   shadowColor: "$shadow",
@@ -136,13 +135,11 @@ const MessageStyled = styled(Text, {
       sent: {
         alignSelf: "flex-end",
         backgroundColor: "$primaryContainer",
-        color: "$onPrimaryContainer",
         borderColor: "$primaryContainer",
       },
       received: {
         alignSelf: "flex-start",
         backgroundColor: "$surfaceContainer",
-        color: "$onSurface",
         borderColor: "$surfaceContainer",
       },
     },
@@ -151,10 +148,14 @@ const MessageStyled = styled(Text, {
 
 const Message = forwardRef<TamaguiElement, MessageProps>(
   ({ children, type, timestamp, isRead, metadata }, ref) => {
+    // typeに応じてTextの色を決定
+    const textColor = type === "sent" ? "$onPrimaryContainer" : "$onSurface";
+
     return (
       <YStack>
         <MessageStyled ref={ref} type={type}>
-          {children}
+          {/* childrenを適切な色のTextでラップ */}
+          <Text color={textColor}>{children}</Text>
         </MessageStyled>
 
         {/* メタデータ表示エリア */}
@@ -180,7 +181,12 @@ const Message = forwardRef<TamaguiElement, MessageProps>(
             )}
 
             {/* その他のメタデータ */}
-            {metadata && <View>{metadata}</View>}
+            {metadata &&
+              (typeof metadata === "string" || typeof metadata === "number" ? (
+                <Text>{metadata}</Text>
+              ) : (
+                metadata // 文字列か数値じゃなければそのまま出す
+              ))}
           </XStack>
         )}
       </YStack>

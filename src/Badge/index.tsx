@@ -62,7 +62,7 @@ export const Badge = forwardRef<TamaguiElement, BadgeProps>(
     }[direction];
 
     // バリアントに基づくサイズスタイルを設定
-    const sizeStyle = {
+    const sizeStyleDefinition = {
       standard: {
         height: 20,
         minWidth: 20,
@@ -88,8 +88,15 @@ export const Badge = forwardRef<TamaguiElement, BadgeProps>(
         width: 8,
         height: 8,
         paddingHorizontal: 0,
+        // Add dummy fontSize and lineHeight for type consistency, though not used
+        fontSize: 0,
+        lineHeight: 0,
       },
-    }[variant];
+    };
+
+    const currentSizeStyle = sizeStyleDefinition[variant];
+    // Destructure to separate lineHeight from other styles
+    const { lineHeight, ...stackSizeStyle } = currentSizeStyle;
 
     return (
       <YStack
@@ -102,15 +109,15 @@ export const Badge = forwardRef<TamaguiElement, BadgeProps>(
         overflow="hidden"
         backgroundColor="$error"
         {...positionStyle}
-        {...sizeStyle}
+        {...stackSizeStyle} // Apply styles intended for the stack (without lineHeight)
         {...(visible === false ? { display: "none" } : {})}
       >
         {variant !== "dot" && (
           <Text
             color="$onError"
             textAlign="center"
-            fontSize={sizeStyle.fontSize}
-            lineHeight={sizeStyle.lineHeight}
+            fontSize={currentSizeStyle.fontSize} // Pass fontSize from original style object
+            lineHeight={lineHeight} // Pass the destructured lineHeight
           >
             {displayContent}
           </Text>

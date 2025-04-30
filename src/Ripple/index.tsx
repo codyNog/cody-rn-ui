@@ -1,9 +1,14 @@
 import { useCallback, useState } from "react";
 import type { FC, ReactNode } from "react";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
-import type { GestureResponderEvent, ViewStyle } from "react-native";
+import type {
+  GestureResponderEvent,
+  ViewStyle,
+  PressableProps,
+} from "react-native";
 
-export interface RippleProps {
+export interface RippleProps
+  extends Omit<PressableProps, "children" | "style"> {
   /**
    * 子要素（ラップするコンポーネント）
    */
@@ -49,14 +54,6 @@ export interface RippleProps {
  * タッチ位置から波紋が広がるアニメーションを提供します。
  * インタラクティブな要素（ボタン、アイコンボタンなど）をラップして使用します。
  *
- * @example
- * ```tsx
- * <Ripple onPress={() => console.log('Pressed')}>
- *   <View style={{ padding: 16 }}>
- *     <Text>Press me</Text>
- *   </View>
- * </Ripple>
- * ```
  */
 export const Ripple: FC<RippleProps> = ({
   children,
@@ -67,6 +64,7 @@ export const Ripple: FC<RippleProps> = ({
   onPress,
   maxScale = 3, // より大きなスケール
   centerRipple = false, // 中央からRippleを開始するかどうか
+  ...pressableProps
 }) => {
   // タッチ位置の状態
   const [ripplePosition, setRipplePosition] = useState({ x: 0, y: 0 });
@@ -87,7 +85,9 @@ export const Ripple: FC<RippleProps> = ({
 
   // コンポーネントのサイズを測定する関数
   const measureComponent = useCallback(
-    (event: { nativeEvent: { layout: { width: number; height: number } } }) => {
+    (event: {
+      nativeEvent: { layout: { width: number; height: number } };
+    }) => {
       const { width, height } = event.nativeEvent.layout;
       setComponentSize({ width, height });
     },
@@ -159,6 +159,8 @@ export const Ripple: FC<RippleProps> = ({
       onPress={handlePress}
       onLayout={measureComponent}
       style={[styles.container, style]}
+      disabled={disabled}
+      {...pressableProps}
     >
       {children}
       {isRippleVisible && (
