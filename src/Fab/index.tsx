@@ -60,7 +60,7 @@ export const FabContainer = styled(YStack, {
  * - tertiary: ターシャリーカラー
  * - surface: サーフェスカラー
  */
-export const Fab = styled(TamaguiButton, {
+const Fab = styled(TamaguiButton, {
   // 円形のボタン
   borderRadius: 1000,
 

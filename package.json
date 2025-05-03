@@ -44,9 +44,7 @@
     "cspell": "^8.17.3",
     "esbuild": "^0.25.0",
     "expo": "^52.0.39",
-    "expo-cli": "^6.3.12",
-    "expo-constants": "~17.0.6",
-    "expo-status-bar": "~2.0.1",
+    "knip": "^5.52.0",
     "npm-check-updates": "^17.1.15",
     "npm-run-all": "^4.1.5",
     "plop": "^4.0.1",
@@ -66,13 +64,9 @@
   "dependencies": {
     "@material/material-color-utilities": "^0.3.0",
     "@octokit/rest": "^21.1.1",
-    "@react-native-async-storage/async-storage": "1.23.1",
-    "@react-native-community/datetimepicker": "8.2.0",
-    "@react-native-community/slider": "4.5.5",
-    "@react-navigation/bottom-tabs": "^7.2.0",
-    "@react-navigation/elements": "^2.2.5",
     "@tamagui/animations-css": "^1.126.4",
     "@tamagui/animations-moti": "^1.126.4",
+    "@tamagui/animations-reanimated": "^1.122.6",
     "@tamagui/font-inter": "^1.126.4",
     "@tamagui/lucide-icons": "^1.126.4",
     "@tamagui/sheet": "^1.126.4",
@@ -81,13 +75,6 @@
     "@tamagui/toast": "^1.126.4",
     "adm-zip": "^0.5.16",
     "dotenv": "^16.4.7",
-    "expo-blur": "^14.0.3",
-    "expo-constants": "~17.0.5",
-    "expo-haptics": "^14.0.1",
-    "expo-router": "^4.0.17",
-    "expo-status-bar": "~2.0.1",
-    "expo-symbols": "^0.2.2",
-    "expo-web-browser": "^14.0.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.7",
@@ -122,6 +109,7 @@
     "build-check": "tsc --noEmit",
     "dev": "npm run storybook:web",
     "update": "npm-check-updates -u",
-    "test-storybook": "test-storybook --url http://localhost:6006"
+    "test-storybook": "test-storybook --url http://localhost:6006",
+    "knip": "knip"
   }
 }
