@@ -187,3 +187,7 @@ storybook-static/
 .roomodes
 .roo/rules-*
 .tamagui
+
+# testoutput
+temp-cli-output/
+.ui-version.json

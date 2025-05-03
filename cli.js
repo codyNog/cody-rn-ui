@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import * as fs from "node:fs/promises";
-import * as path from "node:path";
-import { Octokit } from "@octokit/rest";
+const fs = require("node:fs/promises");
+const path = require("node:path");
+const { Octokit } = require("@octokit/rest");
 // @ts-ignore
-import AdmZip from "adm-zip";
-import * as dotenv from "dotenv";
+const AdmZip = require("adm-zip");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -14,32 +14,17 @@ const CONFIG = {
   path: "src",
   branch: "main",
   versionFile: ".ui-version.json",
-} as const;
+};
 
-interface VersionInfo {
-  lastTag: string;
-  lastUpdate: string;
-  repository: string;
-}
-
-interface PackageJson {
-  dependencies?: Record<string, string>;
-  devDependencies?: Record<string, string>;
-  // biome-ignore lint:
-  [key: string]: any;
-}
-
-const GitHubFileExtractor = (token: string) => {
+const GitHubFileExtractor = (token) => {
   const octokit = new Octokit({
     auth: token,
     baseUrl: "https://api.github.com",
   });
 
-  let repoPackageJson: PackageJson | null = null;
+  let repoPackageJson = null;
 
-  const findNearestPackageJson = async (
-    startDir: string,
-  ): Promise<string | null> => {
+  const findNearestPackageJson = async (startDir) => {
     let currentDir = startDir;
 
     while (currentDir !== path.parse(currentDir).root) {
@@ -55,10 +40,7 @@ const GitHubFileExtractor = (token: string) => {
     return null;
   };
 
-  const mergeDependencies = async (
-    localPackageJsonPath: string,
-    repoPackageJson: PackageJson,
-  ): Promise<void> => {
+  const mergeDependencies = async (localPackageJsonPath, repoPackageJson) => {
     if (!repoPackageJson?.dependencies) {
       console.log("No dependencies found in repository package.json");
       return;
@@ -69,7 +51,7 @@ const GitHubFileExtractor = (token: string) => {
         localPackageJsonPath,
         "utf-8",
       );
-      const localPackageJson: PackageJson = JSON.parse(localPackageJsonContent);
+      const localPackageJson = JSON.parse(localPackageJsonContent);
 
       const oldDependencies = { ...localPackageJson.dependencies };
 
@@ -81,8 +63,8 @@ const GitHubFileExtractor = (token: string) => {
         ...repoDependencies,
       };
 
-      const added: string[] = [];
-      const updated: string[] = [];
+      const added = [];
+      const updated = [];
       for (const [pkg, version] of Object.entries(repoDependencies)) {
         if (!oldDependencies?.[pkg]) {
           added.push(`${pkg}@${version}`);
@@ -120,7 +102,7 @@ const GitHubFileExtractor = (token: string) => {
     }
   };
 
-  const getLatestTag = async (): Promise<string | null> => {
+  const getLatestTag = async () => {
     try {
       const { data } = await octokit.repos.listTags({
         owner: CONFIG.org,
@@ -135,7 +117,7 @@ const GitHubFileExtractor = (token: string) => {
     }
   };
 
-  const getCurrentVersion = async (): Promise<VersionInfo | null> => {
+  const getCurrentVersion = async () => {
     try {
       const content = await fs.readFile(CONFIG.versionFile, "utf-8");
       return JSON.parse(content);
@@ -144,8 +126,8 @@ const GitHubFileExtractor = (token: string) => {
     }
   };
 
-  const saveVersion = async (tag: string): Promise<void> => {
-    const versionInfo: VersionInfo = {
+  const saveVersion = async (tag) => {
+    const versionInfo = {
       lastTag: tag,
       lastUpdate: new Date().toISOString(),
       repository: `${CONFIG.org}/${CONFIG.repo}`,
@@ -158,7 +140,7 @@ const GitHubFileExtractor = (token: string) => {
     );
   };
 
-  const downloadZip = async (): Promise<Buffer> => {
+  const downloadZip = async () => {
     console.log(`📦 Downloading ${CONFIG.org}/${CONFIG.repo}...`);
 
     const response = await fetch(
@@ -182,10 +164,7 @@ const GitHubFileExtractor = (token: string) => {
     return Buffer.from(arrayBuffer);
   };
 
-  const extractSpecificDirectory = async (
-    zipBuffer: Buffer,
-    outputPath: string,
-  ): Promise<void> => {
+  const extractSpecificDirectory = async (zipBuffer, outputPath) => {
     console.log(`📂 Extracting files to ${outputPath}...`);
 
     try {
@@ -200,8 +179,7 @@ const GitHubFileExtractor = (token: string) => {
       const targetPathInZip = `${rootDir}/${CONFIG.path}/`;
       const _extractPath = path.join(outputPath, rootDir);
       const packageJsonEntry = entries.find(
-        (entry: { entryName: string }) =>
-          entry.entryName === `${rootDir}/package.json`,
+        (entry) => entry.entryName === `${rootDir}/package.json`,
       );
 
       if (packageJsonEntry) {
@@ -209,7 +187,7 @@ const GitHubFileExtractor = (token: string) => {
         repoPackageJson = JSON.parse(content);
       }
 
-      const filteredEntries = entries.filter((entry: { entryName: string }) =>
+      const filteredEntries = entries.filter((entry) =>
         entry.entryName.startsWith(targetPathInZip),
       );
       if (filteredEntries.length === 0) {
@@ -226,7 +204,7 @@ const GitHubFileExtractor = (token: string) => {
         );
       }
 
-      tempZip.extractAllTo(outputPath, true);
+      tempZip.extractAllTo(outputPath, true); // Use extractAllTo with overwrite flag
 
       console.log(`✅ All files extracted to: ${outputPath}`);
     } catch (error) {
@@ -235,10 +213,7 @@ const GitHubFileExtractor = (token: string) => {
     }
   };
 
-  const extract = async (options: {
-    force?: boolean;
-    outputPath: string;
-  }): Promise<void> => {
+  const extract = async (options) => {
     try {
       await octokit.repos.get({
         owner: CONFIG.org,
@@ -306,8 +281,7 @@ const GitHubFileExtractor = (token: string) => {
       }
 
       console.log("✨ Files copied successfully!");
-      // biome-ignore lint:
-    } catch (error: any) {
+    } catch (error) {
       console.error("❌ Extraction failed:", error.message);
       if (error.response?.status === 404) {
         console.error("Repository or branch not found. Please check:");
