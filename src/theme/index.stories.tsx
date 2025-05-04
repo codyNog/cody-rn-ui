@@ -27,12 +27,15 @@ const ColorPalette = ({
         {title}
       </Text>
       <YStack space="$2">
-        {Object.entries(colors).map(([name, hex]) => (
+        {/* colors オブジェクトのキー（トークン名）を使って色を表示 */}
+        {Object.keys(colors).map((name) => (
           <XStack key={name} alignItems="center" space="$3">
             <View
               width={40}
               height={40}
-              backgroundColor={hex}
+              // backgroundColor に直接 hex を使う代わりに、トークン名を使う
+              // 例: name が 'primary' なら backgroundColor='$primary' になる
+              backgroundColor={`$${name}`}
               borderRadius="$2"
               borderWidth={1}
               borderColor="$outlineVariant"
@@ -41,8 +44,10 @@ const ColorPalette = ({
               <Text fontSize="$3" fontWeight="500" color="$onSurface">
                 ${name}
               </Text>
+              {/* トークンに対応する実際の hex 値も表示 */}
               <Text fontSize="$2" color="$onSurfaceVariant">
-                {hex}
+                {/* @ts-ignore 型エラーを無視 */}
+                {colors[name as keyof ColorScheme]}
               </Text>
             </YStack>
           </XStack>
@@ -53,11 +58,9 @@ const ColorPalette = ({
 };
 
 // Storybookのストーリーコンポーネント
-const ThemeDisplay = () => {
-  // Storybookのグローバルからキーカラーを取得（デフォルトはMD3の紫）
-  // Storybookのコンテキストにアクセスする方法がないため、ここではデフォルトを使用
-  // 実際のStorybook環境では context.globals.keyColor を使う想定
-  const keyColor = "#6750A4";
+const ThemeDisplay = ({ keyColor }: { keyColor: string }) => {
+  // keyColor を props で受け取る
+  // Args から渡された keyColor を使用
   const { colorScheme } = createMaterialTokens(keyColor);
 
   // 現在のTamaguiテーマ名（ライト/ダーク）を取得
@@ -87,6 +90,13 @@ const meta: Meta<typeof ThemeDisplay> = {
   parameters: {
     layout: "fullscreen",
   },
+  // Args を定義して Controls で keyColor を変更できるようにする
+  args: {
+    keyColor: "#6750A4", // デフォルトのキーカラー
+  },
+  argTypes: {
+    keyColor: { control: "color" }, // カラーピッカーを表示
+  },
 };
 
 export default meta;
@@ -94,4 +104,5 @@ export default meta;
 // Storybookのストーリー
 type Story = StoryObj<typeof meta>;
 
+// Default ストーリーは args を継承する
 export const Default: Story = {};
