@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "NotoSansJP-Regular";
+  src: url("../assets/NotoSansJP-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* もし NotoSansJP-Bold も使うなら、ここに追加 */
+/*
+@font-face {
+  font-family: 'NotoSansJP-Bold';
+  src: url('../assets/NotoSansJP-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+*/

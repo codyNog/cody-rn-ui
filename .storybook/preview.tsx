@@ -1,3 +1,4 @@
+import "./fonts.css"; // カスタムフォントを読み込む
 // react-native-gesture-handler must be imported at the very top
 import "react-native-gesture-handler";
 // Storybookのプレビュー設定

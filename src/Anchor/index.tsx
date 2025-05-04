@@ -70,7 +70,7 @@ export const Anchor = ({ variant = "text", ...props }: Props) => {
   if (variant === "button")
     return (
       <UnstyledAnchor {...props} onPress={undefined} unstyled>
-        <Button> {props.children}</Button>
+        <Button>{props.children}</Button>
       </UnstyledAnchor>
     );
 

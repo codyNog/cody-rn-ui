@@ -101,7 +101,13 @@ export const Accordion = forwardRef<TamaguiElement, Props>(
             enterStyle={{ opacity: 0, height: 0 }}
             exitStyle={{ opacity: 0, height: 0 }}
           >
-            <StyledContent>{content}</StyledContent>
+            <StyledContent>
+              {typeof content === "string" ? (
+                <Paragraph>{content}</Paragraph>
+              ) : (
+                content
+              )}
+            </StyledContent>
           </TamaguiAccordion.Content>
         </TamaguiAccordion.Item>
       ))}

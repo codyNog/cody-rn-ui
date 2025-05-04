@@ -2,7 +2,8 @@ import { ToastProvider } from "@tamagui/toast";
 import type { ReactNode } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TamaguiProvider, Theme } from "tamagui";
-import { DEFAULT_KEY_COLOR, bodyFont, headingFont, useTheme } from "../theme";
+// bodyFont, headingFont は theme 内部で定義されるようになったのでインポート不要
+import { DEFAULT_KEY_COLOR, useTheme } from "../theme";
 
 /**
  * Material Design 3のデザイントークンシステム
@@ -35,10 +36,9 @@ type UIProviderProps = {
 export const UIProvider = (props: UIProviderProps) => {
   // キーカラーを取得（指定がなければデフォルト値を使用）
   const keyColor = props.keyColor || DEFAULT_KEY_COLOR;
+  // useTheme は keyColor のみ受け取るように変更された
   const { config } = useTheme({
     keyColor,
-    bodyFont,
-    headingFont,
   });
   const name = `custom_${props.theme || "light"}`;
 

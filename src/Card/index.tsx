@@ -7,7 +7,6 @@ import {
   Paragraph,
   Card as TamaguiCard,
   type TamaguiElement,
-  Text,
   XStack,
   YStack,
   styled,
@@ -17,6 +16,7 @@ import { Button } from "../Button";
 import { Ripple } from "../Ripple";
 import { hexToRgba } from "../libs/color";
 import { elevationSystem, stateLayerOpacity, typographyScale } from "../theme";
+import { Text as CustomText } from "../Text";
 
 /**
  * Material Design 3のスタイルを適用したカードコンポーネント
@@ -112,24 +112,6 @@ const CardFooter = styled(XStack, {
   justifyContent: "flex-end",
 });
 
-// カードのタイトルコンポーネント
-const CardTitle = styled(Text, {
-  ...typographyScale.titleLarge,
-  color: "$onSurface",
-});
-
-// カードのサブタイトルコンポーネント
-const CardSubtitle = styled(Text, {
-  ...typographyScale.bodyMedium,
-  color: "$onSurfaceVariant",
-});
-
-// カードの説明コンポーネント
-const CardDescription = styled(Paragraph, {
-  ...typographyScale.bodyMedium,
-  color: "$onSurfaceVariant",
-});
-
 // カードのメディアコンポーネント
 const CardMedia = styled(Image, {
   width: "100%",
@@ -137,6 +119,12 @@ const CardMedia = styled(Image, {
   objectFit: "cover",
   marginBottom: "$3",
   borderRadius: 8,
+});
+
+// カードの説明コンポーネント
+const CardDescription = styled(Paragraph, {
+  ...typographyScale.bodyMedium,
+  color: "$onSurfaceVariant",
 });
 
 type Props = {
@@ -217,14 +205,26 @@ export const Card = forwardRef<TamaguiElement, Props>(
 
         {(title || subtitle) && (
           <CardHeader>
-            {title && <CardTitle>{title}</CardTitle>}
-            {subtitle && <CardSubtitle>{subtitle}</CardSubtitle>}
+            {title && (
+              <CustomText variant="headlineSmall" color="$onSurface">
+                {title}
+              </CustomText>
+            )}
+            {subtitle && (
+              <CustomText variant="bodyMedium" color="$onSurfaceVariant">
+                {subtitle}
+              </CustomText>
+            )}
           </CardHeader>
         )}
 
         <CardContent>
           {description && <CardDescription>{description}</CardDescription>}
-          {children}
+          {typeof children === "string" ? (
+            <CustomText>{children}</CustomText>
+          ) : (
+            children
+          )}
         </CardContent>
 
         {actions && actions.length > 0 && (

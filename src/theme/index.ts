@@ -4,11 +4,12 @@ import {
   hexFromArgb,
   themeFromSourceColor,
 } from "@material/material-color-utilities";
-import { createInterFont } from "@tamagui/font-inter";
+// createInterFont は不要になる
 import { shorthands } from "@tamagui/shorthands";
 import { themes, tokens as tamaguiTokens } from "@tamagui/themes"; // tamaguiTokens を再度インポート
-import type { GenericFont } from "tamagui";
-import { createTamagui, createTokens } from "tamagui";
+// GenericFont は不要になったので削除
+// createFont をインポートに追加
+import { createTamagui, createTokens, createFont } from "tamagui";
 
 // キーカラーからMaterial Design 3のテーマを生成する関数
 export function generateMaterialTheme(
@@ -366,18 +367,67 @@ export function createMaterialTokens(keyColor: string) {
   };
 }
 
-// フォントの設定
-export const headingFont = createInterFont();
-export const bodyFont = createInterFont();
+// フォントの設定 (tamagui.config.ts と同様の設定)
+const headingFont = createFont({
+  family: "NotoSansJP-Regular",
+  size: {
+    1: 12,
+    2: 14,
+    3: 15,
+    4: 16,
+    5: 18,
+    6: 20,
+    7: 24,
+    8: 30,
+    9: 36,
+    10: 48,
+    true: 16,
+  },
+  lineHeight: {
+    1: 17,
+    2: 20,
+    3: 22,
+    4: 23,
+    5: 25,
+    6: 28,
+    7: 32,
+    8: 40,
+    9: 50,
+    10: 66,
+    true: 23,
+  },
+  weight: {
+    1: "300",
+    3: "400",
+    4: "500",
+    5: "600",
+    7: "700",
+    9: "900",
+    true: "500", // デフォルトウェイトは 500 (Medium 相当) にしておく
+  },
+  letterSpacing: {
+    1: 0,
+    2: -0.5,
+    3: -0.75,
+    4: -1,
+    5: -1.5,
+    6: -2,
+    7: -2.5,
+    8: -3,
+    9: -3.5,
+    10: -4,
+    true: -1,
+  },
+});
+
+// body フォントも同じ設定を使用
+const bodyFont = headingFont;
 
 // デフォルトのキーカラー（Material Design 3のデフォルト紫色）
 export const DEFAULT_KEY_COLOR = "#6750A4";
 
-export const useTheme = ({
-  keyColor,
-  bodyFont,
-  headingFont,
-}: { keyColor: string; bodyFont: GenericFont; headingFont: GenericFont }) => {
+export const useTheme = ({ keyColor }: { keyColor: string }) => {
+  // bodyFont, headingFont は Provider から渡す必要がなくなる
   // キーカラーからMaterial Design 3のトークンとカラースキームを生成
   const { tokens: materialTokens, colorScheme } =
     createMaterialTokens(keyColor); // tokens も受け取る
@@ -402,8 +452,8 @@ export const useTheme = ({
     },
     shorthands,
     fonts: {
-      body: bodyFont,
-      heading: headingFont,
+      body: bodyFont, // ここで定義した bodyFont を使う
+      heading: headingFont, // ここで定義した headingFont を使う
     },
   });
 
