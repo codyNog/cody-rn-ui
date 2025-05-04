@@ -36,41 +36,56 @@ const HelperText = styled(Text, {
   },
 });
 
-// ラベルコンポーネント
-const Label = styled(Text, {
+// ラベルコンテナ
+const LabelContainer = styled(XStack, {
   position: "absolute",
-  left: 16,
+  left: 12, // TextFieldに合わせる
   top: 16,
-  fontSize: 16,
-  color: "$onSurfaceVariant",
-  transition: "all 0.2s ease",
-  transformOrigin: "left top",
-  zIndex: 1,
   paddingHorizontal: 4,
-  backgroundColor: "transparent",
+  zIndex: 1,
+  pointerEvents: "none", // ラベルコンテナ自体はクリックイベントを受け取らない
+  transition: "all 0.2s ease", // 追加: 位置移動のアニメーション
 
   // バリアント
   variants: {
     variant: {
-      filled: {
-        // filledバリアントのデフォルトスタイル
-      },
-      outlined: {
-        // outlinedバリアントのデフォルトスタイル
+      filled: {},
+      outlined: {},
+    },
+    // Selectが開いているか、値が選択されている場合に上に移動
+    active: {
+      true: {
+        top: 4,
       },
     },
+  },
+});
+
+// ラベルコンポーネント (TextFieldからコピーして調整)
+const Label = styled(Text, {
+  fontSize: 16,
+  color: "$onSurfaceVariant",
+  transition: "all 0.2s ease",
+  transformOrigin: "left top",
+  paddingHorizontal: 4, // TextFieldに合わせて追加
+
+  // バリアント
+  variants: {
+    variant: {
+      filled: {},
+      outlined: {},
+    },
+    // Selectが開いている場合にフォーカス色
     focused: {
       true: {
-        top: 4,
-        fontSize: 12,
         color: "$primary",
-        transform: [{ translateY: 0 }],
       },
     },
-    selected: {
+    // Selectが開いているか、値が選択されている場合に縮小
+    active: {
       true: {
-        top: 4,
         fontSize: 12,
+        lineHeight: 16, // TextFieldに合わせて追加
         transform: [{ translateY: 0 }],
       },
     },
@@ -89,7 +104,7 @@ const Label = styled(Text, {
 
   // デフォルトバリアント
   defaultVariants: {
-    variant: "filled",
+    variant: "filled", // TextFieldに合わせて変更
   },
 });
 
@@ -230,10 +245,8 @@ export const Select = reactForwardRef<View, Props>(
     const [open, setOpen] = useState(false);
     const hasError = !!error;
     const selectedOption = options.find((option) => option.value === value);
-    // 空文字の値を持つオプションが選択されている場合も考慮
-    const isSelected =
-      !!selectedOption ||
-      (value !== undefined && value !== null && value === "");
+    // 値が選択されており、かつ空文字でない場合にtrueとする (TextFieldのisFilledに合わせる)
+    const isSelected = !!selectedOption && value !== "";
 
     return (
       <YStack width="100%">
@@ -305,23 +318,34 @@ export const Select = reactForwardRef<View, Props>(
             </StyledContent>
           </TamaguiSelect>
 
-          <Label
+          <LabelContainer
             variant={variant}
-            focused={open}
-            selected={isSelected}
-            error={hasError}
-            disabled={disabled}
-            marginTop={variant === "outlined" && (open || isSelected) ? -10 : 0}
-            backgroundColor={
-              variant === "outlined" && (open || isSelected)
-                ? "$surface"
-                : variant === "filled"
-                  ? "$surfaceContainerHighest"
-                  : "transparent"
-            }
+            active={open || isSelected}
+            // outlined variant の場合、上にずらすための marginTop と padding を調整
+            marginTop={variant === "outlined" && (open || isSelected) ? -9 : 0} // TextFieldに合わせる
+            paddingHorizontal={
+              variant === "outlined" && (open || isSelected) ? 0 : 4
+            } // TextFieldに合わせる
+            backgroundColor="transparent" // Container は透明
           >
-            {label}
-          </Label>
+            <Label
+              variant={variant}
+              focused={open}
+              active={open || isSelected}
+              error={hasError}
+              disabled={disabled}
+              // outlined variant の場合、Label 自体に背景色を設定
+              backgroundColor={
+                variant === "outlined" && (open || isSelected)
+                  ? "$surface"
+                  : variant === "filled"
+                    ? "$surfaceContainerHighest"
+                    : "transparent"
+              }
+            >
+              {label}
+            </Label>
+          </LabelContainer>
         </XStack>
 
         {/* ヘルパーテキスト */}
