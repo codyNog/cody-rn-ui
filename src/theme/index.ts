@@ -29,12 +29,6 @@ export function generateMaterialTheme(
       return {
         // サーフェスエレベーション（MD3ではトーンを使用してエレベーションを表現）
         surfaceDim: hexFromArgb(palettes.neutral.tone(87)),
-        surface1: hexFromArgb(palettes.neutral.tone(98)), // 低エレベーション
-        surface2: hexFromArgb(palettes.neutral.tone(96)), // 中エレベーション
-        surface3: hexFromArgb(palettes.neutral.tone(94)), // 高エレベーション
-        surface4: hexFromArgb(palettes.neutral.tone(92)), // 最高エレベーション
-        surface5: hexFromArgb(palettes.neutral.tone(90)), // 特別なエレベーション
-
         // Material Design 3の追加サーフェスカラー
         surfaceBright: hexFromArgb(palettes.neutral.tone(98)),
         surfaceContainerLowest: hexFromArgb(palettes.neutral.tone(100)),
@@ -48,12 +42,6 @@ export function generateMaterialTheme(
     return {
       // サーフェスエレベーション（ダークモードでは異なるトーンを使用）
       surfaceDim: hexFromArgb(palettes.neutral.tone(6)),
-      surface1: hexFromArgb(palettes.neutral.tone(10)), // 低エレベーション
-      surface2: hexFromArgb(palettes.neutral.tone(12)), // 中エレベーション
-      surface3: hexFromArgb(palettes.neutral.tone(14)), // 高エレベーション
-      surface4: hexFromArgb(palettes.neutral.tone(16)), // 最高エレベーション
-      surface5: hexFromArgb(palettes.neutral.tone(18)), // 特別なエレベーション
-
       // Material Design 3の追加サーフェスカラー（ダークモード）
       surfaceBright: hexFromArgb(palettes.neutral.tone(24)),
       surfaceContainerLowest: hexFromArgb(palettes.neutral.tone(4)),
@@ -182,12 +170,6 @@ export interface ColorScheme {
 
   // サーフェスエレベーション
   surfaceDim: string;
-  surface1: string;
-  surface2: string;
-  surface3: string;
-  surface4: string;
-  surface5: string;
-
   // 追加のサーフェスカラー
   surfaceBright: string;
   surfaceContainerLowest: string;
@@ -256,19 +238,7 @@ export function createMaterialTokens(keyColor: string) {
 
       // サーフェスエレベーション
       surfaceDim: materialTheme.light.surfaceDim,
-      surface1: materialTheme.light.surface1,
-      surface2: materialTheme.light.surface2,
-      surface3: materialTheme.light.surface3,
-      surface4: materialTheme.light.surface4,
-      surface5: materialTheme.light.surface5,
-
       darkSurfaceDim: materialTheme.dark.surfaceDim,
-      darkSurface1: materialTheme.dark.surface1,
-      darkSurface2: materialTheme.dark.surface2,
-      darkSurface3: materialTheme.dark.surface3,
-      darkSurface4: materialTheme.dark.surface4,
-      darkSurface5: materialTheme.dark.surface5,
-
       // 追加のサーフェスカラー（ライトモード）
       surfaceBright: materialTheme.light.surfaceBright,
       surfaceContainerLowest: materialTheme.light.surfaceContainerLowest,

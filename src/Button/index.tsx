@@ -102,18 +102,18 @@ const BaseButton = styled(TamaguiButton, {
         },
       },
       elevated: {
-        backgroundColor: "$surface1",
+        backgroundColor: "$surfaceBright",
         color: "$primary",
         ...elevationSystem.shadows.level1,
         // ホバー時のスタイル
         hoverStyle: {
-          backgroundColor: "$surface1",
+          backgroundColor: "$surfaceBright",
           opacity: 1 - stateLayerOpacity.hover,
           ...elevationSystem.shadows.level2,
         },
         // プレス時のスタイル
         pressStyle: {
-          backgroundColor: "$surface1",
+          backgroundColor: "$surfaceBright",
           opacity: 1 - stateLayerOpacity.press,
           ...elevationSystem.shadows.level1,
         },
